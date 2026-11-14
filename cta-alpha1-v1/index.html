@@ -1,0 +1,1231 @@
+<!-- ========================================================================== -->
+<!-- SCHEMA / SYSTEM NAME: 디스펜서 v1 (Dispenser v1) - Complete Master Suite     -->
+<!-- DESCRIPTION: Specialty Coffee Archive with SEO Schema, Disclaimer Modal,    -->
+<!--              Sound Toggle, Receipt Printer, 3D Tilt, Canvas & 60 Coffee DB   -->
+<!-- REVISION: v3.1.0 (Data Separated into data.js)                              -->
+<!-- ========================================================================== -->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>디스펜서 v1 - SCA 60종 스페셜티 커피 맛 아카이브</title>
+
+  <!-- SEO & OpenGraph Meta Tags -->
+  <meta name="description" content="산미, 고소함, 입안의 바디감(1~5단계)으로 찾아보는 SCA 스페셜티 커피 원두 추천 및 테이스팅 노트를 확인해보세요.">
+  <meta name="keywords" content="스페셜티커피, 커피원두추천, 산미없는원두, 고소한원두, 에티오피아게이샤, 디스펜서, 바디감, SCA커피">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="디스펜서 v1 - 내 취향 스페셜티 커피 찾기">
+  <meta property="og:description" content="오늘 마실 원두를 입안의 무게감과 향미로 뽑아보세요.">
+
+  <!-- Schema.org JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "디스펜서 v1 (Dispenser v1)",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "All",
+      "inLanguage": "ko-KR",
+      "description": "SCA 기준 60종 스페셜티 커피 맛 탐색 및 아카이브 서비스",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "스페셜티 커피가 뭐예요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SCA 평가 80점 이상 특상 등급 원두로, 족보와 성적표가 확실한 일등품 커피입니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "바디감은 무슨 뜻인가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "입안에서 느껴지는 국물의 두께감과 무게입니다. 1단계(생수)부터 5단계(생크림)까지 구분됩니다."
+          }
+        }
+      ]
+    }
+  ]
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap');
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+    :root {
+      --paper-bg: #F4EFEB;
+      --card-bg: #FCFAF7;
+      --ink: #211B17;
+      --ink-sub: #5C5046;
+      --accent: #B84A28;
+      --line: #2B231F;
+      --line-light: #DDD3C8;
+      --stamp-border: #C82323;
+      --stamp-red: #C82323;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      word-break: keep-all; overflow-wrap: break-word;
+    }
+
+    body {
+      background-color: var(--paper-bg);
+      color: var(--ink);
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 16px; padding-bottom: calc(80px + env(safe-area-inset-bottom));
+      overflow-x: hidden; position: relative;
+    }
+
+    /* 📌 상단 실시간 증기(Steam) Canvas 파티클 */
+    #steamCanvas {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 580px; height: 220px;
+      pointer-events: none; z-index: 1; opacity: 0.75;
+    }
+
+    /* 📌 상단 네비게이션 영역 */
+    .top-nav-bar {
+      position: fixed; top: max(12px, env(safe-area-inset-top)); left: 0; width: 100%;
+      padding: 0 16px; display: flex; justify-content: space-between; gap: 6px;
+      pointer-events: none; z-index: 90;
+    }
+
+    .nav-fixed-btn {
+      pointer-events: auto; background: var(--card-bg); border: 1.5px solid var(--line);
+      color: var(--ink); padding: 6px 10px; border-radius: 4px;
+      font-size: clamp(0.75rem, 2.7vw, 0.83rem); font-weight: 800; cursor: pointer;
+      box-shadow: 2px 2px 0px var(--line); display: flex; align-items: center; gap: 4px;
+      transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease, background 0.2s, box-shadow 0.15s ease;
+      white-space: nowrap;
+    }
+    .nav-fixed-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0px var(--line); }
+    .nav-fixed-btn.muted { background: #EAE3D9; color: var(--ink-sub); border-color: #B8AFA6; }
+    .nav-fixed-btn.slide-left { transform: translateX(calc(-100% - 24px)); opacity: 0; pointer-events: none; }
+    .nav-fixed-btn.slide-right { transform: translateX(calc(100% + 24px)); opacity: 0; pointer-events: none; }
+
+    /* 📌 공통 모달 오버레이 */
+    .detail-modal-overlay, .drawer-overlay, .printer-modal-overlay, .disclaimer-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(33, 27, 23, 0.75); z-index: 200;
+      opacity: 0; visibility: hidden; transition: all 0.25s ease;
+      display: flex; align-items: center; justify-content: center; padding: 14px;
+    }
+    .detail-modal-overlay.open, .drawer-overlay.open, .printer-modal-overlay.open, .disclaimer-modal-overlay.open {
+      opacity: 1; visibility: visible;
+    }
+
+    /* ⚠️ 최초 접속 주의문 팝업 전용 스타일 */
+    .disclaimer-modal-overlay { z-index: 300; }
+    .disclaimer-card {
+      background: var(--card-bg); border: 2px solid var(--line); border-radius: 6px;
+      width: 100%; max-width: 440px; padding: 22px 18px 18px; box-shadow: 5px 5px 0px var(--line);
+      display: flex; flex-direction: column; gap: 12px; position: relative;
+      animation: popNotice 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes popNotice { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .disclaimer-badge { font-size: 0.72rem; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+    .disclaimer-title { font-family: 'Nanum Myeongjo', serif; font-size: 1.25rem; font-weight: 800; color: var(--ink); line-height: 1.3; }
+    .disclaimer-body { font-size: 0.85rem; color: var(--ink-sub); line-height: 1.6; display: flex; flex-direction: column; gap: 10px; }
+    .disclaimer-highlight { background: #F3EAE3; border-left: 3px solid var(--accent); padding: 8px 10px; border-radius: 2px; font-weight: 600; color: var(--ink); font-size: 0.82rem; }
+    .disclaimer-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1.5px dashed var(--line-light); padding-top: 12px; margin-top: 4px; gap: 10px; }
+    .no-show-label { font-size: 0.78rem; font-weight: 600; color: var(--ink-sub); display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; }
+    .disclaimer-confirm-btn { background: var(--accent); color: #FFF; border-color: var(--line); flex: 1; justify-content: center; padding: 10px; }
+
+    /* 본문 컨테이너 */
+    .app-container {
+      width: 100%; max-width: 580px; display: flex; flex-direction: column;
+      align-items: center; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      margin-top: calc(44px + max(12px, env(safe-area-inset-top))); z-index: 2;
+    }
+    .app-container.searched { margin-top: calc(36px + max(12px, env(safe-area-inset-top))); }
+
+    /* 헤더 */
+    .archive-header { text-align: center; margin-bottom: 12px; cursor: pointer; user-select: none; width: 100%; }
+    .archive-issue { font-family: 'Playfair Display', serif; font-size: clamp(0.7rem, 2.5vw, 0.8rem); letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); font-weight: 800; margin-bottom: 4px; }
+    .archive-title { font-family: 'Nanum Myeongjo', serif; font-size: clamp(1.7rem, 6vw, 2.2rem); font-weight: 800; color: var(--ink); letter-spacing: -0.5px; margin-bottom: 6px; line-height: 1.25; }
+    .archive-desc { font-size: clamp(0.85rem, 3vw, 0.95rem); color: var(--ink-sub); font-weight: 500; line-height: 1.4; }
+
+    /* 📌 레트로 원두 디스펜서 레버 위젯 */
+    .dispenser-lever-widget {
+      width: 100%; background: #EFE6DC; border: 2px solid var(--line); border-radius: 6px;
+      padding: 10px 14px; margin-bottom: 16px; box-shadow: 3px 3px 0px var(--line);
+      display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden;
+    }
+    .lever-info { display: flex; flex-direction: column; gap: 2px; }
+    .lever-badge { font-size: 0.65rem; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+    .lever-title { font-family: 'Nanum Myeongjo', serif; font-size: 0.98rem; font-weight: 800; color: var(--ink); }
+    .lever-desc { font-size: 0.75rem; color: var(--ink-sub); }
+
+    .lever-mechanism { width: 70px; height: 48px; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .lever-base-slot { width: 12px; height: 38px; background: var(--line); border-radius: 6px; position: absolute; right: 28px; top: 5px; }
+    .lever-arm { width: 36px; height: 8px; background: #8C7E74; border: 1.5px solid var(--line); border-radius: 4px; position: absolute; right: 22px; top: 10px; transform-origin: right center; transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .lever-knob { width: 22px; height: 22px; background: var(--accent); border: 2px solid var(--line); border-radius: 50%; position: absolute; left: -10px; top: -7px; box-shadow: 1px 1px 0px var(--line); }
+    .lever-mechanism.pulled .lever-arm { transform: rotate(55deg); }
+
+    #beanDropZone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+    .dropping-bean { position: absolute; font-size: 1rem; user-select: none; animation: beanFall 0.6s ease-in forwards; }
+    @keyframes beanFall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(60px) rotate(360deg); opacity: 0; } }
+
+    /* 검색창 */
+    .search-wrap { width: 100%; position: relative; margin-bottom: 14px; }
+    .search-box { width: 100%; height: 52px; background: var(--card-bg); border: 2px solid var(--line); border-radius: 4px; display: flex; align-items: center; padding: 0 8px 0 12px; box-shadow: 3px 3px 0px var(--line); transition: all 0.2s ease; }
+    .search-box:focus-within { box-shadow: 4px 4px 0px var(--accent); border-color: var(--accent); }
+    .search-icon { font-size: 1.1rem; color: var(--ink-sub); margin-right: 8px; user-select: none; flex-shrink: 0; }
+    .search-input { flex: 1; height: 100%; border: none; outline: none; font-size: clamp(0.95rem, 3.5vw, 1.1rem); font-weight: 700; color: var(--ink); background: transparent; min-width: 0; }
+    .search-input::placeholder { color: #9C8F84; font-size: clamp(0.82rem, 3vw, 0.92rem); font-weight: 500; }
+    .btn-icon { width: 38px; height: 38px; border: 1px solid transparent; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: var(--ink-sub); border-radius: 4px; flex-shrink: 0; }
+    .mic-btn.listening { background: #FCE8E6; color: var(--accent); border-color: var(--accent); animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+
+    .voice-status { display: none; width: 100%; background: #F8E8E4; border: 1.5px solid var(--accent); color: var(--accent); padding: 8px 12px; border-radius: 4px; margin-bottom: 12px; text-align: center; font-size: 0.85rem; font-weight: 700; }
+    .voice-status.active { display: block; }
+
+    /* 메인 3대 카테고리 */
+    .core-categories-section { width: 100%; margin-bottom: 14px; }
+    .section-label { font-size: 0.78rem; font-weight: 800; letter-spacing: 1px; color: var(--ink-sub); text-align: center; text-transform: uppercase; margin-bottom: 8px; }
+    .core-categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .core-category-btn { background: var(--card-bg); border: 2px solid var(--line); border-radius: 4px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; box-shadow: 2px 2px 0px var(--line); transition: all 0.1s ease; text-align: center; position: relative; overflow: hidden; }
+    .core-category-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0px var(--line); }
+    .cat-icon { font-size: 1.15rem; }
+    .cat-title { font-family: 'Nanum Myeongjo', serif; font-size: clamp(0.78rem, 2.7vw, 0.92rem); font-weight: 800; color: var(--ink); line-height: 1.2; }
+    .cat-sub { font-size: clamp(0.65rem, 2.2vw, 0.72rem); color: var(--ink-sub); font-weight: 600; white-space: nowrap; }
+
+    /* 보조 필터 태그 */
+    .chips-section { width: 100%; margin-bottom: 18px; }
+    .chips-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+    .chip-btn { background: var(--card-bg); border: 1.5px solid var(--line-light); border-radius: 3px; padding: 5px 9px; font-size: clamp(0.75rem, 2.5vw, 0.82rem); font-weight: 700; color: var(--ink-sub); cursor: pointer; display: inline-flex; align-items: center; gap: 3px; box-shadow: 1px 1px 0px var(--line-light); position: relative; overflow: hidden; }
+
+    /* 📌 클릭 드립 파문(Ripple) 애니메이션 */
+    .drip-ripple { position: absolute; border-radius: 50%; background: rgba(184, 74, 40, 0.25); transform: scale(0); animation: rippleAnim 0.5s linear forwards; pointer-events: none; }
+    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+    /* 결과 리스트 */
+    .results-container { width: 100%; display: none; flex-direction: column; gap: 12px; }
+    .results-container.visible { display: flex; }
+    .results-header-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 2px 6px; border-bottom: 1.5px solid var(--line); }
+    .result-count { font-size: 0.88rem; font-weight: 700; color: var(--ink-sub); }
+    .result-count strong { color: var(--accent); }
+    .home-reset-btn { background: var(--card-bg); border: 1.5px solid var(--line); color: var(--ink); font-size: 0.78rem; font-weight: 800; padding: 3px 8px; border-radius: 3px; cursor: pointer; box-shadow: 1px 1px 0px var(--line); }
+
+    /* 📌 입체 3D 틸트 요약 카드 */
+    .card-3d-wrapper { perspective: 1000px; width: 100%; }
+    .compact-coffee-card { background: var(--card-bg); border: 2px solid var(--line); border-radius: 4px; padding: 12px 14px; box-shadow: 2.5px 2.5px 0px var(--line); cursor: pointer; display: flex; flex-direction: column; gap: 6px; transition: transform 0.15s ease-out, box-shadow 0.15s ease-out; transform-style: preserve-3d; position: relative; overflow: hidden; }
+    .compact-coffee-card:active { transform: translate(1px, 1px) scale(0.99); box-shadow: 1px 1px 0px var(--line); }
+    .compact-top { display: flex; justify-content: space-between; align-items: center; }
+    .compact-meta { font-family: 'Playfair Display', serif; font-size: 0.7rem; font-weight: 800; color: var(--ink-sub); display: flex; align-items: center; gap: 5px; }
+    .compact-no { background: var(--line); color: #FFF; padding: 1px 4px; border-radius: 2px; }
+    .compact-origin-stamp { font-size: 0.72rem; font-weight: 800; color: var(--accent); border: 1px dashed var(--stamp-border); padding: 1px 5px; border-radius: 2px; background: rgba(184, 74, 40, 0.05); white-space: nowrap; }
+    .compact-title-row { display: flex; flex-direction: column; gap: 2px; }
+    .compact-title { font-family: 'Nanum Myeongjo', serif; font-size: 1.15rem; font-weight: 800; color: var(--ink); line-height: 1.25; }
+    .compact-eng { font-family: 'Playfair Display', serif; font-size: 0.75rem; font-style: italic; color: var(--ink-sub); }
+    .compact-headline { font-size: 0.85rem; font-weight: 600; color: var(--accent); line-height: 1.4; margin-top: 2px; }
+    .compact-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line-light); padding-top: 6px; margin-top: 2px; }
+    .compact-body-badge { font-size: 0.75rem; font-weight: 700; color: var(--ink-sub); background: #EFE8E1; padding: 2px 6px; border-radius: 3px; }
+    .compact-tap-guide { font-size: 0.75rem; font-weight: 800; color: var(--ink); }
+
+    /* 미니 시음 도장 */
+    .mini-tasted-badge { position: absolute; right: 12px; bottom: 28px; border: 2px solid var(--stamp-red); color: var(--stamp-red); font-size: 0.68rem; font-weight: 900; padding: 1px 6px; border-radius: 3px; transform: rotate(-12deg); background: rgba(255, 255, 255, 0.9); letter-spacing: 0.5px; pointer-events: none; display: none; }
+    .compact-coffee-card.is-tasted .mini-tasted-badge { display: block; }
+
+    /* 상세 모달 */
+    .detail-modal-card { background: var(--card-bg); border: 2px solid var(--line); border-radius: 4px; width: 100%; max-width: 500px; max-height: calc(92vh - env(safe-area-inset-top)); overflow-y: auto; padding: 18px 14px 16px; box-shadow: 4px 4px 0px var(--line); display: flex; flex-direction: column; gap: 12px; position: relative; }
+    .modal-close-btn { position: absolute; top: 12px; right: 12px; background: #FFF; border: 1.5px solid var(--line); width: 30px; height: 30px; border-radius: 3px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 1px 1px 0px var(--line); z-index: 10; }
+    .modal-meta-bar { display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--line-light); padding-bottom: 6px; font-family: 'Playfair Display', serif; font-size: 0.72rem; color: var(--ink-sub); font-weight: 800; }
+    .modal-card-num { background: var(--line); color: #FFF; padding: 1px 5px; border-radius: 2px; }
+    .modal-title-section { padding-right: 32px; }
+    .modal-kor-name { font-family: 'Nanum Myeongjo', serif; font-size: 1.35rem; font-weight: 800; color: var(--ink); line-height: 1.25; margin-bottom: 2px; }
+    .modal-eng-name { font-family: 'Playfair Display', serif; font-size: 0.8rem; font-style: italic; color: var(--ink-sub); }
+    .modal-headline-box { border-left: 3px solid var(--accent); background: #F3EAE3; padding: 8px 10px; font-size: 0.9rem; font-weight: 700; color: var(--accent); line-height: 1.4; }
+    .modal-spec-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 2px 0; }
+    .modal-spec-item { padding: 6px 4px; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid var(--line-light); }
+    .modal-spec-item:nth-child(2n) { border-right: none; padding-left: 8px; }
+    .modal-spec-item:nth-child(1), .modal-spec-item:nth-child(2) { border-bottom: 1px solid var(--line-light); }
+    .modal-spec-label { font-size: 0.65rem; font-weight: 800; color: #8C7E74; }
+    .modal-spec-val { font-size: 0.8rem; font-weight: 700; color: var(--ink); }
+
+    .modal-profile-rows { display: flex; flex-direction: column; gap: 8px; }
+    .modal-profile-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 0.82rem; flex-wrap: wrap; }
+    .modal-profile-name { font-weight: 700; color: var(--ink-sub); white-space: nowrap; min-width: 90px; }
+    .modal-profile-dots { display: flex; gap: 3px; align-items: center; flex-shrink: 0; }
+    .dot { width: 8px; height: 8px; border: 1.5px solid var(--line); border-radius: 50%; background: transparent; }
+    .dot.filled { background: var(--ink); }
+    .modal-profile-desc { font-size: 0.78rem; font-weight: 700; color: var(--ink); text-align: right; flex: 1; min-width: 120px; }
+    .modal-profile-desc.highlight { color: var(--accent); }
+
+    .modal-perforated-section { border-top: 1.5px dashed var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; position: relative; }
+    .modal-barista-guide { font-size: 0.8rem; line-height: 1.4; color: var(--ink-sub); }
+    .modal-barista-guide strong { color: var(--ink); }
+
+    .modal-action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 4px; }
+    .action-btn { background: var(--card-bg); border: 1.5px solid var(--line); padding: 8px 6px; border-radius: 3px; font-size: 0.8rem; font-weight: 800; color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 1.5px 1.5px 0px var(--line); }
+    .action-btn:active { transform: translate(1px, 1px); box-shadow: 0.5px 0.5px 0px var(--line); }
+    .action-btn.playing { background: #F8E8E4; color: var(--accent); border-color: var(--accent); }
+
+    /* 📌 모달 내 시음 완료 도장 */
+    .stamp-seal { position: absolute; right: 18px; top: 40px; width: 95px; height: 95px; border: 3px double var(--stamp-red); border-radius: 50%; color: var(--stamp-red); display: flex; flex-direction: column; align-items: center; justify-content: center; transform: rotate(-14deg) scale(0); opacity: 0; pointer-events: none; user-select: none; background: rgba(252, 250, 247, 0.88); box-shadow: inset 0 0 4px rgba(200,35,35,0.2); }
+    .stamp-seal.stamped { animation: stampImpact 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    @keyframes stampImpact { 0% { transform: scale(3) rotate(-30deg); opacity: 0; } 100% { transform: scale(1) rotate(-14deg); opacity: 0.95; } }
+    .stamp-inner-text { font-size: 0.75rem; font-weight: 900; letter-spacing: 1px; }
+    .stamp-date-text { font-size: 0.55rem; font-weight: 800; margin-top: 1px; }
+
+    /* 📌 빈티지 영수증 프린터 모달 */
+    .printer-modal-overlay { flex-direction: column; justify-content: flex-start; padding-top: max(20px, env(safe-area-inset-top)); overflow-y: auto; }
+    .printer-slot-header { width: 100%; max-width: 380px; height: 18px; background: #3A322C; border: 2px solid var(--line); border-radius: 4px 4px 0 0; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative; margin-top: 10px; flex-shrink: 0; }
+    .printer-slot-line { width: 82%; height: 4px; background: #110E0C; margin: 5px auto 0; border-radius: 2px; }
+
+    .receipt-paper { width: 100%; max-width: 360px; background: #FFFDF9; border-left: 2px dashed #C8BFAF; border-right: 2px dashed #C8BFAF; padding: 20px 18px 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); display: flex; flex-direction: column; gap: 10px; font-family: 'Courier New', Courier, monospace, 'Pretendard'; color: #1A1412; position: relative; transform-origin: top center; clip-path: polygon(0% 0%, 100% 0%, 100% 98%, 97% 100%, 94% 98%, 91% 100%, 88% 98%, 85% 100%, 82% 98%, 79% 100%, 76% 98%, 73% 100%, 70% 98%, 67% 100%, 64% 98%, 61% 100%, 58% 98%, 55% 100%, 52% 98%, 49% 100%, 46% 98%, 43% 100%, 40% 98%, 37% 100%, 34% 98%, 31% 100%, 28% 98%, 25% 100%, 22% 98%, 19% 100%, 16% 98%, 13% 100%, 10% 98%, 7% 100%, 4% 98%, 0% 100%); }
+    .receipt-paper.printing { animation: paperFeed 1.1s ease-out forwards; }
+    @keyframes paperFeed { 0% { max-height: 0px; opacity: 0; transform: translateY(-20px); } 100% { max-height: 800px; opacity: 1; transform: translateY(0); } }
+
+    .receipt-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; border-bottom: 2px solid #1A1412; padding-bottom: 6px; }
+    .receipt-row { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; }
+    .receipt-divider { border-top: 1px dashed #A69B8D; margin: 2px 0; }
+    .receipt-headline { font-family: 'Nanum Myeongjo', serif; font-size: 0.92rem; font-weight: 800; color: var(--accent); text-align: center; line-height: 1.4; background: #F4EFEB; padding: 8px; border-radius: 4px; }
+    .receipt-barcode { width: 100%; height: 38px; margin-top: 6px; display: flex; justify-content: center; align-items: center; }
+    .receipt-btn-group { display: flex; gap: 8px; width: 100%; max-width: 360px; margin-top: 14px; }
+
+    /* 슬라이드 서랍 */
+    .guide-drawer, .origin-drawer { position: fixed; top: 0; width: 88%; max-width: 380px; height: 100%; background: var(--card-bg); z-index: 201; transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; }
+    .guide-drawer { left: -100%; border-right: 2px solid var(--line); }
+    .guide-drawer.open { left: 0; }
+    .origin-drawer { right: -100%; border-left: 2px solid var(--line); }
+    .origin-drawer.open { right: 0; }
+
+    .drawer-header { padding: 14px; border-bottom: 1.5px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: #F3ECE6; }
+    .drawer-header h2 { font-family: 'Nanum Myeongjo', serif; font-size: 1.15rem; font-weight: 800; color: var(--ink); }
+    .drawer-close-btn { background: #FFF; border: 1px solid var(--line); font-size: 1rem; cursor: pointer; width: 28px; height: 28px; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
+    .drawer-content { flex: 1; overflow-y: auto; padding: 14px 12px 40px; display: flex; flex-direction: column; gap: 12px; }
+
+    .guide-article, .origin-info-card { background: #FFF; border: 1.5px solid var(--line); border-radius: 4px; padding: 12px; box-shadow: 1.5px 1.5px 0px var(--line); }
+    .guide-art-num { font-family: 'Playfair Display', serif; font-size: 0.7rem; font-weight: 800; color: var(--accent); margin-bottom: 2px; }
+    .guide-art-title { font-family: 'Nanum Myeongjo', serif; font-size: 1.05rem; font-weight: 800; color: var(--ink); margin-bottom: 8px; border-bottom: 1px solid var(--line-light); padding-bottom: 4px; }
+    .guide-art-body { font-size: 0.82rem; color: var(--ink-sub); line-height: 1.55; }
+    .guide-art-body ul { margin: 6px 0 6px 14px; }
+    .guide-art-body li { margin-bottom: 3px; }
+
+    .formula-tag-wrap { display: flex; flex-wrap: wrap; gap: 3px; margin: 6px 0; }
+    .formula-tag { background: #EFE8E1; color: var(--ink); font-size: 0.72rem; font-weight: 800; padding: 2px 5px; border-radius: 3px; border: 1px solid var(--line-light); }
+    .process-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 0.76rem; }
+    .process-table th { background: #F4EFEB; border: 1px solid var(--line-light); padding: 4px; text-align: center; font-weight: 800; }
+    .process-table td { border: 1px solid var(--line-light); padding: 5px; color: var(--ink); }
+
+    .origin-info-card { cursor: pointer; }
+    .origin-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .origin-country-name { font-size: 1rem; font-weight: 800; color: var(--ink); }
+    .origin-filter-tag { font-size: 0.68rem; background: #EFEBE9; color: var(--accent); padding: 1px 5px; border-radius: 2px; font-weight: 800; }
+    .origin-card-flavor { font-size: 0.8rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+    .origin-card-desc { font-size: 0.76rem; color: var(--ink-sub); line-height: 1.4; }
+
+    .no-result { text-align: center; padding: 30px 10px; color: var(--ink-sub); }
+    
+    /* 상단 네비게이션 버튼과 일반 버튼의 클릭 효과가 밖으로 새어나가지 않게 가두기 */
+    .nav-fixed-btn, .action-btn { position: relative; overflow: hidden; }
+ </style>
+</head>
+<body>
+
+<!-- 📌 상단 증기 파티클 Canvas -->
+<canvas id="steamCanvas"></canvas>
+
+<!-- ⚠️ 최초 접속 추출 변수 주의문 팝업 모달 -->
+<div class="disclaimer-modal-overlay" id="disclaimerOverlay">
+  <div class="disclaimer-card">
+    <div class="disclaimer-badge">⚠️ BARISTA'S EXTRACTION NOTICE</div>
+    <h2 class="disclaimer-title">추출 방식에 따른 맛 변화 안내</h2>
+    <div class="disclaimer-body">
+      <p>본 디스펜서 v1의 테이스팅 노트(산미, 고소함, 바디감)는 <strong>표준 SCA 추출 기준(수온 92~94℃, 표준 드립 분쇄도, 1:15 비율)</strong>을 바탕으로 작성되었습니다.</p>
+      <div class="disclaimer-highlight">
+        💡 사용하시는 <strong>드리퍼 종류(하리오, 칼리타 등), 물 온도, 분쇄도, 추출 시간 및 수질</strong> 등 추출 변수에 따라 실제 컵 노상에서 느껴지는 향미와 무게감이 다를 수 있습니다.
+      </div>
+      <p>원두 고유의 성향을 바탕으로 나만의 최적 드립 레시피를 찾아가는 즐거운 여정이 되시길 바랍니다! ☕</p>
+    </div>
+    <div class="disclaimer-footer">
+      <label class="no-show-label">
+        <input type="checkbox" id="noShowToday"> 오늘 하루 보지 않기
+      </label>
+      <button class="action-btn disclaimer-confirm-btn" id="closeDisclaimerBtn">네, 확인했습니다 ➔</button>
+    </div>
+  </div>
+</div>
+
+<!-- 📌 상단 네비게이션 바 (효과음 토글 및 서랍 버튼 통합) -->
+<div class="top-nav-bar">
+  <button class="nav-fixed-btn" id="openGuideBtn">📖 커피 이야기</button>
+  <button class="nav-fixed-btn" id="soundToggleBtn">🔊 소리 ON</button>
+  <button class="nav-fixed-btn" id="openDrawerBtn">🌍 원산지 도감</button>
+</div>
+
+<div class="app-container" id="appContainer">
+
+  <header class="archive-header" id="logoBtn" title="처음으로">
+    <div class="archive-issue">DISPENSER V1 • SCA 60 MASTER DATABASE</div>
+    <h1 class="archive-title">커피 맛 아카이브</h1>
+    <p class="archive-desc">원하는 맛과 입안의 무게감으로 나의 커피를 찾아보세요</p>
+  </header>
+
+  <!-- 📌 레트로 원두 디스펜서 레버 위젯 -->
+  <div class="dispenser-lever-widget" id="leverWidget">
+    <div id="beanDropZone"></div>
+    <div class="lever-info">
+      <span class="lever-badge">DISPENSER RANDOM PICK</span>
+      <div class="lever-title">🎰 오늘의 스페셜티 뽑기</div>
+      <div class="lever-desc">우측 레버를 아래로 당겨서 추천 원두를 추출하세요</div>
+    </div>
+    <div class="lever-mechanism" id="leverTrigger" title="당겨서 뽑기!">
+      <div class="lever-base-slot"></div>
+      <div class="lever-arm">
+        <div class="lever-knob"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" class="search-input" placeholder="원두 이름, 맛(초콜릿, 복숭아), 1~5단계..." autocomplete="off">
+      <button class="btn-icon" id="clearBtn" title="지우기" style="display: none;">✕</button>
+      <button class="btn-icon mic-btn" id="micBtn" title="음성 검색">🎤</button>
+    </div>
+  </div>
+
+  <div class="voice-status" id="voiceStatus">
+    🎙️ <strong>듣고 있어요!</strong> 원하시는 맛이나 느낌을 편하게 말씀해주세요...
+  </div>
+
+  <div class="core-categories-section" id="coreCategoriesSection">
+    <div class="section-label">MAIN TASTE CATEGORY</div>
+    <div class="core-categories-grid">
+      <button class="core-category-btn" data-type="no-sour">
+        <span class="cat-icon">🥜</span>
+        <span class="cat-title">산미 없는 커피</span>
+        <span class="cat-sub">쓴맛·구수함 중심</span>
+      </button>
+      <button class="core-category-btn" data-type="mild-sour">
+        <span class="cat-icon">🍋</span>
+        <span class="cat-title">약한 산미 커피</span>
+        <span class="cat-sub">은은한 과일 단맛</span>
+      </button>
+      <button class="core-category-btn" data-type="nutty">
+        <span class="cat-icon">🌰</span>
+        <span class="cat-title">고소한 원두 커피</span>
+        <span class="cat-sub">견과류·초콜릿</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="chips-section" id="chipsSection">
+    <div class="chips-grid">
+      <button class="chip-btn" data-query="1단계 2단계 맑은차 가벼운">💧 맑은 차 느낌 (1~2단계)</button>
+      <button class="chip-btn" data-query="4단계 5단계 우유 묵직한 진한">🥛 우유처럼 묵직함 (4~5단계)</button>
+      <button class="chip-btn" data-query="가향 헤이즐넛 바닐라 무산소">✨ 특별 숙성 및 가향원두</button>
+      <button class="chip-btn" data-query="디카페인 속편한">🌙 속 편한 디카페인</button>
+    </div>
+  </div>
+
+  <div class="results-container" id="resultsContainer">
+    <div class="results-header-bar">
+      <div class="result-count" id="resultCount"></div>
+      <button class="home-reset-btn" id="homeResetBtn">🏠 처음으로</button>
+    </div>
+    <div id="coffeeList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+  </div>
+
+</div>
+
+<!-- 상세 카드 모달 -->
+<div class="detail-modal-overlay" id="detailModalOverlay">
+  <div class="detail-modal-card" id="detailModalContent"></div>
+</div>
+
+<!-- 📌 빈티지 영수증 프린터 출력 모달 -->
+<div class="printer-modal-overlay" id="printerModalOverlay">
+  <div class="printer-slot-header">
+    <div class="printer-slot-line"></div>
+  </div>
+  <div class="receipt-paper" id="receiptPaper">
+    <div class="receipt-title">DISPENSER TASTING TICKET</div>
+    <div class="receipt-row">
+      <span id="rcpNo">NO. --</span>
+      <span id="rcpDate">2026.09.03</span>
+    </div>
+    <div class="receipt-divider"></div>
+    <div style="font-size:1.05rem; font-weight:900; text-align:center;" id="rcpName">원두 이름</div>
+    <div style="font-size:0.75rem; font-style:italic; text-align:center; color:#555;" id="rcpEng">English Name</div>
+    <div class="receipt-headline" id="rcpHeadline">"테이스팅 노트 헤드라인"</div>
+    <div class="receipt-divider"></div>
+    <div class="receipt-row">
+      <span>ORIGIN</span>
+      <span id="rcpOrigin">COUNTRY</span>
+    </div>
+    <div class="receipt-row">
+      <span>PROCESS</span>
+      <span id="rcpProcess">Washed</span>
+    </div>
+    <div class="receipt-row">
+      <span>BODY STAGE</span>
+      <span id="rcpBody">3단계</span>
+    </div>
+    <div class="receipt-divider"></div>
+    <div class="receipt-barcode">
+      <svg id="barcodeSvg" width="220" height="32"></svg>
+    </div>
+    <div style="font-size:0.65rem; text-align:center; color:#777; margin-top:2px;">
+      SCA CERTIFIED SPECIALTY ARCHIVE
+    </div>
+  </div>
+  <div class="receipt-btn-group">
+    <button class="action-btn" id="printSaveBtn" style="flex:1;">🖨️ 티켓 인쇄/저장</button>
+    <button class="action-btn" id="openModalFromRcpBtn" style="flex:1;">🔍 카드 상세보기</button>
+    <button class="action-btn" id="closePrinterBtn" style="width:70px;">닫기</button>
+  </div>
+</div>
+
+<!-- 📖 좌측 서랍: 커피 가이드 -->
+<div class="drawer-overlay" id="guideOverlay"></div>
+<div class="guide-drawer" id="guideDrawer">
+  <div class="drawer-header">
+    <h2>📖 3초 만에 이해하는 커피 이야기</h2>
+    <button class="drawer-close-btn" id="closeGuideBtn">✕</button>
+  </div>
+  <div class="drawer-content">
+    <article class="guide-article">
+      <div class="guide-art-num">CHAPTER 01</div>
+      <h3 class="guide-art-title">스페셜티 커피가 뭐예요?</h3>
+      <div class="guide-art-body">
+        쉽게 말해 <strong>'족보와 성적표가 확실한 일등품 커피'</strong>예요.
+        <ul>
+          <li><strong>SCA 특상 등급:</strong> 미국 스페셜티 커피 협회 평가에서 100점 만점 중 80점 이상을 받은 상위 10% 원두입니다.</li>
+          <li><strong>확실한 출처:</strong> 어느 나라, 어느 마을 농부가 길렀는지 족보가 뚜렷해요.</li>
+          <li><strong>자연의 단맛:</strong> 쓴맛만 나는 게 아니라 잘 익은 과일, 꽃, 초콜릿의 향긋한 맛이 나요.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="guide-article">
+      <div class="guide-art-num">CHAPTER 02</div>
+      <h3 class="guide-art-title">긴 이름은 어떻게 읽나요?</h3>
+      <div class="guide-art-body">
+        커피 이름은 사람 이름처럼 <strong>태어난 곳과 말린 방식</strong>을 순서대로 적은 거예요.
+        <div class="formula-tag-wrap">
+          <span class="formula-tag">1. 나라</span> + 
+          <span class="formula-tag">2. 자란 동네</span> + 
+          <span class="formula-tag">3. 나무 품종</span> + 
+          <span class="formula-tag">4. 말린 방법</span>
+        </div>
+        <p style="margin-top:6px; font-size:0.8rem; color:var(--ink);">
+          👉 <strong>예시: [에티오피아] [아바야] [게이샤] [내추럴]</strong><br>
+          "에티오피아 아바야 마을에서 게이샤 나무 열매를 햇볕에 통째로 말려 달콤한 복숭아 맛이 나는 원두!"
+        </p>
+      </div>
+    </article>
+
+    <article class="guide-article">
+      <div class="guide-art-num">CHAPTER 03</div>
+      <h3 class="guide-art-title">원두를 말리는 4가지 방법</h3>
+      <div class="guide-art-body">
+        커피 열매 껍질을 어떻게 말렸는지에 따라 맛이 완전히 달라져요.
+        <table class="process-table">
+          <thead>
+            <tr>
+              <th>말린 방법</th>
+              <th>어떻게 만들었나요?</th>
+              <th>어떤 맛이 나나요?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>워시드</strong><br>(물 세척)</td>
+              <td>물로 깨끗이 씻어 말림</td>
+              <td>맑은 홍차처럼 잡맛 없이 개운해요.</td>
+            </tr>
+            <tr>
+              <td><strong>내추럴</strong><br>(햇볕 건조)</td>
+              <td>열매째 통째로 바짝 말림</td>
+              <td>딸기잼처럼 달콤하고 진해요.</td>
+            </tr>
+            <tr>
+              <td><strong>허니</strong><br>(단물 건조)</td>
+              <td>단물을 살짝 묻혀 말림</td>
+              <td>꿀물처럼 부드럽고 둥글둥글해요.</td>
+            </tr>
+            <tr>
+              <td><strong>무산소/특수</strong><br>(특별 숙성)</td>
+              <td>밀폐 통이나 오크통 숙성</td>
+              <td>복숭아 요거트나 위스키처럼 신기해요.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="guide-article">
+      <div class="guide-art-num">CHAPTER 04</div>
+      <h3 class="guide-art-title">바디감은 무슨 뜻인가요?</h3>
+      <div class="guide-art-body">
+        신맛·단맛이 아니라, 삼킬 때 입안에 느껴지는 <strong>'국물의 두께감과 무게'</strong>예요.
+        <ul>
+          <li><strong>1단계 (생수 · 허브티):</strong> 물처럼 맑고 가볍게 쑥 넘어가요.</li>
+          <li><strong>2단계 (사과 주스 · 레몬티):</strong> 가볍고 상쾌한 과즙 느낌이에요.</li>
+          <li><strong>3단계 (보리차 · 저지방 우유):</strong> 누구나 편안하게 마시는 중간 두께예요.</li>
+          <li><strong>4단계 (일반 우유 · 핫초코):</strong> 입안이 도톰하고 든든하게 채워져요.</li>
+          <li><strong>5단계 (생크림 · 진한 시럽):</strong> 혀를 묵직하게 감싸는 깊은 맛이에요.</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</div>
+
+<!-- 🌍 우측 서랍: 원산지 도감 -->
+<div class="drawer-overlay" id="originOverlay"></div>
+<div class="origin-drawer" id="originDrawer">
+  <div class="drawer-header">
+    <h2>🌍 커피 원산지 도감</h2>
+    <button class="drawer-close-btn" id="closeDrawerBtn">✕</button>
+  </div>
+  <div class="drawer-content">
+    <div class="drawer-notice" style="font-size:0.78rem; color:var(--ink-sub);">
+      💡 나라 이름을 누르면 해당 국가 원두의 테이스팅 카드를 모아드립니다.
+    </div>
+    <div id="originCardsContainer" style="display: flex; flex-direction: column; gap: 8px;"></div>
+  </div>
+</div>
+
+<!-- 1. 커피 데이터를 담은 외부 파일 연결 (반드시 위에 선언) -->
+<script src="data.js"></script>
+
+<!-- 2. 메인 동작 로직 -->
+<script>
+  // 🔊 Web Audio API 기반 오디오 모듈 & 음소거(Mute) 상태 제어
+  const AudioFX = {
+    ctx: null,
+    isMuted: localStorage.getItem('dispenser_muted') === 'true',
+
+    init() {
+      if (!this.ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) this.ctx = new AudioCtx();
+      }
+      if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    },
+    playTone(type, freqStart, freqEnd, duration, gainStart = 0.1, gainEnd = 0.0001) {
+      if (this.isMuted) return;
+      this.init();
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freqStart, this.ctx.currentTime);
+      if (freqEnd) osc.frequency.exponentialRampToValueAtTime(Math.max(freqEnd, 0.01), this.ctx.currentTime + duration);
+      gain.gain.setValueAtTime(gainStart, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(gainEnd, this.ctx.currentTime + duration);
+      osc.connect(gain); gain.connect(this.ctx.destination);
+      osc.start(); osc.stop(this.ctx.currentTime + duration);
+    },
+    lever() { this.playTone('sawtooth', 140, 30, 0.25, 0.25); },
+    stamp() { this.playTone('triangle', 110, 15, 0.2, 0.5); },
+    drip() { this.playTone('sine', 550, 180, 0.12, 0.12); },
+    printer() {
+      if (this.isMuted) return;
+      this.init(); if (!this.ctx) return;
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => this.playTone('square', 750 + Math.random() * 250, null, 0.06, 0.04), i * 90);
+      }
+    },
+    toggleMute() {
+      this.isMuted = !this.isMuted;
+      localStorage.setItem('dispenser_muted', this.isMuted);
+      return this.isMuted;
+    }
+  };
+
+  // 🔊 소리 ON/OFF 버튼 UI 제어
+  const soundToggleBtn = document.getElementById("soundToggleBtn");
+  function updateSoundBtnUI() {
+    if (AudioFX.isMuted) {
+      soundToggleBtn.innerHTML = "🔇 소리 OFF";
+      soundToggleBtn.classList.add("muted");
+    } else {
+      soundToggleBtn.innerHTML = "🔊 소리 ON";
+      soundToggleBtn.classList.remove("muted");
+    }
+  }
+  updateSoundBtnUI();
+
+  soundToggleBtn.onclick = () => {
+    AudioFX.toggleMute();
+    updateSoundBtnUI();
+    if (!AudioFX.isMuted) AudioFX.drip();
+  };
+
+  // 헬퍼: 모달/서랍 UI 토글
+  function toggleUI(targetEl, overlayEl, isOpen) {
+    if (targetEl) targetEl.classList.toggle("open", isOpen);
+    if (overlayEl) overlayEl.classList.toggle("open", isOpen);
+    document.body.style.overflow = isOpen ? "hidden" : "";
+  }
+
+  // ⚠️ 최초 접속 추출 주의문 팝업 제어
+  const disclaimerOverlay = document.getElementById("disclaimerOverlay");
+  const closeDisclaimerBtn = document.getElementById("closeDisclaimerBtn");
+  const noShowToday = document.getElementById("noShowToday");
+
+  function initDisclaimerNotice() {
+    const hideUntil = localStorage.getItem("dispenser_hide_disclaimer");
+    const now = new Date().getTime();
+    if (!hideUntil || now > parseInt(hideUntil, 10)) {
+      toggleUI(disclaimerOverlay, null, true);
+    }
+  }
+
+  closeDisclaimerBtn.onclick = () => {
+    if (noShowToday.checked) {
+      const expires = new Date().getTime() + (24 * 60 * 60 * 1000);
+      localStorage.setItem("dispenser_hide_disclaimer", expires.toString());
+    }
+    toggleUI(disclaimerOverlay, null, false);
+    AudioFX.drip();
+  };
+
+  document.addEventListener("DOMContentLoaded", initDisclaimerNotice);
+
+  // 한글 초성 추출 함수
+  function getChosung(str) {
+    const list = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+    return Array.from(str).map(char => {
+      const code = char.charCodeAt(0) - 44032;
+      return (code >= 0 && code <= 11171) ? list[Math.floor(code / 588)] : char;
+    }).join('');
+  }
+
+  // LocalStorage 마셔본 원두 관리
+  let tastedSet = new Set(JSON.parse(localStorage.getItem('dispenser_tasted_set') || '[]'));
+  function saveTastedSet() {
+    localStorage.setItem('dispenser_tasted_set', JSON.stringify(Array.from(tastedSet)));
+  }
+
+  const appContainer = document.getElementById("appContainer");
+  const resultsContainer = document.getElementById("resultsContainer");
+  const coffeeList = document.getElementById("coffeeList");
+  const resultCount = document.getElementById("resultCount");
+  const searchInput = document.getElementById("searchInput");
+  const clearBtn = document.getElementById("clearBtn");
+  const logoBtn = document.getElementById("logoBtn");
+  const homeResetBtn = document.getElementById("homeResetBtn");
+
+  const openGuideBtn = document.getElementById("openGuideBtn");
+  const closeGuideBtn = document.getElementById("closeGuideBtn");
+  const guideDrawer = document.getElementById("guideDrawer");
+  const guideOverlay = document.getElementById("guideOverlay");
+
+  const openDrawerBtn = document.getElementById("openDrawerBtn");
+  const closeDrawerBtn = document.getElementById("closeDrawerBtn");
+  const originDrawer = document.getElementById("originDrawer");
+  const originOverlay = document.getElementById("originOverlay");
+  const originCardsContainer = document.getElementById("originCardsContainer");
+
+  // 스크롤 시 버튼 상단 숨김 센서
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 25) {
+      openGuideBtn.classList.add("slide-left");
+      openDrawerBtn.classList.add("slide-right");
+    } else {
+      openGuideBtn.classList.remove("slide-left");
+      openDrawerBtn.classList.remove("slide-right");
+    }
+  });
+
+  openGuideBtn.onclick = () => toggleUI(guideDrawer, guideOverlay, true);
+  closeGuideBtn.onclick = guideOverlay.onclick = () => toggleUI(guideDrawer, guideOverlay, false);
+
+  openDrawerBtn.onclick = () => toggleUI(originDrawer, originOverlay, true);
+  closeDrawerBtn.onclick = originOverlay.onclick = () => toggleUI(originDrawer, originOverlay, false);
+
+  function renderOriginCards() {
+    originCardsContainer.innerHTML = "";
+    originData.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "origin-info-card";
+      card.innerHTML = `
+        <div class="origin-card-head">
+          <div class="origin-country-name">${item.flag} ${item.country}</div>
+          <span class="origin-filter-tag">모아보기 👉</span>
+        </div>
+        <div class="origin-card-flavor">대표 맛: ${item.flavor}</div>
+        <div class="origin-card-desc">${item.desc}</div>
+      `;
+      card.onclick = () => {
+        toggleUI(originDrawer, originOverlay, false);
+        searchInput.value = item.country;
+        clearBtn.style.display = "block";
+        doSearch(item.query);
+      };
+      originCardsContainer.appendChild(card);
+    });
+  }
+
+  // 📌 레트로 원두 디스펜서 레버 메커니즘
+  const leverTrigger = document.getElementById("leverTrigger");
+  const beanDropZone = document.getElementById("beanDropZone");
+  let isLeverPulling = false;
+
+  leverTrigger.onclick = () => {
+    if (isLeverPulling) return;
+    isLeverPulling = true;
+
+    AudioFX.lever();
+    leverTrigger.classList.add("pulled");
+
+    for (let i = 0; i < 12; i++) {
+      setTimeout(() => {
+        const bean = document.createElement("div");
+        bean.className = "dropping-bean";
+        bean.innerText = "🫘";
+        bean.style.left = (40 + Math.random() * 50) + "%";
+        bean.style.animationDuration = (0.4 + Math.random() * 0.3) + "s";
+        beanDropZone.appendChild(bean);
+        setTimeout(() => bean.remove(), 700);
+      }, i * 35);
+    }
+
+    setTimeout(() => {
+      leverTrigger.classList.remove("pulled");
+      isLeverPulling = false;
+      const randomItem = coffeeData[Math.floor(Math.random() * coffeeData.length)];
+      triggerReceiptPrinter(randomItem);
+    }, 450);
+  };
+
+  // 📌 영수증 프린터 모달 제어 및 SVG 바코드
+  const printerModalOverlay = document.getElementById("printerModalOverlay");
+  const receiptPaper = document.getElementById("receiptPaper");
+  const closePrinterBtn = document.getElementById("closePrinterBtn");
+  const printSaveBtn = document.getElementById("printSaveBtn");
+  const openModalFromRcpBtn = document.getElementById("openModalFromRcpBtn");
+  let currentPrintedCoffee = null;
+
+  function generateBarcodeSvg() {
+    const svg = document.getElementById("barcodeSvg");
+    svg.innerHTML = "";
+    let x = 0;
+    for (let i = 0; i < 48; i++) {
+      const width = Math.random() > 0.6 ? 4 : 2;
+      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("x", x); rect.setAttribute("y", 0); rect.setAttribute("width", width); rect.setAttribute("height", 32); rect.setAttribute("fill", "#1A1412");
+      svg.appendChild(rect); x += width + (Math.random() > 0.5 ? 2 : 1);
+    }
+  }
+
+  function triggerReceiptPrinter(item) {
+    currentPrintedCoffee = item;
+    stopAudio();
+
+    document.getElementById("rcpNo").innerText = item.no;
+    document.getElementById("rcpName").innerText = item.name;
+    document.getElementById("rcpEng").innerText = item.eng;
+    document.getElementById("rcpHeadline").innerText = `"${item.headline}"`;
+    document.getElementById("rcpOrigin").innerText = item.origin;
+    document.getElementById("rcpProcess").innerText = item.process;
+    document.getElementById("rcpBody").innerText = item.bodyDesc.split(' ')[0];
+
+    const today = new Date();
+    document.getElementById("rcpDate").innerText = `${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')}`;
+
+    generateBarcodeSvg();
+
+    toggleUI(printerModalOverlay, null, true);
+    receiptPaper.classList.remove("printing");
+    void receiptPaper.offsetWidth;
+    receiptPaper.classList.add("printing");
+    AudioFX.printer();
+  }
+
+  closePrinterBtn.onclick = () => toggleUI(printerModalOverlay, null, false);
+  printSaveBtn.onclick = () => window.print();
+  openModalFromRcpBtn.onclick = () => {
+    toggleUI(printerModalOverlay, null, false);
+    if (currentPrintedCoffee) window.openDetailModal(currentPrintedCoffee.id);
+  };
+
+  // 상세 모달 제어
+  const detailModalOverlay = document.getElementById("detailModalOverlay");
+  const detailModalContent = document.getElementById("detailModalContent");
+  let activeAudioBtn = null;
+
+  function renderDots(count) {
+    return Array.from({length: 5}, (_, i) => `<div class="dot ${i < count ? 'filled' : ''}"></div>`).join('');
+  }
+
+  window.openDetailModal = function(coffeeId) {
+    const item = coffeeData.find(c => c.id === coffeeId);
+    if (!item) return;
+
+    stopAudio();
+
+    const isTasted = tastedSet.has(item.id);
+    const todayStr = new Date().toISOString().slice(2,10).replace(/-/g,'.');
+
+    detailModalContent.innerHTML = `
+      <button class="modal-close-btn" onclick="closeDetailModal()">✕</button>
+
+      <div class="modal-meta-bar">
+        <span class="modal-card-num">${item.no}</span>
+        <span>SCA CUPPING ARCHIVE</span>
+      </div>
+
+      <div class="modal-title-section">
+        <h2 class="modal-kor-name">${item.name}</h2>
+        <div class="modal-eng-name">${item.eng}</div>
+      </div>
+
+      <div class="modal-headline-box">
+        "${item.headline}"
+      </div>
+
+      <div class="modal-spec-grid">
+        <div class="modal-spec-item">
+          <span class="modal-spec-label">VARIETAL (나무 종류)</span>
+          <span class="modal-spec-val">${item.varietal}</span>
+        </div>
+        <div class="modal-spec-item">
+          <span class="modal-spec-label">PROCESS (말린 방법)</span>
+          <span class="modal-spec-val">${item.process}</span>
+        </div>
+        <div class="modal-spec-item">
+          <span class="modal-spec-label">ALTITUDE (자란 높이)</span>
+          <span class="modal-spec-val">${item.altitude}</span>
+        </div>
+        <div class="modal-spec-item">
+          <span class="modal-spec-label">ROAST (볶은 정도)</span>
+          <span class="modal-spec-val">${item.roast}</span>
+        </div>
+      </div>
+
+      <div class="modal-profile-rows">
+        <div class="modal-profile-row">
+          <span class="modal-profile-name">🍋 상큼함 (산미)</span>
+          <div class="modal-profile-dots">${renderDots(item.sourDots)}</div>
+          <span class="modal-profile-desc">${item.sourDesc}</span>
+        </div>
+        <div class="modal-profile-row">
+          <span class="modal-profile-name">🥜 구수함 (너티)</span>
+          <div class="modal-profile-dots">${renderDots(item.nuttyDots)}</div>
+          <span class="modal-profile-desc">${item.nuttyDesc}</span>
+        </div>
+        <div class="modal-profile-row">
+          <span class="modal-profile-name">⚖️ 바디감 (무게)</span>
+          <div class="modal-profile-dots">${renderDots(item.bodyDots)}</div>
+          <span class="modal-profile-desc highlight">${item.bodyDesc}</span>
+        </div>
+      </div>
+
+      <div class="modal-perforated-section">
+        <div class="stamp-seal ${isTasted ? 'stamped' : ''}" id="modalStampSeal">
+          <span class="stamp-inner-text">시음 완료</span>
+          <span class="stamp-inner-text">TASTED</span>
+          <span class="stamp-date-text">${todayStr}</span>
+        </div>
+
+        <div class="modal-barista-guide">
+          🗣️ <strong>바리스타 주문 팁:</strong><br>${item.guide}
+        </div>
+
+        <div class="modal-action-btns">
+          <button class="action-btn" id="modalAudioBtn" onclick="toggleAudio(this, '${item.name}. ${item.headline}. 바디감은 ${item.bodyDesc}. ${item.guide}')">
+            🔊 읽어주기
+          </button>
+          <button class="action-btn" id="modalPrintBtn" onclick="triggerReceiptPrinterFromModal('${item.id}')">
+            🖨️ 티켓 출력
+          </button>
+        </div>
+        <button class="action-btn" id="toggleTastedBtn" onclick="toggleTastedStatus('${item.id}')" style="width:100%; margin-top:2px; background:${isTasted ? '#FCE8E6':'var(--card-bg)'}; color:${isTasted ? 'var(--stamp-red)':'var(--ink)'}">
+          ${isTasted ? '❤️ 시음 도장 취소하기' : '☕ 이 커피 마셔봤어요! (도장 쿵)'}
+        </button>
+      </div>
+    `;
+
+    toggleUI(detailModalOverlay, null, true);
+  }
+
+  window.triggerReceiptPrinterFromModal = function(coffeeId) {
+    const item = coffeeData.find(c => c.id === coffeeId);
+    if (item) {
+      closeDetailModal();
+      triggerReceiptPrinter(item);
+    }
+  };
+
+  window.toggleTastedStatus = function(coffeeId) {
+    const seal = document.getElementById("modalStampSeal");
+    const btn = document.getElementById("toggleTastedBtn");
+
+    if (tastedSet.has(coffeeId)) {
+      tastedSet.delete(coffeeId);
+      if (seal) seal.classList.remove("stamped");
+      if (btn) {
+        btn.innerHTML = '☕ 이 커피 마셔봤어요! (도장 쿵)';
+        btn.style.background = 'var(--card-bg)'; btn.style.color = 'var(--ink)';
+      }
+    } else {
+      tastedSet.add(coffeeId);
+      AudioFX.stamp();
+      if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
+
+      if (seal) {
+        seal.classList.remove("stamped");
+        void seal.offsetWidth;
+        seal.classList.add("stamped");
+      }
+      if (btn) {
+        btn.innerHTML = '❤️ 시음 도장 취소하기';
+        btn.style.background = '#FCE8E6'; btn.style.color = 'var(--stamp-red)';
+      }
+    }
+    saveTastedSet();
+    if (resultsContainer.classList.contains("visible")) doSearch(searchInput.value);
+  };
+
+  window.closeDetailModal = function() { stopAudio(); toggleUI(detailModalOverlay, null, false); };
+  detailModalOverlay.onclick = (e) => { if (e.target === detailModalOverlay) closeDetailModal(); };
+
+  // TTS 오디오
+  window.toggleAudio = function(btn, text) {
+    if (!('speechSynthesis' in window)) return alert("음성 읽기를 지원하지 않는 환경입니다.");
+    if (activeAudioBtn === btn) return stopAudio();
+    stopAudio();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ko-KR'; utterance.rate = 0.95;
+    utterance.onstart = () => { activeAudioBtn = btn; btn.classList.add('playing'); btn.innerHTML = '⏹️ 멈추기'; };
+    utterance.onend = utterance.onerror = () => stopAudio();
+    window.speechSynthesis.speak(utterance);
+  };
+
+  function stopAudio() {
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    if (activeAudioBtn) { activeAudioBtn.classList.remove('playing'); activeAudioBtn.innerHTML = '🔊 읽어주기'; activeAudioBtn = null; }
+  }
+
+  function resetToHome() {
+    stopAudio(); closeDetailModal();
+    toggleUI(guideDrawer, guideOverlay, false);
+    toggleUI(originDrawer, originOverlay, false);
+    toggleUI(printerModalOverlay, null, false);
+    searchInput.value = ""; clearBtn.style.display = "none";
+    resultsContainer.classList.remove("visible"); appContainer.classList.remove("searched");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  logoBtn.onclick = homeResetBtn.onclick = resetToHome;
+
+  // 📌 3D Card Tilt & 렌더링
+  function renderCompactCards(items) {
+    coffeeList.innerHTML = "";
+    resultCount.innerHTML = `검색된 카드 <strong>${items.length}</strong>장`;
+
+    if (items.length === 0) {
+      coffeeList.innerHTML = `
+        <div class="no-result">
+          <h3 style="font-family:'Nanum Myeongjo',serif; font-size:1.1rem; margin-bottom:4px;">🔍 찾으시는 커피 카드가 없습니다</h3>
+          <p style="font-size:0.82rem;">예: '신맛 없는 거', '과테말라', '1단계', '헤이즐넛', '무산소'처럼 검색해보세요.</p>
+        </div>
+      `;
+      return;
+    }
+
+    items.forEach(c => {
+      const isTasted = tastedSet.has(c.id);
+      const wrapper = document.createElement("div");
+      wrapper.className = "card-3d-wrapper";
+
+      const card = document.createElement("div");
+      card.className = `compact-coffee-card ${isTasted ? 'is-tasted' : ''}`;
+      card.innerHTML = `
+        <div class="mini-tasted-badge">TASTED</div>
+        <div class="compact-top">
+          <div class="compact-meta"><span class="compact-no">${c.no}</span><span>SCA INDEX</span></div>
+          <span class="compact-origin-stamp">${c.origin}</span>
+        </div>
+        <div class="compact-title-row">
+          <div class="compact-title">${c.name}</div>
+          <div class="compact-eng">${c.eng}</div>
+        </div>
+        <div class="compact-headline">"${c.headline}"</div>
+        <div class="compact-footer">
+          <span class="compact-body-badge">⚖️ ${c.bodyDesc.split(' ')[0]} ${c.bodyDesc.split(' ')[1] || ''}</span>
+          <span class="compact-tap-guide">상세 보기 ➔</span>
+        </div>
+      `;
+
+      card.onmousemove = (e) => {
+        const rect = card.getBoundingClientRect();
+        const rotateX = ((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * -8;
+        const rotateY = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2)) * 8;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
+      };
+      card.onmouseleave = () => card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+      card.onclick = () => window.openDetailModal(c.id);
+
+      wrapper.appendChild(card);
+      coffeeList.appendChild(wrapper);
+    });
+  }
+
+  function doSearch(query) {
+    const q = query.trim().toLowerCase().replace(/\s+/g, '');
+    if (!q) return resetToHome();
+
+    stopAudio(); appContainer.classList.add("searched"); resultsContainer.classList.add("visible");
+    const qChosung = getChosung(q);
+
+    const filtered = coffeeData.filter(item => {
+      const nameMatch = item.name.toLowerCase().replace(/\s+/g, '').includes(q);
+      const originMatch = item.origin.toLowerCase().replace(/\s+/g, '').includes(q);
+      const chosungMatch = getChosung(item.name).includes(qChosung);
+      const textMatch = item.headline.includes(q) || item.guide.includes(q) || item.bodyDesc.includes(q);
+      const keywordMatch = item.keywords.some(k => q.includes(k) || k.includes(q));
+
+      if (q === "산미없는커피" || q.includes("산미없는") || q.includes("안신")) return item.sourDots <= 1;
+      if (q === "약한산미커피" || q.includes("약한산미") || q.includes("은은한산미")) return item.sourDots === 2 || item.sourDots === 3;
+      if (q === "고소한원두커피" || q.includes("고소한원두") || q.includes("구수한커피")) return item.nuttyDots >= 4;
+
+      if ((q.includes("1단계") || q.includes("생수") || q.includes("허브티")) && item.bodyStage === "1단계") return true;
+      if ((q.includes("2단계") || q.includes("홍차") || q.includes("주스")) && item.bodyStage === "2단계") return true;
+      if ((q.includes("3단계") || q.includes("보리차") || q.includes("저지방")) && item.bodyStage === "3단계") return true;
+      if ((q.includes("4단계") || q.includes("우유") || q.includes("핫초코")) && item.bodyStage === "4단계") return true;
+      if ((q.includes("5단계") || q.includes("생크림") || q.includes("시럽")) && item.bodyStage === "5단계") return true;
+
+      if (q.includes("가벼운") && (item.bodyStage === "1단계" || item.bodyStage === "2단계")) return true;
+      if ((q.includes("묵직한") || q.includes("진한") || q.includes("스타벅스")) && (item.bodyStage === "4단계" || item.bodyStage === "5단계")) return true;
+
+      return nameMatch || originMatch || chosungMatch || textMatch || keywordMatch;
+    });
+
+    renderCompactCards(filtered);
+  }
+
+  // 📌 클릭 시 커피 드립 파문(Ripple)
+  document.onclick = (e) => {
+    const btn = e.target.closest(".core-category-btn, .chip-btn, .nav-fixed-btn, .action-btn");
+    if (btn && btn.id !== "soundToggleBtn") {
+      AudioFX.drip();
+      const rect = btn.getBoundingClientRect();
+      const circle = document.createElement("span");
+      const diameter = Math.max(rect.width, rect.height);
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${e.clientX - rect.left - diameter / 2}px`;
+      circle.style.top = `${e.clientY - rect.top - diameter / 2}px`;
+      circle.className = "drip-ripple";
+      const old = btn.querySelector(".drip-ripple");
+      if (old) old.remove();
+      btn.appendChild(circle);
+    }
+  };
+
+  document.querySelectorAll(".core-category-btn").forEach(btn => {
+    btn.onclick = () => {
+      const type = btn.dataset.type;
+      const q = type === "no-sour" ? "산미 없는 커피" : type === "mild-sour" ? "약한 산미 커피" : "고소한 원두 커피";
+      searchInput.value = q; clearBtn.style.display = "block"; doSearch(q);
+    };
+  });
+
+  // 음성 인식 (STT)
+  const micBtn = document.getElementById("micBtn");
+  const voiceStatus = document.getElementById("voiceStatus");
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (SpeechRecognition) {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'ko-KR';
+
+    micBtn.onclick = () => {
+      try {
+        stopAudio();
+        recognition.start();
+        micBtn.classList.add("listening");
+        voiceStatus.classList.add("active");
+      } catch(e) { recognition.stop(); }
+    };
+    recognition.onresult = (e) => {
+      const text = e.results[0][0].transcript;
+      searchInput.value = text; clearBtn.style.display = "block"; doSearch(text);
+    };
+    recognition.onend = () => {
+      micBtn.classList.remove("listening");
+      voiceStatus.classList.remove("active");
+    };
+  }
+
+  searchInput.oninput = (e) => {
+    clearBtn.style.display = e.target.value ? "block" : "none";
+    doSearch(e.target.value);
+  };
+  clearBtn.onclick = () => { resetToHome(); searchInput.focus(); };
+
+  document.querySelectorAll(".chip-btn").forEach(btn => {
+    btn.onclick = () => {
+      searchInput.value = btn.innerText.replace(/^[^\s]+\s/, '');
+      clearBtn.style.display = "block"; doSearch(btn.dataset.query);
+    };
+  });
+
+  // 📌 상단 실시간 커피 증기 Canvas 최적화 유지
+  const canvas = document.getElementById("steamCanvas");
+  const ctx = canvas.getContext("2d");
+  let particles = [];
+  let isCanvasVisible = true;
+
+  const resizeCanvas = () => { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; };
+  window.onresize = resizeCanvas; resizeCanvas();
+
+  const observer = new IntersectionObserver((entries) => { isCanvasVisible = entries[0].isIntersecting; });
+  observer.observe(canvas);
+
+  class SteamParticle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = canvas.width / 2 + (Math.random() - 0.5) * 160;
+      this.y = canvas.height - 10; this.radius = 8 + Math.random() * 12;
+      this.vy = - (0.4 + Math.random() * 0.6); this.vx = (Math.random() - 0.5) * 0.4;
+      this.alpha = 0.15 + Math.random() * 0.2;
+    }
+    update() {
+      this.y += this.vy; this.x += this.vx; this.alpha -= 0.0018; this.radius += 0.15;
+      if (this.alpha <= 0 || this.y <= 0) this.reset();
+    }
+    draw() {
+      ctx.save(); ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(244, 239, 235, ${this.alpha})`; ctx.shadowBlur = 12;
+      ctx.shadowColor = "rgba(255, 255, 255, 0.5)"; ctx.fill(); ctx.restore();
+    }
+  }
+
+  for (let i = 0; i < 22; i++) particles.push(new SteamParticle());
+  function animateSteam() {
+    if (isCanvasVisible) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+    }
+    requestAnimationFrame(animateSteam);
+  }
+  animateSteam();
+
+  renderOriginCards();
+</script>
+
+</body>
+</html>
