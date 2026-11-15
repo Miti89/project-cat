@@ -240,32 +240,265 @@
     }
 
     /* 📌 공통 모달 오버레이 */
-    .detail-modal-overlay, .drawer-overlay, .printer-modal-overlay, .disclaimer-modal-overlay {
+    .detail-modal-overlay, .drawer-overlay, .printer-modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(33, 27, 23, 0.75); z-index: 200;
       opacity: 0; visibility: hidden; transition: all 0.25s ease;
       display: flex; align-items: center; justify-content: center; padding: 14px;
     }
-    .detail-modal-overlay.open, .drawer-overlay.open, .printer-modal-overlay.open, .disclaimer-modal-overlay.open {
+    .detail-modal-overlay.open, .drawer-overlay.open, .printer-modal-overlay.open {
       opacity: 1; visibility: visible;
     }
 
-    /* ⚠️ 최초 접속 주의문 팝업 전용 스타일 */
-    .disclaimer-modal-overlay { z-index: 300; }
-    .disclaimer-card {
-      background: var(--card-bg); border: 2px solid var(--line); border-radius: 6px;
-      width: 100%; max-width: 440px; padding: 22px 18px 18px; box-shadow: 5px 5px 0px var(--line);
-      display: flex; flex-direction: column; gap: 12px; position: relative;
-      animation: popNotice 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    /* 📦 최초 접속 크래프트 박스 패키지 & 절취선 개봉(Unboxing) 오버레이 */
+    .disclaimer-modal-overlay {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 300;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      overflow: hidden;
+      background: transparent;
+      transition: opacity 0.22s ease, visibility 0.22s ease;
     }
-    @keyframes popNotice { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-    .disclaimer-badge { font-size: 0.72rem; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
-    .disclaimer-title { font-family: 'Nanum Myeongjo', serif; font-size: 1.25rem; font-weight: 800; color: var(--ink); line-height: 1.3; }
-    .disclaimer-body { font-size: 0.85rem; color: var(--ink-sub); line-height: 1.6; display: flex; flex-direction: column; gap: 10px; }
-    .disclaimer-highlight { background: #F3EAE3; border-left: 3px solid var(--accent); padding: 8px 10px; border-radius: 2px; font-weight: 600; color: var(--ink); font-size: 0.82rem; }
-    .disclaimer-footer { display: flex; flex-direction: column; align-items: center; justify-content: center; border-top: 1.5px dashed var(--line-light); padding-top: 14px; margin-top: 4px; gap: 10px; }
-    .no-show-label { font-size: 0.8rem; font-weight: 600; color: var(--ink-sub); display: flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; user-select: none; }
-    .disclaimer-confirm-btn { background: var(--accent); color: #FFF; border-color: var(--line); width: 100%; justify-content: center; padding: 11px; font-size: 0.88rem; }
+    .disclaimer-modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .kraft-panel {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      background-color: #C1A17E;
+      background-image:
+        radial-gradient(rgba(94, 73, 52, 0.08) 1px, transparent 0),
+        radial-gradient(rgba(255, 250, 240, 0.06) 1px, transparent 0),
+        linear-gradient(180deg, rgba(255, 248, 238, 0.06) 0%, rgba(94, 73, 52, 0.07) 100%);
+      background-size: 14px 14px, 19px 19px, 100% 100%;
+      background-position: 0 0, 7px 9px, 0 0;
+      transition: transform 0.54s cubic-bezier(0.65, 0, 0.35, 1);
+      will-change: transform;
+      overflow: hidden;
+    }
+    .kraft-top-panel {
+      top: 0;
+      height: 54%;
+    }
+    .kraft-bottom-panel {
+      top: 54%;
+      height: 46%;
+      background-color: #BE9E7B;
+    }
+    .kraft-panel::before {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+    .kraft-top-panel::before {
+      inset: 16px 16px 0 16px;
+      border-top: 1px solid rgba(94, 73, 52, 0.26);
+      border-left: 1px solid rgba(94, 73, 52, 0.26);
+      border-right: 1px solid rgba(94, 73, 52, 0.26);
+      box-shadow: inset 0 1px 0 rgba(255, 252, 245, 0.16);
+    }
+    .kraft-bottom-panel::before {
+      inset: 0 16px 16px 16px;
+      border-bottom: 1px solid rgba(94, 73, 52, 0.26);
+      border-left: 1px solid rgba(94, 73, 52, 0.26);
+      border-right: 1px solid rgba(94, 73, 52, 0.26);
+      box-shadow: inset 0 -1px 0 rgba(255, 252, 245, 0.14);
+    }
+    .disclaimer-modal-overlay.is-splitting .kraft-top-panel {
+      transform: translateY(-105%);
+    }
+    .disclaimer-modal-overlay.is-splitting .kraft-bottom-panel {
+      transform: translateY(105%);
+    }
+    .kraft-copy-block {
+      position: absolute;
+      top: clamp(44px, 11vh, 108px);
+      left: clamp(26px, 8.5vw, 112px);
+      max-width: min(420px, calc(100vw - 52px));
+      color: #FBF9F5;
+      text-align: left;
+      user-select: none;
+    }
+    .kraft-copy-title {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin-bottom: 10px;
+      color: #FBF9F5;
+    }
+    .kraft-copy-body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(0.82rem, 1.8vw, 0.88rem);
+      font-weight: 400;
+      line-height: 1.65;
+      color: rgba(251, 249, 245, 0.92);
+    }
+    .kraft-copy-en {
+      margin-top: 16px;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(0.72rem, 1.5vw, 0.76rem);
+      font-weight: 400;
+      line-height: 1.55;
+      letter-spacing: 0.2px;
+      color: rgba(251, 249, 245, 0.78);
+    }
+    .kraft-tear-zone {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 54%;
+      transform: translateY(-50%);
+      z-index: 5;
+    }
+    .kraft-confirm-trigger {
+      position: absolute;
+      right: clamp(20px, 4.5vw, 42px);
+      bottom: calc(100% + 10px);
+      background: transparent;
+      border: none;
+      padding: 4px 2px;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #FBF9F5;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .kraft-confirm-trigger:hover {
+      transform: translateX(2px);
+      opacity: 0.88;
+    }
+    .kraft-tear-strip {
+      position: relative;
+      width: 100%;
+      height: 24px;
+      border: none;
+      padding: 0;
+      margin: 0;
+      display: block;
+      cursor: pointer;
+      background: #B49370;
+      box-shadow: inset 0 1px 0 rgba(255, 250, 242, 0.22), inset 0 -1px 0 rgba(94, 73, 52, 0.25);
+      transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+      transform-origin: left center;
+    }
+    .kraft-tear-strip::before,
+    .kraft-tear-strip::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-image: repeating-linear-gradient(90deg, #5E4934 0 7px, transparent 7px 12px);
+      opacity: 0.85;
+    }
+    .kraft-tear-strip::before { top: -1px; }
+    .kraft-tear-strip::after { bottom: -1px; }
+    .kraft-pull-tab {
+      position: absolute;
+      right: 0;
+      top: -1px;
+      width: 88px;
+      height: 26px;
+      background: linear-gradient(90deg, #B49370 0%, #C8A988 65%, #D1B494 100%);
+      border-top: 1px dashed #5E4934;
+      border-bottom: 1px dashed #5E4934;
+      border-left: 1px solid rgba(94, 73, 52, 0.35);
+      border-radius: 3px 0 0 3px;
+      transform: rotate(-2.5deg) translateY(-2px);
+      transform-origin: left center;
+      box-shadow: -3px 4px 8px rgba(40, 28, 16, 0.24);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 14px;
+      pointer-events: none;
+    }
+    .kraft-pull-tab::before {
+      content: "";
+      width: 18px;
+      height: 10px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(94, 73, 52, 0.32) 0 2px,
+        transparent 2px 5px
+      );
+    }
+    .kraft-sub-motto {
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 12px);
+      transform: translateX(-50%);
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      color: rgba(251, 249, 245, 0.85);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      transition: opacity 0.2s ease;
+    }
+    .disclaimer-modal-overlay.is-tearing .kraft-tear-strip {
+      transform: translateX(-108%) rotate(-1.2deg);
+      opacity: 0;
+    }
+    .disclaimer-modal-overlay.is-tearing .kraft-confirm-trigger,
+    .disclaimer-modal-overlay.is-tearing .kraft-sub-motto {
+      opacity: 0;
+    }
+    .kraft-noshow-wrap {
+      position: absolute;
+      left: 50%;
+      bottom: max(26px, 6.5vh);
+      transform: translateX(-50%);
+    }
+    .no-show-label {
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: rgba(251, 249, 245, 0.9);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .no-show-label input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid rgba(251, 249, 245, 0.88);
+      border-radius: 2px;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .no-show-label input[type="checkbox"]:checked::after {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 0px;
+      width: 4px;
+      height: 8px;
+      border: solid #FBF9F5;
+      border-width: 0 1.8px 1.8px 0;
+      transform: rotate(45deg);
+    }
 
     /* 본문 컨테이너 */
     .app-container, .app-container.searched {
@@ -1225,22 +1458,34 @@
 <!-- 📌 상단 증기 파티클 Canvas -->
 <canvas id="steamCanvas"></canvas>
 
-<!-- ⚠️ 최초 접속 추출 변수 주의문 팝업 모달 -->
+<!-- 📦 최초 접속 크래프트 박스 패키지 & 절취선 개봉(Unboxing) 오버레이 -->
 <div class="disclaimer-modal-overlay" id="disclaimerOverlay">
-  <div class="disclaimer-card">
-    <div class="disclaimer-badge">⚠️ BARISTA'S EXTRACTION NOTICE</div>
-    <h2 class="disclaimer-title">추출 방식에 따른 맛 변화 안내</h2>
-    <div class="disclaimer-body">
-      <p>본 커피 맛 아카이브의 테이스팅 노트(산미, 고소함, 바디감)는 <strong>표준 SCA 추출기준(수온 92~94℃, 표준 드립 분쇄도, 1:15~18 비율)</strong>을 바탕으로 작성되었습니다.</p>
-      <div class="disclaimer-highlight">
-        💡 사용하시는 <strong>드리퍼 종류(하리오, 칼리타 등), 물 온도, 분쇄도, 추출 시간 및 수질</strong> 등 추출 변수에 따라 실제 추출된 커피에서 느껴지는 향미와 무게감이 다를 수 있습니다.
+  <div class="kraft-panel kraft-top-panel">
+    <div class="kraft-copy-block">
+      <div class="kraft-copy-title">추출 방식에 따른 맛 변화 안내</div>
+      <div class="kraft-copy-body">
+        본 아카이브의 테이스팅 노트는 표준 SCA 추출기준(92~94℃, 1:15~18)을 바탕으로 작성되었습니다. 드리퍼와 추출 변수에 따라 향미가 다를 수 있습니다.
       </div>
-      <p>원두 고유의 성향을 바탕으로 나만의 최적 드립 레시피를 찾아가는 즐거운 여정이 되시길 바랍니다! ☕</p>
+      <div class="kraft-copy-en">
+        Dispenser v1 — Specialty Coffee Archive<br>
+        Standard SCA cupping &amp; brewing protocol notice.
+      </div>
     </div>
-    <div class="disclaimer-footer">
-      <button class="action-btn disclaimer-confirm-btn" id="closeDisclaimerBtn">네, 확인했습니다 ➔</button>
+  </div>
+
+  <div class="kraft-tear-zone">
+    <button type="button" class="kraft-confirm-trigger" id="disclaimerConfirmText">네, 확인했습니다 →</button>
+    <button type="button" class="kraft-tear-strip" id="closeDisclaimerBtn" aria-label="절취선 개봉하기">
+      <span class="kraft-pull-tab" aria-hidden="true"></span>
+    </button>
+    <div class="kraft-sub-motto">JUST THE WAY YOU BREW</div>
+  </div>
+
+  <div class="kraft-panel kraft-bottom-panel">
+    <div class="kraft-noshow-wrap">
       <label class="no-show-label">
-        <input type="checkbox" id="noShowToday"> 오늘 하루 보지 않기
+        <input type="checkbox" id="noShowToday">
+        <span>오늘 하루 보지 않기</span>
       </label>
     </div>
   </div>
@@ -2278,6 +2523,49 @@
       }
     },
 
+    // 크래프트 박스 절취선 개봉 종이 뜯김 효과음 ('드르륵/촤르륵!')
+    paperTear() {
+      if (this.isMuted) return;
+      this.init();
+      if (!this.ctx || !this.noiseBuffer) return;
+
+      const schedule = () => {
+        if (!this.ctx || !this.noiseBuffer || this.isMuted) return;
+        const t = this.ctx.currentTime + 0.005;
+        const dur = 0.28;
+
+        const src = this.ctx.createBufferSource();
+        src.buffer = this.noiseBuffer;
+
+        const bp = this.ctx.createBiquadFilter();
+        bp.type = 'bandpass';
+        bp.frequency.setValueAtTime(1400, t);
+        bp.frequency.exponentialRampToValueAtTime(3200, t + dur);
+        bp.Q.setValueAtTime(1.8, t);
+
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.0001, t);
+        gain.gain.linearRampToValueAtTime(0.32, t + 0.025);
+        // 절취선 칼선을 따라 뜯기는 미세 진동
+        for (let step = 1; step <= 6; step++) {
+          const st = t + step * 0.038;
+          gain.gain.linearRampToValueAtTime(step % 2 === 0 ? 0.30 : 0.16, st);
+        }
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+        src.connect(bp);
+        bp.connect(gain);
+        gain.connect(this.ctx.destination);
+        src.start(t, 0, dur + 0.02);
+      };
+
+      if (this.ctx.state === 'suspended') {
+        this.ctx.resume().then(schedule).catch(() => {});
+      } else {
+        schedule();
+      }
+    },
+
     stopMinuteRepeater() {
       stopMinuteRepeater();
     },
@@ -2326,27 +2614,47 @@
     document.body.style.overflow = isOpen ? "hidden" : "";
   }
 
-  // ⚠️ 최초 접속 추출 주의문 팝업 제어
+  // 📦 최초 접속 크래프트 박스 패키지 & 절취선 개봉(Unboxing) 제어
   const disclaimerOverlay = document.getElementById("disclaimerOverlay");
   const closeDisclaimerBtn = document.getElementById("closeDisclaimerBtn");
+  const disclaimerConfirmText = document.getElementById("disclaimerConfirmText");
   const noShowToday = document.getElementById("noShowToday");
+  let isUnboxingDisclaimer = false;
 
   function initDisclaimerNotice() {
     const hideUntil = localStorage.getItem("dispenser_hide_disclaimer");
     const now = new Date().getTime();
     if (!hideUntil || now > parseInt(hideUntil, 10)) {
+      disclaimerOverlay.classList.remove("is-tearing", "is-splitting");
       toggleUI(disclaimerOverlay, null, true);
     }
   }
 
-  closeDisclaimerBtn.onclick = () => {
-    if (noShowToday.checked) {
+  function runDisclaimerUnboxing() {
+    if (isUnboxingDisclaimer || !disclaimerOverlay.classList.contains("open")) return;
+    isUnboxingDisclaimer = true;
+
+    if (noShowToday && noShowToday.checked) {
       const expires = new Date().getTime() + (24 * 60 * 60 * 1000);
       localStorage.setItem("dispenser_hide_disclaimer", expires.toString());
     }
-    toggleUI(disclaimerOverlay, null, false);
-    AudioFX.drip();
-  };
+
+    AudioFX.paperTear();
+    disclaimerOverlay.classList.add("is-tearing");
+
+    setTimeout(() => {
+      disclaimerOverlay.classList.add("is-splitting");
+    }, 320);
+
+    setTimeout(() => {
+      toggleUI(disclaimerOverlay, null, false);
+      disclaimerOverlay.classList.remove("is-tearing", "is-splitting");
+      isUnboxingDisclaimer = false;
+    }, 860);
+  }
+
+  if (closeDisclaimerBtn) closeDisclaimerBtn.onclick = runDisclaimerUnboxing;
+  if (disclaimerConfirmText) disclaimerConfirmText.onclick = runDisclaimerUnboxing;
 
   document.addEventListener("DOMContentLoaded", initDisclaimerNotice);
 
