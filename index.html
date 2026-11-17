@@ -903,9 +903,25 @@
       border-color: #A89C90;
     }
 
-    /* 📌 입체 3D 틸트 요약 카드 */
-    .card-3d-wrapper { perspective: 1000px; width: 100%; }
-    .compact-coffee-card { background: var(--card-bg); border: 2px solid var(--line); border-radius: 4px; padding: 15px 16px; box-shadow: 2.5px 2.5px 0px var(--line); cursor: pointer; display: flex; flex-direction: column; gap: 7px; transition: transform 0.15s ease-out, box-shadow 0.15s ease-out; transform-style: preserve-3d; position: relative; overflow: hidden; }
+    /* 📌 요약 카드 + 시선 중심 돌출(Pop-out) / 상·하단 후퇴(Recessed) 모션 */
+    .card-3d-wrapper {
+      width: 100%;
+      position: relative;
+      will-change: transform, opacity;
+      transition: none;
+    }
+    .card-3d-wrapper:hover,
+    .card-3d-wrapper:focus-within {
+      opacity: 1 !important;
+      transform: scale(1.015) !important;
+      z-index: 3 !important;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+    .card-3d-wrapper:hover .compact-coffee-card,
+    .card-3d-wrapper:focus-within .compact-coffee-card {
+      box-shadow: 4px 4px 0px var(--line) !important;
+    }
+    .compact-coffee-card { background: var(--card-bg); border: 2px solid var(--line); border-radius: 4px; padding: 15px 16px; box-shadow: 2.5px 2.5px 0px var(--line); cursor: pointer; display: flex; flex-direction: column; gap: 7px; transition: transform 0.15s ease-out, box-shadow 0.15s ease-out; position: relative; overflow: hidden; }
     .compact-coffee-card:active { transform: translate(1px, 1px) scale(0.99); box-shadow: 1px 1px 0px var(--line); }
     .compact-top { display: flex; justify-content: space-between; align-items: center; }
     .compact-meta { font-family: 'Playfair Display', serif; font-size: 0.7rem; font-weight: 800; color: var(--ink-sub); display: flex; align-items: center; gap: 5px; }
@@ -1449,6 +1465,11 @@
       }
       .printer-slot-header, .receipt-btn-group {
         display: none !important;
+      }
+      .card-3d-wrapper {
+        opacity: 1 !important;
+        transform: none !important;
+        z-index: auto !important;
       }
     }
   </style>
@@ -2644,12 +2665,14 @@
 
     setTimeout(() => {
       disclaimerOverlay.classList.add("is-splitting");
+      scheduleCardScrollFocus();
     }, 320);
 
     setTimeout(() => {
       toggleUI(disclaimerOverlay, null, false);
       disclaimerOverlay.classList.remove("is-tearing", "is-splitting");
       isUnboxingDisclaimer = false;
+      scheduleCardScrollFocus();
     }, 860);
   }
 
@@ -3961,22 +3984,93 @@
         </div>
       `;
 
-      const resetTilt = () => { card.style.transform = ""; };
-      card.onmousemove = (e) => {
-        const rect = card.getBoundingClientRect();
-        const rotateX = ((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * -8;
-        const rotateY = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2)) * 8;
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
-      };
-      card.onmouseleave = resetTilt;
-      card.ontouchend = resetTilt;
-      card.ontouchcancel = resetTilt;
       card.onclick = () => window.openDetailModal(c.id);
 
       wrapper.appendChild(card);
       coffeeList.appendChild(wrapper);
     });
+    scheduleCardScrollFocus();
   }
+
+  let isFocusTicking = false;
+  function updateCardScrollFocus() {
+    if (!coffeeList) return;
+    const wrappers = Array.from(coffeeList.querySelectorAll(".card-3d-wrapper"));
+    if (wrappers.length === 0) return;
+
+    if (wrappers.length <= 1) {
+      wrappers.forEach(w => {
+        w.style.opacity = "1";
+        w.style.transform = "scale(1.01)";
+        w.style.zIndex = "2";
+        const cardEl = w.querySelector(".compact-coffee-card");
+        if (cardEl) cardEl.style.boxShadow = "3.5px 3.5px 0px var(--line)";
+      });
+      return;
+    }
+
+    const vh = window.innerHeight || 800;
+    const rects = wrappers.map(w => w.getBoundingClientRect());
+    const avgHeight = rects.reduce((acc, r) => acc + r.height, 0) / rects.length || 155;
+
+    const baseCenterY = vh * 0.5;
+    let focusCenterY = baseCenterY;
+
+    // 최상단·최하단 1장 중심 연속 보간(Smoothstep Lerp)으로 스크롤 경계 점프 제거
+    const topTargetY = rects[0].top + rects[0].height * 0.5;
+    const topLinear = Math.max(0, Math.min(1, (rects[0].top - vh * 0.05) / (vh * 0.35)));
+    const topWeight = topLinear * topLinear * (3 - 2 * topLinear);
+    focusCenterY = baseCenterY + (topTargetY - baseCenterY) * topWeight;
+
+    const remainingBottom = Math.max(0, document.documentElement.scrollHeight - (window.scrollY + vh));
+    if (remainingBottom < 260) {
+      const lastRect = rects[rects.length - 1];
+      const bottomTargetY = lastRect.top + lastRect.height * 0.5;
+      const bottomLinear = Math.max(0, Math.min(1, 1 - remainingBottom / 260));
+      const bottomWeight = bottomLinear * bottomLinear * (3 - 2 * bottomLinear);
+      focusCenterY = focusCenterY + (bottomTargetY - focusCenterY) * bottomWeight;
+    }
+
+    const deadzone = Math.max(75, Math.min(105, avgHeight * 0.55));
+    const maxFadeDist = Math.max(260, vh * 0.52);
+
+    wrappers.forEach((w, idx) => {
+      const rect = rects[idx];
+      const cardEl = w.querySelector(".compact-coffee-card");
+      const cardCenterY = rect.top + rect.height * 0.5;
+      const dist = Math.abs(cardCenterY - focusCenterY);
+      if (dist <= deadzone) {
+        w.style.opacity = "1";
+        w.style.transform = "scale(1.022)";
+        w.style.zIndex = "2";
+        if (cardEl) cardEl.style.boxShadow = "4.5px 4.5px 0px var(--line)";
+      } else {
+        const overflowDist = dist - deadzone;
+        const t = Math.min(1, overflowDist / maxFadeDist);
+        const eased = t * t * (3 - 2 * t);
+        const scaleVal = (1.022 - eased * 0.074).toFixed(4);
+        const opacityVal = (1 - eased * 0.24).toFixed(3);
+        const shadowPx = (4.5 - eased * 3.5).toFixed(2);
+        const shadowAlpha = (0.92 - eased * 0.57).toFixed(2);
+        w.style.opacity = opacityVal;
+        w.style.transform = `scale(${scaleVal})`;
+        w.style.zIndex = eased < 0.25 ? "1" : "0";
+        if (cardEl) cardEl.style.boxShadow = `${shadowPx}px ${shadowPx}px 0px rgba(30, 25, 21, ${shadowAlpha})`;
+      }
+    });
+  }
+
+  function scheduleCardScrollFocus() {
+    if (isFocusTicking) return;
+    isFocusTicking = true;
+    requestAnimationFrame(() => {
+      isFocusTicking = false;
+      updateCardScrollFocus();
+    });
+  }
+
+  window.addEventListener("scroll", scheduleCardScrollFocus, { passive: true });
+  window.addEventListener("resize", scheduleCardScrollFocus, { passive: true });
 
   const renderCoffeeCards = renderCompactCards;
 
