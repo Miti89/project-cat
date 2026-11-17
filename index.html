@@ -10,7 +10,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>디스펜서 v1 - SCA 60종 스페셜티 커피 맛 아카이브</title>
+  <title>디스펜서 v1 - SCA 100종 스페셜티 커피 맛 아카이브</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
 
   <!-- SEO & OpenGraph Meta Tags -->
@@ -167,8 +167,8 @@
       background: rgba(235, 228, 220, 0.75);
     }
 
-    /* Task 1-1: 원산지 도감 & 커피 이야기 하단 언더라인 탭 스타일 */
-    #openDrawerBtn, #openGuideBtn {
+    /* Task 1-1: 원산지 도감 하단 언더라인 탭 스타일 */
+    #openDrawerBtn {
       border-bottom: 1.5px solid #B84A27;
       padding-bottom: 2px;
       border-radius: 0;
@@ -1036,7 +1036,7 @@
 
     /* 2. 맛 프로필 (상큼함 산미 -> 고소함 너티 -> 바디감 무게) */
     .modal-profile-card { background: #FFF; border: 1.5px solid var(--line); border-radius: 4px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; box-shadow: 1.5px 1.5px 0px var(--line-light); }
-    .profile-card-title { font-size: 0.68rem; font-weight: 800; color: var(--ink-sub); letter-spacing: 0.8px; text-transform: uppercase; border-bottom: 1px solid var(--line-light); padding-bottom: 4px; }
+    .profile-card-title { font-size: 0.68rem; font-weight: 800; color: var(--ink-sub); letter-spacing: 0.8px; text-transform: uppercase; border-bottom: 1px solid var(--line-light); padding-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
     .modal-profile-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.83rem; flex-wrap: wrap; }
     .modal-profile-name { font-weight: 800; color: var(--ink); white-space: nowrap; min-width: 95px; }
     .modal-profile-dots { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
@@ -1057,7 +1057,7 @@
 
     /* Task 6-2: 원산지 & 추출 스펙 4분할 그리드 (ORIGIN & BREWING SPEC) */
     .modal-spec-section { background: #F3ECE6; border: 1.5px solid var(--line); border-radius: 4px; padding: 9px 11px; display: flex; flex-direction: column; gap: 7px; }
-    .modal-spec-header { font-size: 0.66rem; font-weight: 800; color: var(--ink-sub); letter-spacing: 0.8px; text-transform: uppercase; border-bottom: 1px solid var(--line-light); padding-bottom: 4px; }
+    .modal-spec-header { font-size: 0.66rem; font-weight: 800; color: var(--ink-sub); letter-spacing: 0.8px; text-transform: uppercase; border-bottom: 1px solid var(--line-light); padding-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
     .modal-spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .modal-spec-item { background: rgba(255,255,255,0.65); border: 1px solid var(--line-light); border-radius: 3px; padding: 6px 8px; display: flex; flex-direction: column; gap: 2px; }
     .modal-spec-label { font-size: 0.63rem; font-weight: 800; color: #786D65; text-transform: uppercase; }
@@ -1175,9 +1175,165 @@
     .receipt-barcode { width: 100%; height: 38px; margin-top: 6px; display: flex; justify-content: center; align-items: center; }
     .receipt-btn-group { display: flex; gap: 8px; width: 100%; max-width: 360px; margin-top: 14px; }
 
-    /* 슬라이드 서랍 (커피 이야기 & 원산지 도감 모두 좌측 -> 우측으로 등장 통일) */
-    .guide-drawer, .origin-drawer { position: fixed; top: 0; left: -100%; right: auto; width: 88%; max-width: 380px; height: 100%; background: var(--card-bg); border-right: 2px solid var(--line); border-left: none; z-index: 201; transition: left 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; }
-    .guide-drawer.open, .origin-drawer.open { left: 0; }
+    /* 슬라이드 서랍 (원산지 도감 좌측 -> 우측 등장) */
+    .origin-drawer { position: fixed; top: 0; left: -100%; right: auto; width: 88%; max-width: 380px; height: 100%; background: var(--card-bg); border-right: 2px solid var(--line); border-left: none; z-index: 201; transition: left 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; }
+    .origin-drawer.open { left: 0; }
+
+    /* 고스트 마이크로 '?' 아이콘 & 조용한 라벨 점선 밑줄 + 전역 팝오버 */
+    .term-help-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      border: 1px solid rgba(92, 80, 70, 0.28);
+      background: transparent;
+      color: rgba(92, 80, 70, 0.52);
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.56rem;
+      font-weight: 600;
+      line-height: 1;
+      padding: 0;
+      margin-left: 4px;
+      cursor: pointer;
+      vertical-align: middle;
+      flex-shrink: 0;
+      box-shadow: none;
+      transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .term-help-btn:hover,
+    .term-help-btn:active,
+    .term-help-btn.is-active {
+      color: var(--ink);
+      border-color: rgba(30, 25, 21, 0.55);
+      background: rgba(92, 80, 70, 0.08);
+    }
+    .term-label-link {
+      cursor: pointer;
+      border-bottom: 1px dotted rgba(92, 80, 70, 0.32);
+      padding-bottom: 0.5px;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+    .term-label-link:hover,
+    .term-label-link:active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .term-guide-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 25, 21, 0.42);
+      z-index: 259;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .term-guide-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .term-guide-popover {
+      width: 100%;
+      max-width: 400px;
+      max-height: min(80vh, 540px);
+      background: var(--card-bg);
+      border: 2px solid var(--line);
+      border-radius: 6px;
+      box-shadow: 4px 4px 0px var(--line);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 260;
+      transform: scale(0.94) translateY(6px);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .term-guide-backdrop.open .term-guide-popover {
+      transform: scale(1) translateY(0);
+    }
+    .term-guide-header {
+      padding: 12px 14px;
+      background: #F3ECE6;
+      border-bottom: 1.5px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .term-guide-kicker {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.66rem;
+      font-weight: 900;
+      letter-spacing: 0.9px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .term-guide-title {
+      font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+    .term-guide-close {
+      background: #FFF;
+      border: 1.5px solid var(--line);
+      width: 26px;
+      height: 26px;
+      border-radius: 3px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 1px 1px 0px var(--line);
+    }
+    .term-guide-scroll {
+      padding: 12px 14px 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .term-guide-context-box {
+      background: #FAF0EB;
+      border: 1.5px solid #E2C4B4;
+      border-left: 4px solid var(--accent);
+      border-radius: 4px;
+      padding: 9px 11px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.45;
+      display: none;
+    }
+    .term-guide-context-box.visible {
+      display: block;
+    }
+    .term-guide-body {
+      font-size: 0.81rem;
+      color: var(--ink-sub);
+      line-height: 1.58;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .term-guide-body ul {
+      margin: 2px 0 2px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .term-guide-body strong {
+      color: var(--ink);
+    }
 
     .drawer-header { padding: 14px; border-bottom: 1.5px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: #F3ECE6; }
     .drawer-header h2 { font-family: 'Nanum Myeongjo', serif; font-size: 1.15rem; font-weight: 800; color: var(--ink); }
@@ -1391,10 +1547,11 @@
       .nav-fixed-group,
       .top-clock-widget,
       .app-container,
-      .guide-drawer,
       .origin-drawer,
       .drawer-overlay,
       .disclaimer-modal-overlay,
+      .term-guide-backdrop,
+      .term-help-btn,
       .detail-modal-overlay:not(.open),
       .printer-modal-overlay:not(.open),
       .ticket-export-toolbar {
@@ -1512,11 +1669,10 @@
   </div>
 </div>
 
-<!-- 📌 상단 네비게이션 바 (좌측 상단 수평 정렬: 소리 ON/OFF · 원산지 도감 · 커피 이야기) -->
+<!-- 📌 상단 네비게이션 바 (좌측 상단 수평 정렬: 소리 ON/OFF · 원산지 도감) -->
 <div class="top-nav-bar">
   <button class="nav-fixed-btn" id="soundToggleBtn">🔊 소리 ON</button>
   <button class="nav-fixed-btn" id="openDrawerBtn">원산지 도감</button>
-  <button class="nav-fixed-btn" id="openGuideBtn">커피 이야기</button>
 </div>
 
 <!-- 📌 우측 상단 실시간 시간(시.분.초) 및 초시계(Sub-dial) - 클릭 시 파텍필립 미닛 리피터 타종 -->
@@ -1579,7 +1735,7 @@
 <div class="app-container" id="appContainer">
 
   <header class="archive-header" id="logoBtn" title="처음으로">
-    <div class="archive-issue">DISPENSER V1 • SCA 60 MASTER DATABASE</div>
+    <div class="archive-issue" id="archiveIssueBadge">DISPENSER V1 • SCA 100 MASTER DATABASE</div>
     <h1 class="archive-title">커피 맛 아카이브</h1>
     <p class="archive-desc">원하는 맛과 입안의 무게감으로 나의 커피를 찾아보세요</p>
   </header>
@@ -1759,9 +1915,9 @@
 
   <div class="results-container visible" id="resultsContainer">
     <div class="results-header-bar" id="resultsHeader">
-      <h2 class="result-count" id="resultCount">전체 스페셜티 아카이브 <strong>60</strong>종</h2>
+      <h2 class="result-count" id="resultCount">전체 스페셜티 아카이브 <strong>100</strong>종</h2>
       <div class="results-actions">
-        <button type="button" class="reset-all-btn" id="resetAllBtn" disabled>🔄 전체 60종</button>
+        <button type="button" class="reset-all-btn" id="resetAllBtn" disabled>🔄 전체 100종</button>
         <button type="button" class="home-reset-btn" id="homeResetBtn">↑ 위로</button>
       </div>
     </div>
@@ -1825,102 +1981,24 @@
 
 </div>
 
-<!-- 📖 좌측 서랍: 커피 가이드 -->
-<div class="drawer-overlay" id="guideOverlay"></div>
-<div class="guide-drawer" id="guideDrawer">
-  <div class="drawer-header">
-    <h2>📖 3초 만에 이해하는 커피 이야기</h2>
-    <button class="drawer-close-btn" id="closeGuideBtn">✕</button>
-  </div>
-  <div class="drawer-content">
-    <article class="guide-article">
-      <div class="guide-art-num">CHAPTER 01</div>
-      <h3 class="guide-art-title">스페셜티 커피가 뭐예요?</h3>
-      <div class="guide-art-body">
-        쉽게 말해 <strong>'족보와 성적표가 확실한 일등품 커피'</strong>예요.
-        <ul>
-          <li><strong>SCA 특상 등급:</strong> 미국 스페셜티 커피 협회 평가에서 100점 만점 중 80점 이상을 받은 상위 10% 원두입니다.</li>
-          <li><strong>확실한 출처:</strong> 어느 나라, 어느 마을 농부가 길렀는지 족보가 뚜렷해요.</li>
-          <li><strong>자연의 단맛:</strong> 쓴맛만 나는 게 아니라 잘 익은 과일, 꽃, 초콜릿의 향긋한 맛이 나요.</li>
-        </ul>
+<!-- 💡 컨텍스트형 '?' 마이크로 용어 가이드 팝오버 -->
+<div class="term-guide-backdrop" id="termGuideBackdrop" role="dialog" aria-modal="true" aria-labelledby="termGuideTitle">
+  <div class="term-guide-popover" id="termGuidePopover">
+    <div class="term-guide-header">
+      <div>
+        <div class="term-guide-kicker" id="termGuideKicker">COFFEE GUIDE</div>
+        <h3 class="term-guide-title" id="termGuideTitle">용어 안내</h3>
       </div>
-    </article>
-
-    <article class="guide-article">
-      <div class="guide-art-num">CHAPTER 02</div>
-      <h3 class="guide-art-title">긴 이름은 어떻게 읽나요?</h3>
-      <div class="guide-art-body">
-        커피 이름은 사람 이름처럼 <strong>태어난 곳과 말린 방식</strong>을 순서대로 적은 거예요.
-        <div class="formula-tag-wrap">
-          <span class="formula-tag">1. 나라</span> + 
-          <span class="formula-tag">2. 자란 동네</span> + 
-          <span class="formula-tag">3. 나무 품종</span> + 
-          <span class="formula-tag">4. 말린 방법</span>
-        </div>
-        <p style="margin-top:6px; font-size:0.8rem; color:var(--ink);">
-          👉 <strong>예시: [에티오피아] [아바야] [게이샤] [내추럴]</strong><br>
-          "에티오피아 아바야 마을에서 게이샤 나무 열매를 햇볕에 통째로 말려 달콤한 복숭아 맛이 나는 원두!"
-        </p>
-      </div>
-    </article>
-
-    <article class="guide-article">
-      <div class="guide-art-num">CHAPTER 03</div>
-      <h3 class="guide-art-title">원두를 말리는 4가지 방법</h3>
-      <div class="guide-art-body">
-        커피 열매 껍질을 어떻게 말렸는지에 따라 맛이 완전히 달라져요.
-        <table class="process-table">
-          <thead>
-            <tr>
-              <th>말린 방법</th>
-              <th>어떻게 만들었나요?</th>
-              <th>어떤 맛이 나나요?</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>워시드</strong><br>(물 세척)</td>
-              <td>물로 깨끗이 씻어 말림</td>
-              <td>맑은 홍차처럼 잡맛 없이 개운해요.</td>
-            </tr>
-            <tr>
-              <td><strong>내추럴</strong><br>(햇볕 건조)</td>
-              <td>열매째 통째로 바짝 말림</td>
-              <td>딸기잼처럼 달콤하고 진해요.</td>
-            </tr>
-            <tr>
-              <td><strong>허니</strong><br>(단물 건조)</td>
-              <td>단물을 살짝 묻혀 말림</td>
-              <td>꿀물처럼 부드럽고 둥글둥글해요.</td>
-            </tr>
-            <tr>
-              <td><strong>무산소/특수</strong><br>(특별 숙성)</td>
-              <td>밀폐 통이나 오크통 숙성</td>
-              <td>복숭아 요거트나 위스키처럼 신기해요.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </article>
-
-    <article class="guide-article">
-      <div class="guide-art-num">CHAPTER 04</div>
-      <h3 class="guide-art-title">바디감은 무슨 뜻인가요?</h3>
-      <div class="guide-art-body">
-        신맛·단맛이 아니라, 삼킬 때 입안에 느껴지는 <strong>'국물의 두께감과 무게'</strong>예요.
-        <ul>
-          <li><strong>1단계 (생수 · 허브티):</strong> 물처럼 맑고 가볍게 쑥 넘어가요.</li>
-          <li><strong>2단계 (사과 주스 · 레몬티):</strong> 가볍고 상쾌한 과즙 느낌이에요.</li>
-          <li><strong>3단계 (보리차 · 저지방 우유):</strong> 누구나 편안하게 마시는 중간 두께예요.</li>
-          <li><strong>4단계 (일반 우유 · 핫초코):</strong> 입안이 도톰하고 든든하게 채워져요.</li>
-          <li><strong>5단계 (생크림 · 진한 시럽):</strong> 혀를 묵직하게 감싸는 깊은 맛이에요.</li>
-        </ul>
-      </div>
-    </article>
+      <button type="button" class="term-guide-close" id="closeTermGuideBtn" aria-label="닫기">✕</button>
+    </div>
+    <div class="term-guide-scroll">
+      <div class="term-guide-context-box" id="termGuideContextBox"></div>
+      <div class="term-guide-body" id="termGuideBody"></div>
+    </div>
   </div>
 </div>
 
-<!-- 🌍 우측 서랍: 원산지 도감 -->
+<!-- 🌍 좌측 서랍: 원산지 도감 -->
 <div class="drawer-overlay" id="originOverlay"></div>
 <div class="origin-drawer" id="originDrawer">
   <div class="drawer-header">
@@ -1939,7 +2017,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <!-- 2. 커피 데이터를 담은 외부 파일 연결 (반드시 위에 선언) -->
-<script src="data.js"></script>
+<script src="data.js?v=2.1"></script>
 
 <!-- 3. 메인 동작 로직 -->
 <script>
@@ -2717,16 +2795,335 @@
   const resetAllBtn = document.getElementById("resetAllBtn");
   const homeResetBtn = document.getElementById("homeResetBtn");
 
-  const openGuideBtn = document.getElementById("openGuideBtn");
-  const closeGuideBtn = document.getElementById("closeGuideBtn");
-  const guideDrawer = document.getElementById("guideDrawer");
-  const guideOverlay = document.getElementById("guideOverlay");
-
   const openDrawerBtn = document.getElementById("openDrawerBtn");
   const closeDrawerBtn = document.getElementById("closeDrawerBtn");
   const originDrawer = document.getElementById("originDrawer");
   const originOverlay = document.getElementById("originOverlay");
   const originCardsContainer = document.getElementById("originCardsContainer");
+
+  const termGuideBackdrop = document.getElementById("termGuideBackdrop");
+  const termGuideKicker = document.getElementById("termGuideKicker");
+  const termGuideTitle = document.getElementById("termGuideTitle");
+  const termGuideContextBox = document.getElementById("termGuideContextBox");
+  const termGuideBody = document.getElementById("termGuideBody");
+  const closeTermGuideBtn = document.getElementById("closeTermGuideBtn");
+
+  const COFFEE_TERM_GUIDES = {
+    roast_naming: {
+      kicker: "ROAST & NAMING FORMULA",
+      title: "배전도 5단계 & 커피 이름 읽는 법",
+      getContext: (item) => {
+        if (!item) return "";
+        const countryKor = (item.origin || "").replace(/^[^\s]+\s*/, "");
+        const regionTxt = item.region || "세부 산지";
+        const descMap = {
+          "Light": "꽃향기와 과일 산미가 가장 화사한 약배전",
+          "Light-Medium": "산뜻한 산미와 은은한 단맛의 약중배전",
+          "Medium": "산미·단맛·고소함이 균형 잡힌 중배전",
+          "Medium-Dark": "다크 초콜릿과 구운 견과류 풍미의 중강배전",
+          "Dark": "신맛 없이 묵직하고 스모키한 강배전"
+        };
+        return `<strong>🔥 ${formatRoastShort(item.roast)}</strong> (${descMap[item.roast] || "표준 로스팅"})<br><strong>이름 해부:</strong> <span style="color:var(--accent);">[${countryKor}]</span> · [${regionTxt}] · [${item.varietal}] · [${item.process}]`;
+      },
+      body: `
+        <p><strong>1. 배전도 (Roasting 5단계):</strong> 생두를 볶는 정도에 따라 맛의 방향이 결정됩니다.</p>
+        <ul>
+          <li><strong>약배전 (Light):</strong> 꽃향·과일 산미 극대화, 쓴맛 없음</li>
+          <li><strong>약중배전 (Light-Medium):</strong> 산뜻한 과일 산미 + 은은한 단맛</li>
+          <li><strong>중배전 (Medium):</strong> 산미·단맛·고소함의 황금 밸런스</li>
+          <li><strong>중강배전 (Medium-Dark):</strong> 다크 초콜릿·구운 견과 풍미</li>
+          <li><strong>강배전 (Dark):</strong> 신맛 제로, 묵직하고 스모키한 쓴맛</li>
+        </ul>
+        <p style="margin-top:4px;"><strong>2. 긴 이름 공식:</strong></p>
+        <div class="formula-tag-wrap">
+          <span class="formula-tag">1. 나라</span> +
+          <span class="formula-tag">2. 지역·농장</span> +
+          <span class="formula-tag">3. 품종</span> +
+          <span class="formula-tag">4. 가공 방식</span>
+        </div>
+      `
+    },
+    taste_all: {
+      kicker: "CUPPING TASTE PROFILE",
+      title: "4대 테이스팅 맛 기준 가이드",
+      getContext: (item) => {
+        if (!item) return "";
+        const sweetTxt = item.sweetDots != null ? ` · 🍯 단맛 ${item.sweetDots}단계` : "";
+        return `현재 원두 요약: <strong>🍋 산미 ${item.sourDots} · 🥜 고소 ${item.nuttyDots} · ⚖️ 바디 ${item.bodyDots}${sweetTxt}</strong>`;
+      },
+      body: `
+        <ul>
+          <li><strong>🍋 산미 (Acidity · 상큼함):</strong> 식초의 신맛이 아니라 사과·자몽·베리 같은 상큼한 과즙미 (1단계 무산미 ~ 5단계 과즙 폭발).</li>
+          <li><strong>🥜 고소함 (Nutty &amp; Cocoa):</strong> 구운 아몬드·헤이즐넛·보리차·초콜릿처럼 편안하고 구수한 풍미 (1단계 꽃·차 중심 ~ 5단계 진한 넛츠).</li>
+          <li><strong>⚖️ 바디감 (Body · 입안 무게감):</strong> 삼킬 때 느껴지는 국물의 밀도 — <code>1단계</code> 생수·허브티 → <code>2단계</code> 사과주스 → <code>3단계</code> 보리차·저지방우유 → <code>4단계</code> 일반우유·핫초코 → <code>5단계</code> 생크림.</li>
+          <li><strong>🍯 달콤함 (Sweetness · 자연 단맛):</strong> 잘 익은 체리 과당과 로스팅 캐러멜화로 생기는 꿀·과일청 같은 자연스러운 단맛 여운.</li>
+        </ul>
+      `
+    },
+    spec_all: {
+      kicker: "ORIGIN & BREWING SPEC",
+      title: "원두 스펙 & 맞춤 추출 가이드",
+      getContext: (item) => {
+        if (!item) return "";
+        const br = item.brewOverride || getBrewRecipe(item.roast);
+        return `현재 원두: <strong>${item.varietal}</strong> · <strong>${item.process}</strong>${item.physicalGrade ? ` (${item.physicalGrade})` : ""}<br>권장 추출: <strong>💧 ${br}</strong>`;
+      },
+      body: `
+        <ul>
+          <li><strong>🌱 품종 &amp; WCR 4대 혈통:</strong> <code>티피카</code>(맑은 실크 밸런스), <code>버본</code>(둥근 초콜릿·과실 단맛), <code>에티오피아 토착종</code>(자스민·열대과일), <code>교배·희귀종</code>(고바디 및 천연 저카페인).</li>
+          <li><strong>☀️ 가공 &amp; 등급:</strong> <code>워시드</code>(맑고 개운) · <code>내추럴</code>(진한 과일잼) · <code>허니</code>(매끄러운 꿀단맛) · <code>무산소/특수</code>(열대과일·요거트). 등급: <code>G1</code>(무결점), <code>AA/Supremo</code>(대립두), <code>SHB/SHG</code>(고산지 경질두).</li>
+          <li><strong>⛰️ 재배 고도:</strong> 1,400~2,200m+ 고산지일수록 일교차가 커서 조직이 조밀하고 복합적인 산미·단맛이 응축됩니다.</li>
+          <li><strong>💧 맞춤 추출 수온:</strong> 기본 <code>20g / 300ml (1:15)</code> 기준 약배전은 <code>92~93°C</code>로 화사하게, 강배전·특수발효·디카페인은 과추출 방지를 위해 <code>88~89°C</code>로 낮춰 내립니다.</li>
+        </ul>
+      `
+    },
+    specialty: {
+      kicker: "SCA MASTER ARCHIVE",
+      title: "스페셜티 커피 (Specialty Coffee)",
+      getContext: () => `현재 아카이브에는 SCA·WCR 국제 표준 기준을 적용한 <strong>총 ${coffeeData.length}종</strong>의 스페셜티 원두가 수록되어 있습니다.`,
+      body: `
+        <p>쉽게 말해 <strong>'족보와 성적표가 확실한 일등품 커피'</strong>입니다.</p>
+        <ul>
+          <li><strong>SCA 특상 등급:</strong> 국제스페셜티커피협회(SCA) 커핑 평가에서 100점 만점 중 <strong>80점 이상</strong>을 받은 상위 10% 원두만 인정됩니다.</li>
+          <li><strong>결점두 기준:</strong> 생두 350g당 1차 결점두(완전 결함) 0개, 2차 결점두 5개 이하의 엄격한 선별을 거칩니다.</li>
+          <li><strong>완벽한 이력:</strong> 생산 국가, 세부 산지(Region), 품종, 가공 방식이 투명하게 추적되며 과일·꽃·초콜릿의 자연스러운 향미를 지닙니다.</li>
+        </ul>
+      `
+    },
+    naming: {
+      kicker: "COFFEE NAMING FORMULA",
+      title: "커피 긴 이름 읽는 법",
+      getContext: (item) => {
+        if (!item) return "";
+        const countryKor = (item.origin || "").replace(/^[^\s]+\s*/, "");
+        const regionTxt = item.region || "세부 산지";
+        return `현재 원두 해부: <strong>${item.name}</strong><br><span style="color:var(--accent); font-weight:800;">[${countryKor}]</span> · <span style="font-weight:700;">[${regionTxt}]</span> · <span style="font-weight:700;">[${item.varietal}]</span> · <span style="font-weight:700;">[${item.process}]</span>`;
+      },
+      body: `
+        <p>스페셜티 커피 이름은 사람 이름처럼 <strong>태어난 곳과 말린 방식</strong>을 순서대로 적은 공식입니다.</p>
+        <div class="formula-tag-wrap">
+          <span class="formula-tag">1. 나라</span> +
+          <span class="formula-tag">2. 자란 동네</span> +
+          <span class="formula-tag">3. 나무 품종</span> +
+          <span class="formula-tag">4. 말린 방법</span>
+        </div>
+        <p style="font-size:0.78rem; color:var(--ink);">👉 <strong>예시:</strong> <em>에티오피아 아바야 게이샤 내추럴</em><br>"에티오피아 아바야 마을에서 게이샤 나무 열매를 햇볕에 통째로 말려 달콤한 복숭아 맛이 나는 원두!"</p>
+      `
+    },
+    roast: {
+      kicker: "ROASTING LEVEL",
+      title: "배전도 (로스팅 5단계)",
+      getContext: (item) => {
+        if (!item) return "";
+        const descMap = {
+          "Light": "꽃향기와 과일 산미가 가장 화사하고 쓴맛이 거의 없는 약배전입니다.",
+          "Light-Medium": "산뜻한 과일 산미와 은은한 단맛이 균형을 이루는 약중배전입니다.",
+          "Medium": "산미·단맛·고소함이 황금 밸런스를 이루는 표준 중배전입니다.",
+          "Medium-Dark": "신맛이 줄고 다크 초콜릿과 구운 견과류 풍미가 깊어진 중강배전입니다.",
+          "Dark": "신맛 없이 스모키하고 묵직한 다크 초콜릿·쓴맛이 강조된 강배전입니다."
+        };
+        return `현재 원두: <strong>🔥 ${formatRoastShort(item.roast)}</strong> — ${descMap[item.roast] || "균형 잡힌 로스팅 단계입니다."}`;
+      },
+      body: `
+        <p>생두에 열을 가해 볶는 정도에 따라 신맛·단맛·쓴맛의 비중이 결정됩니다.</p>
+        <ul>
+          <li><strong>약배전 (Light):</strong> 꽃향기와 과일 산미가 가장 화사하고 쓴맛이 없음</li>
+          <li><strong>약중배전 (Light-Medium):</strong> 산뜻한 과일 산미와 은은한 단맛의 조화</li>
+          <li><strong>중배전 (Medium):</strong> 산미·단맛·고소함이 황금 밸런스를 이루는 표준 단계</li>
+          <li><strong>중강배전 (Medium-Dark):</strong> 신맛이 줄고 다크 초콜릿과 구운 견과류 풍미가 깊어짐</li>
+          <li><strong>강배전 (Dark):</strong> 신맛 없이 스모키하고 묵직한 다크 초콜릿·쓴맛 강조</li>
+        </ul>
+      `
+    },
+    sour: {
+      kicker: "TASTE AXIS 01 · ACIDITY",
+      title: "산미 (Acidity · 상큼함)",
+      getContext: (item) => item ? `현재 원두 산미: <strong>🍋 ${item.sourDots}단계 (${item.sourDesc})</strong>` : "",
+      body: `
+        <p>커피의 산미는 식초처럼 찌푸려지는 쉰 맛이 아니라, 사과·오렌지·자몽·베리 같은 <strong>과일의 상큼하고 싱그러운 과즙미</strong>를 뜻합니다.</p>
+        <ul>
+          <li><strong>1단계:</strong> 신맛 거의 없음 (고소·쌉쌀함 중심)</li>
+          <li><strong>2단계:</strong> 자극 없이 은은하고 부드러운 과실 감칠맛</li>
+          <li><strong>3단계:</strong> 상큼함과 고소함이 조화로운 중간 산미</li>
+          <li><strong>4단계:</strong> 자몽·복숭아·베리 과즙이 선명하게 살아남</li>
+          <li><strong>5단계:</strong> 시트러스·열대과일의 짜릿한 과즙 산미 폭발</li>
+        </ul>
+      `
+    },
+    nutty: {
+      kicker: "TASTE AXIS 02 · NUTTY & COCOA",
+      title: "고소함 (Nutty & Cocoa · 너티함)",
+      getContext: (item) => item ? `현재 원두 고소함: <strong>🥜 ${item.nuttyDots}단계 (${item.nuttyDesc})</strong>` : "",
+      body: `
+        <p>구운 아몬드, 헤이즐넛, 땅콩, 보리차, 밀크/다크 초콜릿처럼 <strong>입안을 편안하고 구수하게 감싸는 풍미</strong>입니다.</p>
+        <ul>
+          <li><strong>1단계:</strong> 고소함 대신 화사한 꽃·허브·과일차 향미 중심</li>
+          <li><strong>2단계:</strong> 뒷맛에 은은하게 감도는 부드러운 견과 여운</li>
+          <li><strong>3단계:</strong> 과일향과 고소함이 균형 있게 어우러짐</li>
+          <li><strong>4단계:</strong> 구운 아몬드·밀크초콜릿 같은 든든한 고소함</li>
+          <li><strong>5단계:</strong> 볶은 땅콩·보리차·진한 다크 카카오의 극강 고소함</li>
+        </ul>
+      `
+    },
+    body: {
+      kicker: "TASTE AXIS 03 · BODY WEIGHT",
+      title: "바디감 (Body · 입안의 무게감)",
+      getContext: (item) => item ? `현재 원두 바디감: <strong>⚖️ ${item.bodyDesc}</strong>` : "",
+      body: `
+        <p>신맛·단맛이 아니라, 커피를 삼킬 때 혀에 느껴지는 <strong>'국물의 두께감과 밀도'</strong>입니다.</p>
+        <ul>
+          <li><strong>1단계 (생수 · 맑은 허브티):</strong> 물처럼 가볍고 깔끔하게 쑥 넘어감</li>
+          <li><strong>2단계 (사과주스 · 레몬티):</strong> 산뜻하고 매끄러운 과즙 느낌</li>
+          <li><strong>3단계 (보리차 · 저지방 우유):</strong> 누구나 편안하게 즐기는 중간 두께</li>
+          <li><strong>4단계 (일반 우유 · 핫초코):</strong> 입안이 도톰하고 든든하게 채워짐</li>
+          <li><strong>5단계 (생크림 · 진한 시럽):</strong> 혀를 묵직하게 코팅하는 중량감</li>
+        </ul>
+      `
+    },
+    sweet: {
+      kicker: "TASTE AXIS 04 · SWEETNESS",
+      title: "달콤함 (Sweetness · 자연 단맛)",
+      getContext: (item) => item && item.sweetDots != null ? `현재 원두 단맛: <strong>🍯 ${item.sweetDots}단계 (${item.sweetDesc || "균형 잡힌 단맛"})</strong>` : "",
+      body: `
+        <p>설탕이나 시럽을 첨가한 단맛이 아니라, 잘 익은 커피 체리의 과당과 로스팅 중 <strong>캐러멜화(Caramelization)</strong>로 만들어지는 아카시아 꿀·과일청·초콜릿 같은 자연 단맛과 여운입니다.</p>
+        <ul>
+          <li><strong>1~2단계:</strong> 담백하고 드라이하며 깔끔하게 떨어지는 여운</li>
+          <li><strong>3단계:</strong> 은은하게 뒷받침하는 균형 잡힌 자연 단맛</li>
+          <li><strong>4~5단계:</strong> 꿀·과일잼·초콜릿 시럽처럼 혀끝에 오래 남는 풍부한 단맛</li>
+        </ul>
+      `
+    },
+    varietal: {
+      kicker: "VARIETAL & WCR LINEAGE",
+      title: "품종 & 유전 계보 (Varietal & Lineage)",
+      getContext: (item) => item ? `현재 원두: <strong>🌱 ${item.varietal}</strong>${item.lineage ? ` (${item.lineage})` : ""}` : "",
+      body: `
+        <p>사과에 부사·아오리가 있듯 커피나무도 품종과 유전 계보에 따라 맛의 DNA가 다릅니다.</p>
+        <ul>
+          <li><strong>티피카 (Typica) 계열:</strong> 맑고 깨끗한 단맛과 실크 같은 밸런스 (블루마운틴, 코나 등)</li>
+          <li><strong>버본 (Bourbon) 계열:</strong> 둥글고 풍부한 단맛과 초콜릿·과실미 (카투라, SL28, 파카스 등)</li>
+          <li><strong>에티오피아 토착종 (Landrace):</strong> 자스민 꽃향기와 폭발적인 열대과일·시트러스 (게이샤, 치로소, 우시우시 등)</li>
+          <li><strong>교배종 &amp; 희귀종:</strong> 병충해에 강하고 바디가 묵직한 품종(카스티요, 카티모르) 및 천연 저카페인 희귀종(로리나, 유제니오이데스)</li>
+        </ul>
+      `
+    },
+    process: {
+      kicker: "PROCESS & PHYSICAL GRADE",
+      title: "가공 방식 & 생두 등급",
+      getContext: (item) => item ? `현재 원두: <strong>☀️ ${item.process}</strong>${item.physicalGrade ? ` · 등급: <strong>${item.physicalGrade}</strong>` : ""}` : "",
+      body: `
+        <p>수확한 커피 열매의 껍질을 어떻게 벗기고 말렸는지에 따라 향미와 질감이 크게 달라집니다.</p>
+        <table class="process-table">
+          <thead><tr><th>가공 방식</th><th>특징</th><th>대표 맛</th></tr></thead>
+          <tbody>
+            <tr><td><strong>워시드</strong></td><td>물로 과육 세척 후 건조</td><td>홍차처럼 맑고 개운한 맛</td></tr>
+            <tr><td><strong>내추럴</strong></td><td>열매 통째로 햇볕 건조</td><td>딸기잼·와인처럼 진한 단맛</td></tr>
+            <tr><td><strong>허니</strong></td><td>점액질(단물)을 남겨 건조</td><td>꿀물처럼 매끄러운 단맛</td></tr>
+            <tr><td><strong>무산소/특수</strong></td><td>밀폐·온도발효 / 오크숙성</td><td>열대과일·요거트·위스키 풍미</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:0.76rem; margin-top:4px;"><strong>생두 등급:</strong> <code>G1</code>(결점두 최소 최상급), <code>AA/Supremo</code>(크기가 큰 대립두), <code>SHB/SHG</code>(해발 1,350m+ 고산지 단단한 원두)</p>
+      `
+    },
+    altitude: {
+      kicker: "ALTITUDE & TERROIR",
+      title: "재배 고도 & 산지 (Altitude & Terroir)",
+      getContext: (item) => {
+        if (!item) return "";
+        const alt = (item.altitude && item.altitude !== "Blend" && item.altitude !== "Various") ? item.altitude : "산지별 상이 (Blend)";
+        return `현재 원두: <strong>⛰️ ${item.region ? item.region + " · " : ""}${alt}</strong>`;
+      },
+      body: `
+        <p>일반적으로 <strong>해발 1,400m ~ 2,200m 이상의 고산 지대</strong>일수록 낮과 밤의 일교차가 큽니다.</p>
+        <ul>
+          <li><strong>느린 성숙:</strong> 서늘한 밤 기온 덕분에 커피 열매가 천천히 익으면서 당분과 유기산을 가득 축적합니다.</li>
+          <li><strong>높은 밀도:</strong> 조직이 단단하고 조밀하게 자라 로스팅 시 복합적인 과일 산미와 응축된 단맛이 풍부하게 발현됩니다.</li>
+        </ul>
+      `
+    },
+    recipe: {
+      kicker: "BREWING TEMP & RATIO",
+      title: "추천 추출 레시피 (Brew Recipe)",
+      getContext: (item) => {
+        if (!item) return "";
+        const br = item.brewOverride || getBrewRecipe(item.roast);
+        return `현재 원두 권장 레시피: <strong>💧 ${br}</strong>`;
+      },
+      body: `
+        <p>표준 핸드드립 기본 비율은 <strong>원두 20g : 물 300ml (1:15)</strong>입니다. 배전도와 가공법에 따라 물 온도를 조절하세요.</p>
+        <ul>
+          <li><strong>약배전 (92~93°C):</strong> 원두 조직이 단단해 높은 수온으로 화사한 꽃·과일 향을 충분히 추출</li>
+          <li><strong>중배전 (90~91°C):</strong> 단맛과 고소함의 밸런스가 가장 좋은 표준 수온</li>
+          <li><strong>강배전·특수발효·디카페인 (88~89°C):</strong> 성분이 빠르게 우러나므로 과추출(쓴맛·탄맛)을 막기 위해 수온을 낮춰 추출</li>
+        </ul>
+      `
+    },
+    origin: {
+      kicker: "TASTE AXIS 04 · ORIGIN & THEME",
+      title: "원산지 & 특별 테마 (Origin Wheel)",
+      getContext: () => {
+        const opt = ORIGIN_WHEEL_OPTIONS[wheelState.origin] || ORIGIN_WHEEL_OPTIONS[0];
+        return `현재 휠 선택: <strong>${opt.label} (${opt.kor})</strong> — 4번째 휠을 돌려 특정 나라 또는 테마만 모아볼 수 있습니다.`;
+      },
+      body: `
+        <p>디스펜서 4번째 휠은 <strong>27개 커피 생산국</strong>과 <strong>3대 스페셜 테마</strong>를 빠르게 걸러주는 필터입니다.</p>
+        <ul>
+          <li><strong>ALL (전체):</strong> 120종 마스터 DB 전체에서 취향 조합 검색</li>
+          <li><strong>27개 국가 코드:</strong> 에티오피아(ETH), 콜롬비아(COL), 케냐(KEN), 예멘(YEM) 등 국가별 테루아 필터</li>
+          <li><strong>🧪 FER (특수발효):</strong> 무산소·열충격·카보닉·코지 등 발효 공법 로트</li>
+          <li><strong>✨ FLV (가향/인퓨즈):</strong> 천연 가향·과일 인퓨즈드·오크 배럴 에이지드</li>
+          <li><strong>☕ BLD (블렌드):</strong> 밸런스가 완벽한 하우스 시그니처 블렌드</li>
+        </ul>
+      `
+    }
+  };
+
+  let lastTermHelpTrigger = null;
+  function openTermGuide(termKey, coffeeId = null, triggerEl = null) {
+    const def = COFFEE_TERM_GUIDES[termKey];
+    if (!def || !termGuideBackdrop) return;
+    const item = coffeeId ? coffeeData.find(c => c.id === coffeeId) : null;
+
+    if (lastTermHelpTrigger) lastTermHelpTrigger.classList.remove("is-active");
+    lastTermHelpTrigger = triggerEl || null;
+    if (lastTermHelpTrigger) lastTermHelpTrigger.classList.add("is-active");
+
+    if (termGuideKicker) termGuideKicker.textContent = def.kicker;
+    if (termGuideTitle) termGuideTitle.textContent = def.title;
+
+    const ctxHtml = typeof def.getContext === "function" ? def.getContext(item) : "";
+    if (termGuideContextBox) {
+      if (ctxHtml) {
+        termGuideContextBox.innerHTML = ctxHtml;
+        termGuideContextBox.classList.add("visible");
+      } else {
+        termGuideContextBox.innerHTML = "";
+        termGuideContextBox.classList.remove("visible");
+      }
+    }
+    if (termGuideBody) termGuideBody.innerHTML = def.body;
+    termGuideBackdrop.classList.add("open");
+  }
+
+  function closeTermGuide() {
+    if (termGuideBackdrop) termGuideBackdrop.classList.remove("open");
+    if (lastTermHelpTrigger) {
+      lastTermHelpTrigger.classList.remove("is-active");
+      lastTermHelpTrigger = null;
+    }
+  }
+
+  if (closeTermGuideBtn) closeTermGuideBtn.onclick = closeTermGuide;
+  if (termGuideBackdrop) {
+    termGuideBackdrop.onclick = (e) => {
+      if (e.target === termGuideBackdrop) closeTermGuide();
+    };
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && termGuideBackdrop && termGuideBackdrop.classList.contains("open")) {
+      closeTermGuide();
+    }
+  });
 
   const topClockWidget = document.getElementById("topClockWidget");
   const topClockText = document.getElementById("topClockText");
@@ -2802,18 +3199,13 @@
     if (window.scrollY > 25) {
       soundToggleBtn.classList.add("slide-left");
       openDrawerBtn.classList.add("slide-left");
-      openGuideBtn.classList.add("slide-left");
       if (topClockWidget) topClockWidget.classList.add("slide-up");
     } else {
       soundToggleBtn.classList.remove("slide-left");
       openDrawerBtn.classList.remove("slide-left");
-      openGuideBtn.classList.remove("slide-left");
       if (topClockWidget) topClockWidget.classList.remove("slide-up");
     }
   });
-
-  openGuideBtn.onclick = () => toggleUI(guideDrawer, guideOverlay, true);
-  closeGuideBtn.onclick = guideOverlay.onclick = () => toggleUI(guideDrawer, guideOverlay, false);
 
   openDrawerBtn.onclick = () => toggleUI(originDrawer, originOverlay, true);
   closeDrawerBtn.onclick = originOverlay.onclick = () => toggleUI(originDrawer, originOverlay, false);
@@ -2854,21 +3246,83 @@
   let isLeverPulling = false;
   let isThumbwheelsInitialized = false;
 
-  // 조작 휠 상태 (산미, 고소함, 바디감: 0=ANY/무관, 1~5단계 | 원산지: 0=ALL, 1~11)
+  // 조작 휠 상태 (산미, 고소함, 바디감: 0=ANY/무관, 1~5단계 | 원산지: 0=ALL, 1~30)
   const ORIGIN_WHEEL_OPTIONS = [
-    { key: "ALL", code: "ALL", kor: "전체", matchTokens: [] },
-    { key: "COL", code: "COL", kor: "콜롬비아", matchTokens: ["COLOMBIA"] },
-    { key: "ETH", code: "ETH", kor: "에티오피아", matchTokens: ["ETHIOPIA"] },
-    { key: "BRA", code: "BRA", kor: "브라질", matchTokens: ["BRAZIL"] },
-    { key: "KEN", code: "KEN", kor: "케냐", matchTokens: ["KENYA"] },
-    { key: "GTM", code: "GTM", kor: "과테말라", matchTokens: ["GUATEMALA"] },
-    { key: "PAN", code: "PAN", kor: "파나마", matchTokens: ["PANAMA"] },
-    { key: "CRI", code: "CRI", kor: "코스타리카", matchTokens: ["COSTA RICA"] },
-    { key: "IDN", code: "IDN", kor: "인도네시아", matchTokens: ["INDONESIA"] },
-    { key: "RWA", code: "RWA", kor: "르완다", matchTokens: ["RWANDA"] },
-    { key: "FLV", code: "FLV", kor: "플레이버", matchTokens: ["FLAVORED"] },
-    { key: "BLD", code: "BLD", kor: "블렌드", matchTokens: ["HOUSE BLEND", "BLEND"] }
+    { key: "ALL", code: "ALL", label: "ALL", kor: "전체", matchTokens: [] },
+    { key: "COL", code: "COL", label: "🇨🇴 COL", kor: "콜롬비아", matchTokens: ["COLOMBIA"] },
+    { key: "ETH", code: "ETH", label: "🇪🇹 ETH", kor: "에티오피아", matchTokens: ["ETHIOPIA"] },
+    { key: "BRA", code: "BRA", label: "🇧🇷 BRA", kor: "브라질", matchTokens: ["BRAZIL"] },
+    { key: "KEN", code: "KEN", label: "🇰🇪 KEN", kor: "케냐", matchTokens: ["KENYA"] },
+    { key: "GTM", code: "GTM", label: "🇬🇹 GTM", kor: "과테말라", matchTokens: ["GUATEMALA"] },
+    { key: "PAN", code: "PAN", label: "🇵🇦 PAN", kor: "파나마", matchTokens: ["PANAMA"] },
+    { key: "CRI", code: "CRI", label: "🇨🇷 CRI", kor: "코스타리카", matchTokens: ["COSTA RICA"] },
+    { key: "IDN", code: "IDN", label: "🇮🇩 IDN", kor: "인도네시아", matchTokens: ["INDONESIA"] },
+    { key: "RWA", code: "RWA", label: "🇷🇼 RWA", kor: "르완다", matchTokens: ["RWANDA"] },
+    { key: "SLV", code: "SLV", label: "🇸🇻 SLV", kor: "엘살바도르", matchTokens: ["SALVADOR"] },
+    { key: "HND", code: "HND", label: "🇭🇳 HND", kor: "온두라스", matchTokens: ["HONDURAS"] },
+    { key: "YEM", code: "YEM", label: "🇾🇪 YEM", kor: "예멘", matchTokens: ["YEMEN"] },
+    { key: "JAM", code: "JAM", label: "🇯🇲 JAM", kor: "자메이카", matchTokens: ["JAMAICA"] },
+    { key: "USA", code: "USA", label: "🇺🇸 HAW", kor: "하와이", matchTokens: ["HAWAII"] },
+    { key: "PER", code: "PER", label: "🇵🇪 PER", kor: "페루", matchTokens: ["PERU"] },
+    { key: "ECU", code: "ECU", label: "🇪🇨 ECU", kor: "에콰도르", matchTokens: ["ECUADOR"] },
+    { key: "BOL", code: "BOL", label: "🇧🇴 BOL", kor: "볼리비아", matchTokens: ["BOLIVIA"] },
+    { key: "NIC", code: "NIC", label: "🇳🇮 NIC", kor: "니카라과", matchTokens: ["NICARAGUA"] },
+    { key: "MEX", code: "MEX", label: "🇲🇽 MEX", kor: "멕시코", matchTokens: ["MEXICO"] },
+    { key: "BDI", code: "BDI", label: "🇧🇮 BDI", kor: "부룬디", matchTokens: ["BURUNDI"] },
+    { key: "TZA", code: "TZA", label: "🇹🇿 TZA", kor: "탄자니아", matchTokens: ["TANZANIA"] },
+    { key: "UGA", code: "UGA", label: "🇺🇬 UGA", kor: "우간다", matchTokens: ["UGANDA"] },
+    { key: "PNG", code: "PNG", label: "🇵🇬 PNG", kor: "파푸아뉴기니", matchTokens: ["PNG", "PAPUA"] },
+    { key: "VNM", code: "VNM", label: "🇻🇳 VNM", kor: "베트남", matchTokens: ["VIETNAM"] },
+    { key: "CHN", code: "CHN", label: "🇨🇳 CHN", kor: "중국(운남)", matchTokens: ["CHINA", "YUNNAN"] },
+    { key: "IND", code: "IND", label: "🇮🇳 IND", kor: "인도", matchTokens: ["INDIA"] },
+    { key: "TLS", code: "TLS", label: "🇹🇱 TLS", kor: "동티모르", matchTokens: ["TIMOR"] },
+    { key: "FER", code: "FER", label: "🧪 FER", kor: "특수발효", categoryType: "FERMENTED_LOT", matchTokens: ["ANAEROBIC", "THERMAL SHOCK"] },
+    { key: "FLV", code: "FLV", label: "✨ FLV", kor: "가향/인퓨즈", categoryType: "FLAVORED", matchTokens: ["FLAVORED", "INFUSED", "BARREL"] },
+    { key: "BLD", code: "BLD", label: "☕ BLD", kor: "블렌드", categoryType: "HOUSE_BLEND", matchTokens: ["HOUSE BLEND", "BLEND"] }
   ];
+
+  const archiveIssueBadge = document.getElementById("archiveIssueBadge");
+  if (archiveIssueBadge) {
+    archiveIssueBadge.textContent = `DISPENSER V1 • SCA ${coffeeData.length} MASTER DATABASE`;
+  }
+  if (resetAllBtn) {
+    resetAllBtn.textContent = `🔄 전체 ${coffeeData.length}종`;
+  }
+
+  function matchesOriginWheelOption(c, originOpt) {
+    if (!originOpt || originOpt.key === "ALL") return true;
+    const upOrigin = (c.origin || "").toUpperCase();
+    const upProcess = (c.process || "").toUpperCase();
+    const kwList = Array.isArray(c.keywords) ? c.keywords : [];
+
+    if (originOpt.categoryType) {
+      if (c.categoryType) return c.categoryType === originOpt.categoryType;
+      if (originOpt.categoryType === "FERMENTED_LOT") {
+        return ["Anaerobic", "Thermal Shock", "Carbonic Maceration"].includes(c.processGroup) ||
+          originOpt.matchTokens.some(tok => upProcess.includes(tok)) ||
+          kwList.some(k => ["무산소", "특수발효", "열충격", "카보닉", "코지", "효모발효"].includes(k));
+      }
+      if (originOpt.categoryType === "FLAVORED") {
+        return ["Infused", "Barrel Aged", "Flavored"].includes(c.processGroup) ||
+          upOrigin.includes("FLAVORED") ||
+          upProcess.includes("INFUSED") ||
+          upProcess.includes("BARREL") ||
+          upProcess.includes("FLAVORED") ||
+          kwList.some(k => ["가향", "인퓨즈드"].includes(k));
+      }
+      if (originOpt.categoryType === "HOUSE_BLEND") {
+        return upOrigin.includes("HOUSE BLEND") || (c.name || "").includes("블렌드");
+      }
+    }
+
+    if (c.countryCode) {
+      if (originOpt.code === "USA") {
+        return c.countryCode === "USA" || c.countryCode === "HAW";
+      }
+      return c.countryCode === originOpt.code;
+    }
+    return originOpt.matchTokens.some(tok => upOrigin.includes(tok));
+  }
 
   const wheelState = {
     sour: 2,
@@ -2905,39 +3359,34 @@
 
     const originOpt = ORIGIN_WHEEL_OPTIONS[originVal] || ORIGIN_WHEEL_OPTIONS[0];
     let pool = coffeeData;
-    if (originVal > 0 && originOpt.matchTokens.length > 0) {
-      const originFiltered = coffeeData.filter(c => {
-        const up = (c.origin || "").toUpperCase();
-        return originOpt.matchTokens.some(tok => up.includes(tok));
-      });
+    if (originVal > 0) {
+      const originFiltered = coffeeData.filter(c => matchesOriginWheelOption(c, originOpt));
       if (originFiltered.length > 0) pool = originFiltered;
     }
 
-    const exact = pool.filter(c =>
-      (sourVal === 0 || c.sourDots === sourVal) &&
-      (nuttyVal === 0 || c.nuttyDots === nuttyVal) &&
-      (bodyVal === 0 || c.bodyDots === bodyVal)
-    );
-    if (exact.length > 0) {
-      return { list: exact, isExact: true };
-    }
-    let minScore = Infinity;
-    let closest = [];
-    pool.forEach(c => {
+    const scored = pool.map(c => {
       const dSour = sourVal === 0 ? 0 : Math.abs(c.sourDots - sourVal);
       const dNutty = nuttyVal === 0 ? 0 : Math.abs(c.nuttyDots - nuttyVal);
       const dBody = bodyVal === 0 ? 0 : Math.abs(c.bodyDots - bodyVal);
       const manhattan = dSour + dNutty + dBody;
       const euclidean = dSour * dSour + dNutty * dNutty + dBody * dBody;
       const score = manhattan * 10 + euclidean;
-      if (score < minScore) {
-        minScore = score;
-        closest = [c];
-      } else if (score === minScore) {
-        closest.push(c);
-      }
-    });
-    return { list: closest, isExact: false };
+      return { item: c, score };
+    }).sort((a, b) => a.score - b.score);
+
+    const exactItems = scored.filter(x => x.score === 0).map(x => x.item);
+    const closePool = scored.filter(x => x.score > 0).map(x => x.item);
+    const minCuration = Math.min(6, pool.length);
+    const pickedClose = exactItems.length < minCuration
+      ? closePool.slice(0, minCuration - exactItems.length)
+      : [];
+
+    return {
+      list: [...exactItems, ...pickedClose],
+      exactCount: exactItems.length,
+      closeCount: pickedClose.length,
+      isExact: exactItems.length > 0
+    };
   }
 
   // Task 2-3: 레버 하단 배지 갱신 및 검색 모드 활성 시 충돌 방지
@@ -2952,10 +3401,12 @@
       return;
     }
     if (searchOverrideBadge) searchOverrideBadge.style.display = "none";
-    const { list, isExact } = getMatchingCoffees(wheelState);
+    const { list, exactCount, closeCount, isExact } = getMatchingCoffees(wheelState);
     if (isExact) {
       if (exactBadge) {
-        exactBadge.innerHTML = `🎯 일치 ${list.length}종`;
+        exactBadge.innerHTML = closeCount > 0
+          ? `🎯 일치 ${exactCount} + ✨ ${closeCount}종`
+          : `🎯 일치 ${exactCount}종`;
         exactBadge.style.display = "inline-block";
       }
       if (closeBadge) closeBadge.style.display = "none";
@@ -3057,6 +3508,17 @@
   }
 
   function initThumbwheels() {
+    const drumOriginEl = document.getElementById("drumOrigin");
+    const slotOriginEl = document.querySelector('.wheel-slot[data-wheel="origin"]');
+    if (drumOriginEl) {
+      drumOriginEl.innerHTML = ORIGIN_WHEEL_OPTIONS.map((opt, idx) =>
+        `<div class="wheel-num is-origin ${idx === 0 ? 'is-any' : ''}" data-val="${idx}">${opt.label}</div>`
+      ).join("");
+    }
+    if (slotOriginEl) {
+      slotOriginEl.setAttribute("aria-valuemax", String(ORIGIN_WHEEL_OPTIONS.length - 1));
+    }
+
     const slots = document.querySelectorAll(".wheel-slot");
     slots.forEach(slot => {
       const type = slot.getAttribute("data-wheel");
@@ -3156,14 +3618,10 @@
     if (wheelRandomBtn) {
       wheelRandomBtn.onclick = () => {
         const sample = coffeeData[Math.floor(Math.random() * coffeeData.length)];
-        const upOrigin = (sample.origin || "").toUpperCase();
-        const foundIdx = ORIGIN_WHEEL_OPTIONS.findIndex((opt, i) =>
-          i > 0 && opt.matchTokens.some(tok => upOrigin.includes(tok))
-        );
         updateWheelVisual("sour", sample.sourDots, false, false);
         updateWheelVisual("nutty", sample.nuttyDots, false, false);
         updateWheelVisual("body", sample.bodyDots, false, false);
-        updateWheelVisual("origin", foundIdx >= 0 ? foundIdx : 0, false, false);
+        updateWheelVisual("origin", 0, false, false);
         markWheelInteracted();
       };
     }
@@ -3298,18 +3756,25 @@
           appContainer.classList.add("searched");
           resultsContainer.classList.add("visible");
 
-          const { list, isExact } = getMatchingCoffees(filterState.appliedWheel);
-          const shuffled = [...list].sort(() => Math.random() - 0.5);
-          const matchLabel = isExact ? "🎰 조합 일치 카드" : "✨ 근접 추천 카드";
+          const { list, exactCount, closeCount, isExact } = getMatchingCoffees(filterState.appliedWheel);
+          const exactPart = list.slice(0, exactCount).sort(() => Math.random() - 0.5);
+          const closePart = list.slice(exactCount);
+          const orderedList = [...exactPart, ...closePart];
           const aw = filterState.appliedWheel;
           const sourTxt = aw.sour === 0 ? "무관" : aw.sour;
           const nuttyTxt = aw.nutty === 0 ? "무관" : aw.nutty;
           const bodyTxt = aw.body === 0 ? "무관" : aw.body;
           const originOpt = ORIGIN_WHEEL_OPTIONS[aw.origin] || ORIGIN_WHEEL_OPTIONS[0];
           const originTxt = aw.origin > 0 ? `·원산지 ${originOpt.kor}` : "";
-          const customHeader = `${matchLabel} <strong>${shuffled.length}</strong>장 <span style="font-size:0.76rem; color:var(--ink-sub); font-weight:600;">(산미${sourTxt}·고소${nuttyTxt}·바디${bodyTxt}${originTxt})</span>`;
+          let customHeader = "";
+          if (exactCount > 0 && closeCount > 0) {
+            customHeader = `🎰 맞춤 큐레이션 <strong>${orderedList.length}</strong>장 <span style="font-size:0.76rem; color:var(--ink-sub); font-weight:600;">(🎯일치 ${exactCount} + ✨근접 ${closeCount} · 산미${sourTxt}·고소${nuttyTxt}·바디${bodyTxt}${originTxt})</span>`;
+          } else {
+            const matchLabel = isExact ? "🎰 조합 일치 카드" : "✨ 근접 추천 카드";
+            customHeader = `${matchLabel} <strong>${orderedList.length}</strong>장 <span style="font-size:0.76rem; color:var(--ink-sub); font-weight:600;">(산미${sourTxt}·고소${nuttyTxt}·바디${bodyTxt}${originTxt})</span>`;
+          }
 
-          renderCompactCards(shuffled, customHeader);
+          renderCompactCards(orderedList, customHeader);
           setTimeout(() => {
             smoothScrollToElement(resultsHeader, 280);
           }, 320);
@@ -3621,7 +4086,22 @@
     const altitudeDisplay = (item.altitude && item.altitude !== 'Blend' && item.altitude !== 'Various')
       ? item.altitude
       : '산지별 상이 (Blend)';
-    const brewRecipe = getBrewRecipe(item.roast);
+    const brewRecipe = item.brewOverride || getBrewRecipe(item.roast);
+    const caffeineBadgeHtml = item.caffeine === "DECAF"
+      ? `<span class="modal-roast-pill" style="background:#EEF4F8; color:#2E5A78; border-color:#B6CFE0;">🌙 DECAF</span>`
+      : item.caffeine === "LOW_CAF"
+      ? `<span class="modal-roast-pill" style="background:#EEF7EE; color:#2F6B3B; border-color:#B7DEC0;">🌿 LOW-CAF</span>`
+      : "";
+    const categoryBadgeHtml = item.categoryType === "FERMENTED_LOT"
+      ? `<span class="modal-roast-pill" style="background:#F5EFFA; color:#6B3FA0; border-color:#D8C4EE;">🧪 특수발효</span>`
+      : "";
+    const sweetRowHtml = item.sweetDots != null
+      ? `<div class="modal-profile-row">
+              <span class="modal-profile-name"><span class="term-label-link" role="button" tabindex="0" data-term="sweet" data-coffee-id="${item.id}" title="달콤함 기준 보기">🍯 달콤함 (단맛)</span></span>
+              <div class="modal-profile-dots">${renderDots(item.sweetDots || 3, 'sour')}</div>
+              <span class="modal-profile-desc">${item.sweetDots || 3}단계 (${item.sweetDesc || '균형 잡힌 단맛'})</span>
+            </div>`
+      : "";
 
     detailModalContent.innerHTML = `
       <button class="modal-close-btn" onclick="closeDetailModal()">✕</button>
@@ -3629,7 +4109,9 @@
       <div class="modal-meta-bar">
         <div class="modal-meta-left">
           <span class="modal-card-num">${item.no}</span>
-          <span class="modal-roast-pill">🔥 ${formatRoastShort(item.roast)}</span>
+          <span class="modal-roast-pill">🔥 ${formatRoastShort(item.roast)}</span><button type="button" class="term-help-btn" data-term="roast_naming" data-coffee-id="${item.id}" title="배전도 및 이름 공식 설명" aria-label="배전도 및 이름 공식 설명">?</button>
+          ${caffeineBadgeHtml}
+          ${categoryBadgeHtml}
         </div>
         <span class="modal-origin-pill">${item.origin}</span>
       </div>
@@ -3654,24 +4136,25 @@
             <div class="barista-guide-text">${item.guide}</div>
           </div>
 
-          <!-- 2. ☕ 맛 프로필 (산미 -> 고소함 -> 바디감) -->
+          <!-- 2. ☕ 맛 프로필 (산미 -> 고소함 -> 바디감 -> 달콤함) -->
           <div class="modal-profile-card">
-            <div class="profile-card-title">CUPPING TASTE PROFILE</div>
+            <div class="profile-card-title"><span>CUPPING TASTE PROFILE</span><button type="button" class="term-help-btn" data-term="taste_all" data-coffee-id="${item.id}" title="4대 맛 지표 설명" aria-label="4대 맛 지표 설명">?</button></div>
             <div class="modal-profile-row">
-              <span class="modal-profile-name">🍋 상큼함 (산미)</span>
+              <span class="modal-profile-name"><span class="term-label-link" role="button" tabindex="0" data-term="sour" data-coffee-id="${item.id}" title="산미 설명 보기">🍋 상큼함 (산미)</span></span>
               <div class="modal-profile-dots">${renderDots(item.sourDots, 'sour')}</div>
               <span class="modal-profile-desc">${item.sourDots}단계 (${item.sourDesc})</span>
             </div>
             <div class="modal-profile-row">
-              <span class="modal-profile-name">🥜 고소함 (너티)</span>
+              <span class="modal-profile-name"><span class="term-label-link" role="button" tabindex="0" data-term="nutty" data-coffee-id="${item.id}" title="고소함 설명 보기">🥜 고소함 (너티)</span></span>
               <div class="modal-profile-dots">${renderDots(item.nuttyDots, 'nutty')}</div>
               <span class="modal-profile-desc">${item.nuttyDots}단계 (${item.nuttyDesc})</span>
             </div>
             <div class="modal-profile-row">
-              <span class="modal-profile-name">⚖️ 바디감 (무게)</span>
+              <span class="modal-profile-name"><span class="term-label-link" role="button" tabindex="0" data-term="body" data-coffee-id="${item.id}" title="바디감 설명 보기">⚖️ 바디감 (무게)</span></span>
               <div class="modal-profile-dots">${renderDots(item.bodyDots, 'body')}</div>
               <span class="modal-profile-desc highlight">${item.bodyDesc}</span>
             </div>
+            ${sweetRowHtml}
           </div>
 
           <!-- 3. 💬 테이스팅 한줄 평 -->
@@ -3682,22 +4165,22 @@
 
           <!-- 4. Task 6-2: 원산지 & 추출 스펙 4분할 그리드 (ORIGIN & BREWING SPEC) -->
           <div class="modal-spec-section">
-            <div class="modal-spec-header">ORIGIN & BREWING SPEC</div>
+            <div class="modal-spec-header"><span>ORIGIN &amp; BREWING SPEC</span><button type="button" class="term-help-btn" data-term="spec_all" data-coffee-id="${item.id}" title="원두 스펙 및 추출 가이드" aria-label="원두 스펙 및 추출 가이드">?</button></div>
             <div class="modal-spec-grid">
               <div class="modal-spec-item">
-                <span class="modal-spec-label">🌱 VARIETAL (품종)</span>
-                <span class="modal-spec-val">${item.varietal}</span>
+                <span class="modal-spec-label"><span class="term-label-link" role="button" tabindex="0" data-term="varietal" data-coffee-id="${item.id}" title="품종·계보 설명 보기">🌱 VARIETAL &amp; LINEAGE (품종·계보)</span></span>
+                <span class="modal-spec-val">${item.varietal}${item.lineage ? ` <span style="font-size:0.72rem; color:var(--ink-sub); font-weight:600;">(${item.lineage})</span>` : ''}</span>
               </div>
               <div class="modal-spec-item">
-                <span class="modal-spec-label">☀️ PROCESS (가공)</span>
-                <span class="modal-spec-val">${item.process}</span>
+                <span class="modal-spec-label"><span class="term-label-link" role="button" tabindex="0" data-term="process" data-coffee-id="${item.id}" title="가공·등급 설명 보기">☀️ PROCESS &amp; GRADE (가공·등급)</span></span>
+                <span class="modal-spec-val">${item.process}${item.physicalGrade ? ` <span style="font-size:0.72rem; color:var(--ink-sub); font-weight:600;">· ${item.physicalGrade}</span>` : ''}</span>
               </div>
               <div class="modal-spec-item">
-                <span class="modal-spec-label">⛰️ ALTITUDE (고도)</span>
-                <span class="modal-spec-val">${altitudeDisplay}</span>
+                <span class="modal-spec-label"><span class="term-label-link" role="button" tabindex="0" data-term="altitude" data-coffee-id="${item.id}" title="산지·고도 설명 보기">⛰️ REGION &amp; ALTITUDE (산지·고도)</span></span>
+                <span class="modal-spec-val">${item.region ? `${item.region} · ` : ''}${altitudeDisplay}</span>
               </div>
               <div class="modal-spec-item">
-                <span class="modal-spec-label">💧 BREW RECIPE (추천 추출 레시피)</span>
+                <span class="modal-spec-label"><span class="term-label-link" role="button" tabindex="0" data-term="recipe" data-coffee-id="${item.id}" title="추출 레시피 설명 보기">💧 BREW RECIPE (추천 추출 레시피)</span></span>
                 <span class="modal-spec-val recipe-highlight">${brewRecipe}</span>
               </div>
             </div>
@@ -3865,7 +4348,7 @@
   function resetToAllCoffees(scrollToTop = false) {
     stopAudio();
     closeDetailModal();
-    toggleUI(guideDrawer, guideOverlay, false);
+    closeTermGuide();
     toggleUI(originDrawer, originOverlay, false);
     toggleUI(printerModalOverlay, null, false);
 
@@ -3935,6 +4418,7 @@
     resultsContainer.classList.add("visible");
 
     if (resetAllBtn) {
+      resetAllBtn.textContent = `🔄 전체 ${coffeeData.length}종`;
       resetAllBtn.disabled = (filterState.mode === "ALL");
     }
 
@@ -3984,7 +4468,13 @@
         </div>
       `;
 
-      card.onclick = () => window.openDetailModal(c.id);
+      card.onclick = (e) => {
+        if (e.target.closest("[data-term]")) {
+          e.stopPropagation();
+          return;
+        }
+        window.openDetailModal(c.id);
+      };
 
       wrapper.appendChild(card);
       coffeeList.appendChild(wrapper);
@@ -4078,19 +4568,48 @@
     if (filterState.mode === "ALL") {
       renderCompactCards(coffeeData, `전체 스페셜티 아카이브 <strong>${coffeeData.length}</strong>종`);
     } else if (filterState.mode === "DISPENSER" && filterState.appliedWheel) {
-      const { list, isExact } = getMatchingCoffees(filterState.appliedWheel);
-      const matchLabel = isExact ? "🎰 조합 일치 카드" : "✨ 근접 추천 카드";
+      const { list, exactCount, closeCount, isExact } = getMatchingCoffees(filterState.appliedWheel);
       const aw = filterState.appliedWheel;
       const sourTxt = aw.sour === 0 ? "무관" : aw.sour;
       const nuttyTxt = aw.nutty === 0 ? "무관" : aw.nutty;
       const bodyTxt = aw.body === 0 ? "무관" : aw.body;
       const originOpt = ORIGIN_WHEEL_OPTIONS[aw.origin] || ORIGIN_WHEEL_OPTIONS[0];
       const originTxt = aw.origin > 0 ? `·원산지 ${originOpt.kor}` : "";
-      const customHeader = `${matchLabel} <strong>${list.length}</strong>장 <span style="font-size:0.76rem; color:var(--ink-sub); font-weight:600;">(산미${sourTxt}·고소${nuttyTxt}·바디${bodyTxt}${originTxt})</span>`;
+      let customHeader = "";
+      if (exactCount > 0 && closeCount > 0) {
+        customHeader = `🎰 맞춤 큐레이션 <strong>${list.length}</strong>장 <span style="font-size:0.76rem; color:var(--ink-sub); font-weight:600;">(🎯일치 ${exactCount} + ✨근접 ${closeCount} · 산미${sourTxt}·고소${nuttyTxt}·바디${bodyTxt}${originTxt})</span>`;
+      } else {
+        const matchLabel = isExact ? "🎰 조합 일치 카드" : "✨ 근접 추천 카드";
+        customHeader = `${matchLabel} <strong>${list.length}</strong>장 <span style="font-size:0.76rem; color:var(--ink-sub); font-weight:600;">(산미${sourTxt}·고소${nuttyTxt}·바디${bodyTxt}${originTxt})</span>`;
+      }
       renderCompactCards(list, customHeader);
     } else if (filterState.mode === "SEARCH") {
       filterCoffeesBySearch(filterState.query);
     }
+  }
+
+  function expandSimilarCoffees(directMatches, minCount = 5) {
+    if (!Array.isArray(directMatches) || directMatches.length === 0 || directMatches.length > 3 || coffeeData.length <= directMatches.length) {
+      return directMatches;
+    }
+    const anchor = directMatches[0];
+    const anchorFamilies = new Set(Array.isArray(anchor.flavorFamily) ? anchor.flavorFamily : []);
+    const usedIds = new Set(directMatches.map(c => c.id));
+    const extras = coffeeData
+      .filter(c => !usedIds.has(c.id))
+      .map(c => {
+        const tasteDist =
+          Math.abs((c.sourDots || 0) - (anchor.sourDots || 0)) +
+          Math.abs((c.nuttyDots || 0) - (anchor.nuttyDots || 0)) +
+          Math.abs((c.bodyDots || 0) - (anchor.bodyDots || 0));
+        const sharedFamilyCount = (Array.isArray(c.flavorFamily) ? c.flavorFamily : [])
+          .filter(f => anchorFamilies.has(f)).length;
+        return { item: c, simScore: tasteDist * 10 - sharedFamilyCount * 8 };
+      })
+      .sort((a, b) => a.simScore - b.simScore)
+      .slice(0, Math.min(minCount, coffeeData.length) - directMatches.length)
+      .map(x => x.item);
+    return [...directMatches, ...extras];
   }
 
   // 한국어 구어체·감각어·부정어·복합 질의를 모두 처리하는 스마트 검색 함수
@@ -4101,41 +4620,70 @@
     const isPureChosung = /^[ㄱ-ㅎ]+$/.test(q);
     const getChosungMatch = (name) => isPureChosung && getChosung(name).includes(q);
 
-    // 📌 1. 산지 도감 탭 및 국가명 전용 스마트 필터
-    if (q === "인도") {
-      return coffeeData.filter(item => item.origin.includes("INDIA") || (item.name.includes("인도") && !item.name.includes("인도네시아")));
+    // 📌 1. 산지 도감(originData) 및 정규화 코드(countryCode / categoryType) 기반 동적 스마트 필터
+    if (Array.isArray(originData)) {
+      const matchedOriginEntry = originData.find(o => {
+        const normCountry = (o.country || "").toLowerCase().replace(/[\s()]/g, "");
+        const baseCountry = (o.country || "").replace(/\([^)]*\)/g, "").toLowerCase().replace(/\s+/g, "");
+        const normQuery = (o.query || "").toLowerCase().replace(/\s+/g, "");
+        const normCode = (o.code || "").toLowerCase();
+        return q === normQuery || q === normCountry || (baseCountry && q === baseCountry) || (normCode && q === normCode);
+      });
+      if (matchedOriginEntry && matchedOriginEntry.code) {
+        const code = matchedOriginEntry.code;
+        if (code === "FER") {
+          const ferOpt = ORIGIN_WHEEL_OPTIONS.find(opt => opt.code === "FER");
+          return coffeeData.filter(c => matchesOriginWheelOption(c, ferOpt));
+        }
+        if (code === "FLV") {
+          const flvOpt = ORIGIN_WHEEL_OPTIONS.find(opt => opt.code === "FLV");
+          return coffeeData.filter(c => matchesOriginWheelOption(c, flvOpt));
+        }
+        if (code === "BLD") {
+          const bldOpt = ORIGIN_WHEEL_OPTIONS.find(opt => opt.code === "BLD");
+          return coffeeData.filter(c => matchesOriginWheelOption(c, bldOpt));
+        }
+        const wheelOpt = ORIGIN_WHEEL_OPTIONS.find(opt => opt.code === code);
+        if (wheelOpt) {
+          return coffeeData.filter(c => matchesOriginWheelOption(c, wheelOpt));
+        }
+        return coffeeData.filter(c => c.countryCode === code);
+      }
     }
-    if (q === "인도네시아") {
-      return coffeeData.filter(item => item.origin.includes("INDONESIA") || item.name.includes("인도네시아"));
+
+    // 특수발효 vs 가향/인퓨즈드 분리 전용 검색
+    if (/^(특수발효|무산소|혐기성|서멀쇼크|열충격|카보닉|코지|효모발효)$/.test(q) || (/(특수발효|무산소|혐기성|서멀쇼크|열충격|카보닉|코지|효모발효)/.test(q) && !/(가향|인퓨즈)/.test(q))) {
+      const ferOpt = ORIGIN_WHEEL_OPTIONS.find(opt => opt.code === "FER");
+      return coffeeData.filter(c => matchesOriginWheelOption(c, ferOpt));
     }
-    if (q === "케냐") return coffeeData.filter(item => item.origin.includes("KENYA") || item.name.includes("케냐"));
-    if (q === "하와이" || q === "코나") return coffeeData.filter(item => item.origin.includes("HAWAII") || item.name.includes("하와이") || item.name.includes("코나"));
-    if (q === "자메이카" || q === "블루마운틴") return coffeeData.filter(item => item.origin.includes("JAMAICA") || item.name.includes("자메이카"));
-    if (q === "파푸아뉴기니" || q === "파푸아" || q === "png" || q.includes("파푸아")) return coffeeData.filter(item => item.origin.includes("PNG") || item.name.includes("파푸아뉴기니"));
-    if (q === "중국" || q === "운남" || q.includes("중국") || q.includes("운남")) return coffeeData.filter(item => item.origin.includes("CHINA") || item.name.includes("운남") || item.keywords.includes("중국"));
-    if (q === "온두라스" || q === "혼두라스" || q.includes("온두라스") || q.includes("혼두라스")) return coffeeData.filter(item => item.origin.includes("HONDURAS") || item.name.includes("혼두라스") || item.keywords.includes("온두라스"));
-    if (q === "르완다") return coffeeData.filter(item => item.origin.includes("RWANDA") || item.name.includes("르완다"));
-    if (q === "부룬디") return coffeeData.filter(item => item.origin.includes("BURUNDI") || item.name.includes("부룬디"));
-    if (q === "탄자니아") return coffeeData.filter(item => item.origin.includes("TANZANIA") || item.name.includes("탄자니아"));
-    if (q === "우간다") return coffeeData.filter(item => item.origin.includes("UGANDA") || item.name.includes("우간다"));
-    if (q === "엘살바도르" || q.includes("살바도르")) return coffeeData.filter(item => item.origin.includes("SALVADOR") || item.name.includes("엘살바도르"));
-    if (q === "에티오피아") return coffeeData.filter(item => item.origin.includes("ETHIOPIA") || item.name.includes("에티오피아"));
-    if (q === "파나마") return coffeeData.filter(item => item.origin.includes("PANAMA") || item.name.includes("파나마"));
-    if (q === "코스타리카") return coffeeData.filter(item => item.origin.includes("COSTA RICA") || item.name.includes("코스타리카"));
-    if (q === "과테말라") return coffeeData.filter(item => item.origin.includes("GUATEMALA") || item.name.includes("과테말라"));
-    if (q === "니카라과") return coffeeData.filter(item => item.origin.includes("NICARAGUA") || item.name.includes("니카라과"));
-    if (q === "콜롬비아") return coffeeData.filter(item => item.origin.includes("COLOMBIA") || item.name.includes("콜롬비아"));
-    if (q === "브라질") return coffeeData.filter(item => item.origin.includes("BRAZIL") || item.name.includes("브라질"));
-    if (q === "페루") return coffeeData.filter(item => item.origin.includes("PERU") || item.name.includes("페루"));
-    if (q === "에콰도르") return coffeeData.filter(item => item.origin.includes("ECUADOR") || item.name.includes("에콰도르"));
-    if (q === "볼리비아") return coffeeData.filter(item => item.origin.includes("BOLIVIA") || item.name.includes("볼리비아"));
-    if (q === "동티모르" || q.includes("티모르")) return coffeeData.filter(item => item.origin.includes("TIMOR") || item.name.includes("동티모르"));
-    if (q === "베트남") return coffeeData.filter(item => item.origin.includes("VIETNAM") || item.name.includes("베트남"));
-    if (q === "가향" || q === "특수발효" || q === "무산소" || q.includes("가향") || q.includes("특수발효")) {
-      return coffeeData.filter(item => item.origin.includes("FLAVORED") || item.keywords.includes("가향") || item.keywords.includes("무산소") || item.keywords.includes("인퓨즈드") || item.keywords.includes("특수발효"));
+    if (/^(가향|인퓨즈드|인퓨즈|배럴|오크통|향료)$/.test(q) || (/(가향|인퓨즈드|인퓨즈|배럴|오크통|향료)/.test(q) && !/(특수발효|무산소)/.test(q))) {
+      const flvOpt = ORIGIN_WHEEL_OPTIONS.find(opt => opt.code === "FLV");
+      return coffeeData.filter(c => matchesOriginWheelOption(c, flvOpt));
     }
-    if (q === "하우스" || q === "하우스블렌드" || q === "블렌드" || q.includes("하우스")) {
-      return coffeeData.filter(item => item.origin.includes("HOUSE BLEND") || item.name.includes("블렌드"));
+
+    // ORIGIN_WHEEL_OPTIONS 및 주요 국가명·별칭 동적 매칭 (인도 vs 인도네시아 정확 분리 포함)
+    const COUNTRY_ALIASES = {
+      "인도": "IND", "인도네시아": "IDN", "케냐": "KEN", "하와이": "USA", "코나": "USA",
+      "자메이카": "JAM", "블루마운틴": "JAM", "파푸아뉴기니": "PNG", "파푸아": "PNG", "png": "PNG",
+      "중국": "CHN", "운남": "CHN", "온두라스": "HND", "혼두라스": "HND", "르완다": "RWA",
+      "부룬디": "BDI", "탄자니아": "TZA", "우간다": "UGA", "엘살바도르": "SLV", "살바도르": "SLV",
+      "에티오피아": "ETH", "파나마": "PAN", "코스타리카": "CRI", "과테말라": "GTM", "니카라과": "NIC",
+      "콜롬비아": "COL", "브라질": "BRA", "페루": "PER", "에콰도르": "ECU", "볼리비아": "BOL",
+      "동티모르": "TLS", "티모르": "TLS", "베트남": "VNM", "예멘": "YEM", "멕시코": "MEX",
+      "하우스": "BLD", "하우스블렌드": "BLD", "블렌드": "BLD"
+    };
+    const matchedCode = COUNTRY_ALIASES[q] || (
+      ORIGIN_WHEEL_OPTIONS.find(opt => {
+        if (opt.key === "ALL") return false;
+        const normKor = opt.kor.toLowerCase().replace(/[\s()]/g, "");
+        return q === normKor || q === opt.code.toLowerCase();
+      })?.code
+    );
+    if (matchedCode) {
+      const targetOpt = ORIGIN_WHEEL_OPTIONS.find(opt => opt.code === matchedCode);
+      if (targetOpt) {
+        return coffeeData.filter(c => matchesOriginWheelOption(c, targetOpt));
+      }
     }
 
     // 📌 2. 구어체·감각어·부정어·강도 수식어(약/중/강) 의도(Intent) 규칙 판별기
@@ -4217,19 +4765,25 @@
       intentFilters.push(item => item.bodyDots <= 2);
     }
 
-    // [E] 단맛 / 달콤함 관련 구어체 판별 ('단거', '달달한거', '달콤한거')
+    // [E] 단맛 / 달콤함 관련 구어체 판별 ('단거', '달달한거', '달콤한거', v2 sweetDots 우선)
     const sweetPattern = /(단거|단것|단맛|달달|달콤|스위트|설탕|꿀|시럽|초코|초콜릿|카라멜|바닐라|잼)/;
     if (sweetPattern.test(q)) {
       intentFilters.push(item => {
-        const hay = `${item.headline} ${item.guide} ${item.sourDesc} ${item.nuttyDesc} ${item.keywords.join(' ')}`;
+        if (typeof item.sweetDots === "number" && item.sweetDots >= 4) return true;
+        const hay = `${item.headline} ${item.guide} ${item.sourDesc} ${item.nuttyDesc} ${item.sweetDesc || ''} ${(item.keywords || []).join(' ')}`;
         return /(달콤|단맛|달달|꿀|초콜릿|초코|카라멜|시럽|바닐라|잼|설탕|스위트|메이플)/.test(hay);
       });
     }
 
-    // [F] 디카페인 / 저녁용 구어체 판별
-    const decafPattern = /(디카페인|카페인없|밤에|저녁|숙면|임산부|속편한)/;
+    // [F] 디카페인 / 저카페인 / 저녁용 구어체 판별 (v2 caffeine 우선)
+    const decafPattern = /(디카페인|저카페인|카페인없|카페인적|로리나|버본포인투|유제니오이데스|밤에|저녁|숙면|임산부|속편한)/;
     if (decafPattern.test(q)) {
-      intentFilters.push(item => item.process.toLowerCase().includes("decaf") || item.keywords.includes("디카페인"));
+      intentFilters.push(item =>
+        item.caffeine === "DECAF" ||
+        item.caffeine === "LOW_CAF" ||
+        (item.process || "").toLowerCase().includes("decaf") ||
+        (item.keywords || []).includes("디카페인")
+      );
     }
 
     // [G] 바디감 1~5단계 명시 판별
@@ -4242,17 +4796,18 @@
     // 구어체 의도 필터가 하나 이상 감지된 경우 모든 감지된 의도를 만족(AND)하는 원두 반환
     if (intentFilters.length > 0) {
       const intentMatched = coffeeData.filter(item => intentFilters.every(fn => fn(item)));
-      if (intentMatched.length > 0) return intentMatched;
+      if (intentMatched.length > 0) return expandSimilarCoffees(intentMatched, 5);
     }
 
-    // 📌 3. 일반 텍스트 / 어근(접미사 '한거', '거', '맛', '커피', '원두' 제거) / 초성 검색 폴백
+    // 📌 3. 일반 텍스트 / 어근(접미사 '한거', '거', '맛', '커피', '원두' 제거) / 초성 검색 폴백 (v2 메타 필드 포함)
     const stripped = q.replace(/(추천해줘|추천|원두커피|커피원두|원두|커피|한거|한것|한맛|인거|거|맛)$/g, '').trim() || q;
 
-    return coffeeData.filter(item => {
-      const hay = `${item.name} ${item.eng} ${item.origin} ${item.headline} ${item.bodyDesc} ${item.guide} ${item.sourDesc} ${item.nuttyDesc} ${item.keywords.join(' ')}`.toLowerCase().replace(/\s+/g, '');
+    const directMatches = coffeeData.filter(item => {
+      const hay = `${item.name} ${item.eng} ${item.origin} ${item.region || ''} ${item.varietal || ''} ${item.lineage || ''} ${item.species || ''} ${item.physicalGrade || ''} ${item.process || ''} ${item.headline} ${item.bodyDesc} ${item.guide} ${item.sourDesc} ${item.nuttyDesc} ${item.sweetDesc || ''} ${(item.flavorFamily || []).join(' ')} ${(item.keywords || []).join(' ')}`.toLowerCase().replace(/\s+/g, '');
       const chosungMatch = getChosungMatch(item.name);
       return hay.includes(q) || (stripped.length >= 1 && hay.includes(stripped)) || chosungMatch;
     });
+    return expandSimilarCoffees(directMatches, 5);
   }
 
   // Task 2-2 & 2-3: 검색 필터링 함수 (filterCoffeesBySearch & doSearch 호환)
@@ -4309,17 +4864,49 @@
     }
   });
 
-  // 📌 버튼 포인터다운/업 및 카드 클릭 시 기계식 타건 사운드 (단일 재생 보장: 중복 발화 방지)
+  // 📌 버튼 포인터다운/업 및 카드 클릭 시 기계식 타건 사운드 (모바일 터치 스크롤 오작동 방지 + 단일 재생 보장)
   const SOUND_BTN_SELECTOR =
-    ".core-category-btn, .nav-fixed-btn, .action-btn, .ticket-export-btn, .modal-tab-btn, .modal-close-btn, .drawer-close-btn, .clear-btn, .mic-btn, .wheel-random-btn, .reset-all-btn:not(:disabled), .home-reset-btn, .search-jump-badge, #logoBtn, .compact-coffee-card, .origin-info-card";
+    ".core-category-btn, .nav-fixed-btn, .action-btn, .ticket-export-btn, .modal-tab-btn, .modal-close-btn, .drawer-close-btn, .clear-btn, .mic-btn, .wheel-random-btn, .reset-all-btn:not(:disabled), .home-reset-btn, .search-jump-badge, .term-help-btn, .term-label-link, .term-guide-close, #logoBtn";
+  const CARD_SOUND_SELECTOR = ".compact-coffee-card, .origin-info-card";
   const BRIGHT_BTN_SELECTOR = ".modal-tab-btn, .action-btn, .ticket-export-btn, .compact-coffee-card, .origin-info-card";
   let activeSoundBtnPressed = null;
+  let lastPointerType = "mouse";
 
   function isExcludedSoundBtn(el) {
     return !el || el.id === "soundToggleBtn" || el.id === "toggleTastedBtn" || el.id === "saveTicketImgBtn" || el.id === "ticketDirectSaveBtn" || el.id === "ticketShareBtn";
   }
 
+  // '?' 마이크로 용어 가이드 버튼 클릭/키보드 캡처 핸들러 (카드 모달 / 로고 리셋 이벤트 전파 완벽 차단)
+  document.addEventListener("click", (e) => {
+    const helpBtn = e.target.closest("[data-term]");
+    if (!helpBtn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (lastPointerType === "touch" || e.detail === 0) {
+      AudioFX.drip();
+    }
+    openTermGuide(helpBtn.dataset.term, helpBtn.dataset.coffeeId || null, helpBtn);
+  }, true);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      const helpBtn = e.target.closest("[data-term]");
+      if (helpBtn && helpBtn.tagName !== "BUTTON") {
+        e.preventDefault();
+        e.stopPropagation();
+        AudioFX.drip();
+        openTermGuide(helpBtn.dataset.term, helpBtn.dataset.coffeeId || null, helpBtn);
+      }
+    }
+  }, true);
+
   document.addEventListener("pointerdown", (e) => {
+    lastPointerType = e.pointerType || "mouse";
+    if (lastPointerType === "touch") {
+      AudioFX.init();
+      activeSoundBtnPressed = null;
+      return;
+    }
     if (e.button !== undefined && e.button !== 0) return;
     const soundBtn = e.target.closest(SOUND_BTN_SELECTOR);
     if (soundBtn && !isExcludedSoundBtn(soundBtn)) {
@@ -4358,9 +4945,11 @@
     if (coreCategoriesSection && !e.target.closest(".search-wrap, #coreCategoriesSection")) {
       coreCategoriesSection.classList.remove("open");
     }
-    const kbdBtnTarget = e.detail === 0 ? e.target.closest(SOUND_BTN_SELECTOR) : null;
-    if (kbdBtnTarget && !isExcludedSoundBtn(kbdBtnTarget)) {
-      const variant = kbdBtnTarget.matches(BRIGHT_BTN_SELECTOR) ? "bright" : "default";
+    const cardTarget = e.target.closest(CARD_SOUND_SELECTOR);
+    const tapBtnTarget = (e.detail === 0 || lastPointerType === "touch") ? e.target.closest(SOUND_BTN_SELECTOR) : null;
+    const soundTarget = cardTarget || tapBtnTarget;
+    if (soundTarget && !isExcludedSoundBtn(soundTarget)) {
+      const variant = soundTarget.matches(BRIGHT_BTN_SELECTOR) ? "bright" : "default";
       AudioFX.drip(variant);
     }
     const btn = e.target.closest(".core-category-btn, .nav-fixed-btn, .action-btn");
