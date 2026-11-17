@@ -1009,37 +1009,37 @@
     .modal-origin-pill { font-size: 0.72rem; font-weight: 800; color: var(--accent); background: rgba(184, 74, 40, 0.08); border: 1px dashed var(--stamp-border); padding: 1px 6px; border-radius: 3px; white-space: nowrap; }
 
     /* ==========================================================================
-       🎛️ PAPER-CRAFT ROCKER SWITCH MECHANISM (시소 메커니즘 탭 스위처)
+       🎛️ 1. LOW-PROFILE ROCKER SWITCH (상세 모달 상단 시소 탭 - 깊이 절제)
        ========================================================================== */
     .modal-segment-tabs {
       position: relative;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: stretch;
-      background: #E4DBD0;
-      padding: 6px 6px 8px;
+      background: #E5DDD2;
+      padding: 4px 5px 6px;
       border-radius: 7px;
       border: 1.5px solid var(--line);
-      box-shadow: inset 0 2px 4px rgba(30, 25, 21, 0.16);
+      box-shadow: inset 0 1.5px 3px rgba(30, 25, 21, 0.14);
       perspective: 600px;
       user-select: none;
+      gap: 0;
     }
 
-    /* 중앙 시소 회전축(Pivot Axis) 구분선 */
     .rocker-pivot-divider {
-      width: 2px;
+      width: 1.5px;
       background: var(--line);
       margin: 2px 0;
-      opacity: 0.35;
+      opacity: 0.3;
       z-index: 2;
     }
 
-    /* 공통 날개(Wing) 버튼: 기본값은 '위로 들려 있어 누를 수 있는 상태(Raised)' */
+    /* 들려 있는 탭 (Raised): 살짝만 올라오고(-1.5px) 하단 단면은 2.5px로 절제 */
     .modal-tab-btn {
       position: relative;
       z-index: 1;
       border: 1.5px solid var(--line);
-      padding: 8px 10px;
+      padding: 7px 10px;
       font-family: 'Pretendard', sans-serif;
       font-size: 0.8rem;
       font-weight: 800;
@@ -1049,19 +1049,17 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transform-origin: center center;
-      /* 들린 상태(Raised): 위로 솟아오르고 아래쪽에 4px 입체 단면(Lip)과 그림자 생성 */
       background: linear-gradient(180deg, #FFFDF9 0%, #F4ECE1 100%);
-      transform: translateY(-2.5px) rotateX(4deg);
+      transform: translateY(-1.5px) rotateX(2.2deg);
       box-shadow:
-        0 4px 0px var(--line),
-        0 6px 10px rgba(30, 25, 21, 0.18),
+        0 2.5px 0px var(--line),
+        0 4px 7px rgba(30, 25, 21, 0.14),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
       transition:
-        transform 0.2s cubic-bezier(0.22, 1.35, 0.36, 1),
-        box-shadow 0.18s cubic-bezier(0.22, 1, 0.36, 1),
-        background 0.18s ease,
-        color 0.18s ease;
+        transform 0.18s cubic-bezier(0.22, 1.25, 0.36, 1),
+        box-shadow 0.16s cubic-bezier(0.22, 1, 0.36, 1),
+        background 0.16s ease,
+        color 0.16s ease;
     }
 
     #tabBtnProfile {
@@ -1075,50 +1073,47 @@
       transform-origin: left center;
     }
 
-    /* 들려 있는 탭에 마우스를 올렸을 때 살짝 반응 */
     .modal-tab-btn:not(.active):hover {
       color: var(--ink);
-      transform: translateY(-1.5px) rotateX(2deg);
+      transform: translateY(-0.8px) rotateX(1deg);
       box-shadow:
-        0 3px 0px var(--line),
-        0 4px 7px rgba(30, 25, 21, 0.15),
+        0 2px 0px var(--line),
+        0 3px 5px rgba(30, 25, 21, 0.12),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
     }
 
-    /* 눌린 상태(Depressed / Active): 베젤 안으로 깊숙이 내려앉아 하단 단면이 사라지고 안착됨 */
+    /* 눌린 탭 (Depressed / Active): 베젤 안으로 차분하게 안착 */
     .modal-tab-btn.active {
       z-index: 0;
       color: var(--ink);
       background: linear-gradient(180deg, #EDE4D8 0%, #FBF8F3 100%);
-      transform: translateY(2px) rotateX(-2deg);
+      transform: translateY(1.2px) rotateX(-1deg);
       box-shadow:
         0 0px 0px var(--line),
-        inset 0 2px 4px rgba(30, 25, 21, 0.18),
+        inset 0 1.5px 3px rgba(30, 25, 21, 0.16),
         inset 0 -1px 0 rgba(255, 255, 255, 0.7);
     }
 
-    /* 물리적으로 누르는 순간(:active) 바닥까지 들어가는 타건감 */
     .modal-tab-btn:active {
-      transform: translateY(2.5px) !important;
+      transform: translateY(1.6px) !important;
       box-shadow:
         0 0px 0px var(--line),
-        inset 0 2px 5px rgba(30, 25, 21, 0.24) !important;
+        inset 0 2px 4px rgba(30, 25, 21, 0.2) !important;
     }
 
-    /* 미니 상태 인디케이터 점 */
     .rocker-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
       background: rgba(92, 80, 70, 0.28);
       border: 1px solid rgba(30, 25, 21, 0.35);
-      transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+      transition: background 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
     }
     .modal-tab-btn.active .rocker-dot {
       background: var(--accent);
       border-color: var(--line);
-      transform: scale(1.1);
-      box-shadow: 0 0 0 2px rgba(184, 74, 39, 0.18);
+      transform: scale(1.08);
+      box-shadow: 0 0 0 2px rgba(184, 74, 39, 0.16);
     }
 
     .modal-title-section { padding-right: 32px; display: flex; flex-direction: column; gap: 2px; }
@@ -1693,6 +1688,177 @@
     .ticket-export-btn:active {
       transform: translate(1px, 1px);
       box-shadow: 0.5px 0.5px 0px var(--line);
+    }
+
+    /* ==========================================================================
+       🎛️ 2. TACTILE RECTANGULAR BUTTON SYSTEM (선별된 네모난 버튼 공통 메커니즘)
+       ========================================================================== */
+
+    /* [그룹 B] 모달 하단 3열 액션 버튼 & 프린터 모달 버튼 (.action-btn) - 2.5px 단면 */
+    .action-btn {
+      background: linear-gradient(180deg, #FFFDF9 0%, #F4ECE1 100%);
+      border: 1.5px solid var(--line);
+      border-radius: 5px;
+      transform: translateY(-1px);
+      box-shadow:
+        0 2.5px 0px var(--line),
+        0 3px 6px rgba(30, 25, 21, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      transition:
+        transform 0.14s cubic-bezier(0.22, 1.2, 0.36, 1),
+        box-shadow 0.14s ease,
+        background 0.14s ease,
+        color 0.14s ease;
+    }
+    .action-btn:hover {
+      transform: translateY(-0.5px);
+      box-shadow:
+        0 2px 0px var(--line),
+        0 2px 4px rgba(30, 25, 21, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+    /* 클릭 순간(:active) 및 토글 활성 상태(.playing, .tasted-active): 스위치처럼 안착 */
+    .action-btn:active,
+    .action-btn.playing,
+    .action-btn.tasted-active {
+      transform: translateY(1.5px) !important;
+      box-shadow:
+        0 0px 0px var(--line),
+        inset 0 1.5px 3px rgba(30, 25, 21, 0.2) !important;
+    }
+    .action-btn.playing {
+      background: linear-gradient(180deg, #F3DFD8 0%, #F8E8E4 100%);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .action-btn.tasted-active {
+      background: linear-gradient(180deg, #F6DCDA 0%, #FCE8E6 100%);
+      color: var(--stamp-red);
+      border-color: var(--stamp-red);
+    }
+    /* Primary 강조 버튼 (📥 티켓 이미지 저장) */
+    .action-btn.primary-save {
+      background: linear-gradient(180deg, #C6532E 0%, #AD421F 100%);
+      color: #FFFDF9;
+      border-color: var(--line);
+      box-shadow:
+        0 2.5px 0px var(--line),
+        0 3px 6px rgba(30, 25, 21, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+    .action-btn.primary-save:hover {
+      background: linear-gradient(180deg, #CC5833 0%, #B44622 100%);
+    }
+    .action-btn.primary-save:active {
+      background: linear-gradient(180deg, #9E3B1B 0%, #B44622 100%);
+      box-shadow:
+        0 0px 0px var(--line),
+        inset 0 2px 4px rgba(20, 12, 8, 0.35) !important;
+    }
+
+    /* [그룹 C] 메인 3대 테이스트 카테고리 버튼 (.core-category-btn) - 2.5px 단면 */
+    .core-category-btn {
+      background: linear-gradient(180deg, #FFFDF9 0%, #F5EDE2 100%);
+      border: 1.5px solid var(--line);
+      border-radius: 6px;
+      transform: translateY(-1px);
+      box-shadow:
+        0 2.5px 0px var(--line),
+        0 3px 6px rgba(30, 25, 21, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      transition:
+        transform 0.14s cubic-bezier(0.22, 1.2, 0.36, 1),
+        box-shadow 0.14s ease,
+        background 0.14s ease;
+    }
+    .core-category-btn:hover {
+      background: linear-gradient(180deg, #FFFDF9 0%, #EFE4D6 100%);
+      transform: translateY(-0.5px);
+      box-shadow:
+        0 2px 0px var(--line),
+        0 2px 4px rgba(30, 25, 21, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+    .core-category-btn:active {
+      transform: translateY(1.5px);
+      box-shadow:
+        0 0px 0px var(--line),
+        inset 0 1.5px 3px rgba(30, 25, 21, 0.18);
+    }
+
+    /* [그룹 D] 영수증 티켓 보조 툴바 (.ticket-export-btn) & 결과 헤더 컨트롤 버튼 - 2px 슬림 단면 */
+    .ticket-export-btn,
+    .tasted-filter-btn,
+    .reset-all-btn:not(:disabled),
+    .home-reset-btn {
+      background: linear-gradient(180deg, #FFFDF9 0%, #F4ECE1 100%);
+      border: 1.5px solid var(--line);
+      border-radius: 4px;
+      transform: translateY(-0.8px);
+      box-shadow:
+        0 2px 0px var(--line),
+        0 2px 4px rgba(30, 25, 21, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      transition:
+        transform 0.14s cubic-bezier(0.22, 1.2, 0.36, 1),
+        box-shadow 0.14s ease,
+        background 0.14s ease,
+        color 0.14s ease;
+    }
+    .ticket-export-btn:hover,
+    .tasted-filter-btn:hover,
+    .reset-all-btn:not(:disabled):hover,
+    .home-reset-btn:hover {
+      transform: translateY(-0.3px);
+      box-shadow:
+        0 1.5px 0px var(--line),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+    .ticket-export-btn:active,
+    .tasted-filter-btn:active,
+    .tasted-filter-btn.active,
+    .reset-all-btn:not(:disabled):active,
+    .home-reset-btn:active {
+      transform: translateY(1.2px) !important;
+      box-shadow:
+        0 0px 0px var(--line),
+        inset 0 1.5px 3px rgba(30, 25, 21, 0.2) !important;
+    }
+    /* '☕ 마셔본 원두' 토글 활성 시 눌려 들어간 테라코타 스위치 상태 유지 */
+    .tasted-filter-btn.active {
+      background: linear-gradient(180deg, #A8401F 0%, #B84A27 100%);
+      color: #FFFDF9;
+      border-color: var(--line);
+      box-shadow:
+        0 0px 0px var(--line),
+        inset 0 2px 4px rgba(20, 12, 8, 0.32) !important;
+    }
+
+    /* [그룹 E] 모달 · 서랍 · 용어가이드 닫기(✕) 버튼 - 2px 마이크로 키캡 */
+    .modal-close-btn,
+    .drawer-close-btn,
+    .term-guide-close {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F3ECE2 100%);
+      border: 1.5px solid var(--line);
+      border-radius: 4px;
+      transform: translateY(-0.8px);
+      box-shadow:
+        0 2px 0px var(--line),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    }
+    .modal-close-btn:hover,
+    .drawer-close-btn:hover,
+    .term-guide-close:hover {
+      background: linear-gradient(180deg, #FFFDF9 0%, #EAE0D3 100%);
+    }
+    .modal-close-btn:active,
+    .drawer-close-btn:active,
+    .term-guide-close:active {
+      transform: translateY(1.2px);
+      box-shadow:
+        0 0px 0px var(--line),
+        inset 0 1.5px 2.5px rgba(30, 25, 21, 0.2);
     }
 
     /* 📌 인쇄용 CSS (position:fixed 다중 페이지 복제 및 배경 겹침 원천 차단 -> 단 1장만 출력) */
