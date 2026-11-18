@@ -3523,7 +3523,7 @@
       kicker: "RELEASE NOTES & CHANGELOG",
       title: "Coffee Taste Archive 버전 기록",
       getContext: () => {
-        const label = (typeof APP_VERSION_INFO !== "undefined" && APP_VERSION_INFO.displayLabel) ? APP_VERSION_INFO.displayLabel : "CTA v2.1.7 (α1)";
+        const label = (typeof APP_VERSION_INFO !== "undefined" && APP_VERSION_INFO.displayLabel) ? APP_VERSION_INFO.displayLabel : "CTA v2.1.8 (α1)";
         const eng = (typeof APP_VERSION_INFO !== "undefined") ? APP_VERSION_INFO.engineName : "DispenserV2 ™";
         const dt = (typeof APP_VERSION_INFO !== "undefined") ? APP_VERSION_INFO.updatedAt : "2026-11-18";
         return `현재 빌드: <strong>${label}</strong> (${dt})<br>검색 엔진: <strong>${eng}</strong> · 수록 원두: <strong>SCA ${coffeeData.length}종 스페셜</strong>`;
