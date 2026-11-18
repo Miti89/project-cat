@@ -3,14 +3,22 @@ const APP_VERSION_INFO = {
   projectShortCode: "CTA",
   projectTitleKor: "커피 맛 아카이브",
   engineName: "DispenserV2 ™",
-  version: "2.1.9",
+  version: "2.3.0",
   stage: "α1",
+  schemaVersion: "v3",
   get displayLabel() {
     return `${this.projectShortCode} v${this.version}${this.stage ? ` (${this.stage})` : ""}`;
   },
   updatedAt: "2026-11-18",
   dbCount: 120,
   history: [
+    {
+      version: "2.3.0",
+      stage: "α1",
+      schemaVersion: "v3",
+      date: "2026-11-18",
+      summary: "Schema v3 업그레이드, 한·영·일(KR/EN/JP) 다국어 전환 스위치, 120종 생산자·농장·공식 출처(Traceability) 및 실제 유통 원두 검색(Google/Naver) 연동, 스키마 버전 자동 관리 체계 구축"
+    },
     {
       version: "2.1.9",
       stage: "α1",
