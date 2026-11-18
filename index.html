@@ -1,8 +1,8 @@
 <!-- ========================================================================== -->
-<!-- SCHEMA / SYSTEM NAME: 디스펜서 v1 (Dispenser v1) - Complete Master Suite     -->
+<!-- SCHEMA / SYSTEM NAME: Coffee Taste Archive (Dispenser v2 Engine)           -->
 <!-- DESCRIPTION: Specialty Coffee Archive with SEO Schema, Disclaimer Modal,    -->
-<!--              Sound Toggle, Receipt Printer, 3D Tilt, Canvas & 60 Coffee DB   -->
-<!-- REVISION: v3.1.0 (Data Separated into data.js)                              -->
+<!--              Sound Toggle, Receipt Printer, 3D Tilt, Canvas & 120 Coffee DB  -->
+<!-- REVISION: v2.1.8 (α1) (Data Separated into data.js)                        -->
 <!-- ========================================================================== -->
 
 <!DOCTYPE html>
@@ -10,14 +10,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>디스펜서 v1 - SCA 120종 스페셜티 커피 맛 아카이브</title>
+  <title>Coffee Taste Archive - SCA 120종 스페셜</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
 
   <!-- SEO & OpenGraph Meta Tags -->
   <meta name="description" content="산미, 고소함, 입안의 바디감(1~5단계)으로 찾아보는 SCA 스페셜티 커피 원두 추천 및 테이스팅 노트를 확인해보세요.">
   <meta name="keywords" content="스페셜티커피, 커피원두추천, 산미없는원두, 고소한원두, 에티오피아게이샤, 디스펜서, 바디감, SCA커피">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="디스펜서 v1 - 내 취향 스페셜티 커피 찾기">
+  <meta property="og:title" content="Coffee Taste Archive - 내 취향 스페셜티 커피 찾기">
   <meta property="og:description" content="오늘 마실 원두를 입안의 무게감과 향미로 뽑아보세요.">
 
   <!-- Schema.org JSON-LD Structured Data -->
@@ -26,11 +26,11 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "디스펜서 v1 (Dispenser v1)",
+      "name": "Coffee Taste Archive (Dispenser v2)",
       "applicationCategory": "LifestyleApplication",
       "operatingSystem": "All",
       "inLanguage": "ko-KR",
-      "description": "SCA 기준 60종 스페셜티 커피 맛 탐색 및 아카이브 서비스",
+      "description": "SCA 기준 120종 스페셜티 커피 맛 탐색 및 아카이브 서비스",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" }
     },
     {
@@ -105,6 +105,10 @@
         scrollbar-width: thin;
         scrollbar-color: rgba(92, 80, 70, 0.28) transparent;
       }
+    }
+
+    html {
+      scrollbar-gutter: stable;
     }
 
     body {
@@ -262,12 +266,16 @@
       pointer-events: none;
       overflow: hidden;
       background: transparent;
-      transition: opacity 0.22s ease, visibility 0.22s ease;
     }
     .disclaimer-modal-overlay.open {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
+      background-color: #C1A17E;
+    }
+    .disclaimer-modal-overlay.is-splitting {
+      background-color: transparent;
+      transition: opacity 0.22s ease 0.32s, visibility 0.22s ease 0.32s;
     }
     .kraft-panel {
       position: absolute;
@@ -508,16 +516,41 @@
     }
 
     /* 헤더 */
-    .archive-header { text-align: center; margin-bottom: 22px; cursor: pointer; user-select: none; width: 100%; }
-    .archive-issue { font-family: 'Playfair Display', serif; font-size: clamp(0.68rem, 2.3vw, 0.78rem); letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); font-weight: 800; margin-bottom: 3px; }
-    .archive-title { font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif; font-size: clamp(1.6rem, 5.6vw, 2.15rem); font-weight: 900; color: var(--ink); letter-spacing: -0.5px; margin-bottom: 6px; line-height: 1.28; }
-    .archive-desc { font-size: clamp(0.82rem, 2.8vw, 0.92rem); color: var(--ink-sub); font-weight: 500; line-height: 1.48; }
+    .archive-header {
+      text-align: center;
+      padding-top: 6px;
+      margin-bottom: 22px;
+      cursor: pointer;
+      user-select: none;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+    }
+    .archive-title {
+      font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+      font-size: clamp(1.68rem, 5.8vw, 2.2rem);
+      font-weight: 900;
+      color: var(--ink);
+      letter-spacing: -0.6px;
+      margin: 0;
+      line-height: 1.24;
+    }
+    .archive-desc {
+      font-size: clamp(0.84rem, 2.8vw, 0.94rem);
+      color: var(--ink-sub);
+      font-weight: 500;
+      letter-spacing: -0.15px;
+      margin: 0;
+      line-height: 1.48;
+    }
 
     /* 📌 레트로 원두 디스펜서 (조작 휠 + 레버) 위젯 */
     .dispenser-lever-widget {
       width: 100%; background: #EFE6DC; border: 2px solid var(--line); border-radius: 10px;
-      padding: 20px 18px; margin-bottom: 28px; box-shadow: 3px 3px 0px var(--line);
-      display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden;
+      padding: 16px 18px 9px; margin-bottom: 24px; box-shadow: 3px 3px 0px var(--line);
+      display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden;
       transition: opacity 0.22s ease, filter 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
     }
     /* Task 2-3: 검색 모드 활성 시 디스펜서 대기 상태 표시 */
@@ -530,12 +563,11 @@
       opacity: 0.78;
     }
     .dispenser-top-bar {
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
     }
-    .lever-info { display: flex; flex-direction: column; gap: 1px; }
-    .lever-badge { font-size: 0.62rem; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
-    .lever-title { font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif; font-size: 0.98rem; font-weight: 800; color: var(--ink); }
-    .lever-desc { font-size: 0.72rem; color: var(--ink-sub); line-height: 1.28; }
+    .lever-info { display: flex; flex-direction: column; gap: 3px; }
+    .lever-title { font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif; font-size: 1.04rem; font-weight: 800; color: var(--ink); line-height: 1.25; }
+    .lever-desc { font-size: 0.74rem; color: var(--ink-sub); line-height: 1.35; }
 
     /* 사진 속 오렌지 버튼을 모티브로 한 랜덤 다이얼 버튼 */
     .wheel-random-btn {
@@ -565,6 +597,41 @@
       padding: 8px 10px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 3px rgba(0,0,0,0.12);
       display: flex; align-items: stretch; justify-content: space-between; gap: 8px;
+    }
+    .dispenser-powered-by {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      text-align: right;
+      font-family: 'Playfair Display', 'Pretendard', serif;
+      font-size: 0.58rem;
+      font-weight: 500;
+      letter-spacing: 0.35px;
+      color: rgba(92, 80, 70, 0.45);
+      line-height: 1.15;
+      margin-top: -6px;
+      padding-right: 2px;
+      user-select: none;
+    }
+    .dispenser-version-trigger {
+      pointer-events: auto;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-family: 'Pretendard', monospace, sans-serif;
+      font-size: 0.56rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: rgba(92, 80, 70, 0.55);
+      border-bottom: 1px dotted rgba(92, 80, 70, 0.35);
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+    .dispenser-version-trigger:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
     }
 
     .thumbwheel-group {
@@ -810,7 +877,7 @@
 
     /* 검색창 */
     .search-wrap { width: 100%; position: relative; margin-bottom: 20px; z-index: 40; }
-    .search-box { width: 100%; height: 48px; background: var(--card-bg); border: 2px solid var(--line); border-radius: 4px; display: flex; align-items: center; padding: 0 6px 0 11px; box-shadow: 3px 3px 0px var(--line); transition: all 0.2s ease; gap: 4px; }
+    .search-box { width: 100%; height: 48px; background: var(--card-bg); border: 2px solid var(--line); border-radius: 4px; display: flex; align-items: center; padding: 0 10px 0 12px; box-shadow: 3px 3px 0px var(--line); transition: border-color 0.18s ease, box-shadow 0.18s ease; gap: 4px; }
     .search-box:focus-within { box-shadow: 4px 4px 0px var(--accent); border-color: var(--accent); }
     .search-icon { font-size: 1.05rem; color: var(--ink-sub); margin-right: 4px; user-select: none; flex-shrink: 0; }
     .search-input { flex: 1; height: 100%; border: none; outline: none; font-size: clamp(0.9rem, 3.3vw, 1.04rem); font-weight: 700; color: var(--ink); background: transparent; min-width: 0; }
@@ -837,29 +904,26 @@
     }
 
     .btn-icon { width: 34px; height: 34px; border: 1px solid transparent; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.08rem; color: var(--ink-sub); border-radius: 4px; flex-shrink: 0; }
-    .mic-btn.listening { background: #FCE8E6; color: var(--accent); border-color: var(--accent); animation: pulse 1.2s infinite; }
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
 
-    .voice-status { display: none; width: 100%; background: #F8E8E4; border: 1.5px solid var(--accent); color: var(--accent); padding: 8px 12px; border-radius: 4px; margin-bottom: 10px; text-align: center; font-size: 0.85rem; font-weight: 700; }
-    .voice-status.active { display: block; }
-
-    /* 메인 3대 카테고리 (검색창 클릭 시 검색창과 스페셜티 뽑기 사이에 자연스럽게 펼쳐져 아래 창을 가리지 않음) */
+    /* 메인 3대 카테고리 (플로팅 팝오버로 전환해 하단 요소 레이아웃 밀림 방지) */
     .core-categories-section {
-      position: relative;
-      width: 100%;
-      max-height: 0;
-      margin-top: 0;
-      padding: 0 2px;
-      overflow: hidden;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      z-index: 60;
+      background: var(--card-bg);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 12px 10px;
+      box-shadow: 4px 4px 0px var(--line), 0 10px 24px rgba(30, 25, 21, 0.16);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateY(-4px);
-      transition: max-height 0.24s cubic-bezier(0.22, 1, 0.36, 1), margin-top 0.24s ease, opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+      transform: translateY(-6px);
+      transition: opacity 0.16s ease, transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.16s ease;
     }
     .core-categories-section.open {
-      max-height: 195px;
-      margin-top: 12px;
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
@@ -927,7 +991,8 @@
     .reset-all-btn:disabled {
       opacity: 0.42;
       cursor: default;
-      box-shadow: none;
+      transform: translateY(-0.8px);
+      box-shadow: 0 2px 0px #A89C90;
       background: #EAE2D8;
       color: #877A70;
       border-color: #A89C90;
@@ -938,21 +1003,15 @@
       width: 100%;
       position: relative;
       will-change: transform, opacity;
-      transition: none;
+      backface-visibility: hidden;
     }
-    .card-3d-wrapper:hover,
-    .card-3d-wrapper:focus-within {
-      opacity: 1 !important;
-      transform: scale(1.015) !important;
-      z-index: 3 !important;
-      transition: transform 0.18s ease, opacity 0.18s ease;
+    @media (hover: hover) and (pointer: fine) {
+      .card-3d-wrapper:hover .compact-coffee-card {
+        border-color: var(--accent);
+      }
     }
-    .card-3d-wrapper:hover .compact-coffee-card,
-    .card-3d-wrapper:focus-within .compact-coffee-card {
-      box-shadow: 4px 4px 0px var(--line) !important;
-    }
-    .compact-coffee-card { background: var(--card-bg); border: 2px solid var(--line); border-radius: 8px; padding: 20px 22px; box-shadow: 2.5px 2.5px 0px var(--line); cursor: pointer; display: flex; flex-direction: column; gap: 11px; transition: transform 0.15s ease-out, box-shadow 0.15s ease-out; position: relative; overflow: hidden; }
-    .compact-coffee-card:active { transform: translate(1px, 1px) scale(0.99); box-shadow: 1px 1px 0px var(--line); }
+    .compact-coffee-card { background: var(--card-bg); border: 2px solid var(--line); border-radius: 8px; padding: 20px 22px; box-shadow: 2.5px 2.5px 0px var(--line); cursor: pointer; display: flex; flex-direction: column; gap: 11px; transition: border-color 0.15s ease; position: relative; overflow: hidden; }
+    .compact-coffee-card:active { transform: translateY(1px); }
     .compact-top { display: flex; justify-content: space-between; align-items: center; }
     .compact-meta { font-family: 'Playfair Display', serif; font-size: 0.7rem; font-weight: 800; color: var(--ink-sub); display: flex; align-items: center; gap: 5px; }
     .compact-no { background: var(--line); color: #FFF; padding: 1px 4px; border-radius: 2px; }
@@ -1051,12 +1110,13 @@
       gap: 6px;
       background: linear-gradient(180deg, #FFFDF9 0%, #F4ECE1 100%);
       transform: translateY(-1.5px) rotateX(2.2deg);
+      backface-visibility: hidden;
       box-shadow:
         0 2.5px 0px var(--line),
         0 4px 7px rgba(30, 25, 21, 0.14),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
       transition:
-        transform 0.18s cubic-bezier(0.22, 1.25, 0.36, 1),
+        transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.16s cubic-bezier(0.22, 1, 0.36, 1),
         background 0.16s ease,
         color 0.16s ease;
@@ -1553,20 +1613,17 @@
         margin-top: calc(40px + max(8px, env(safe-area-inset-top)));
       }
       .archive-header {
-        margin-bottom: 14px;
-      }
-      .archive-issue {
-        margin-bottom: 1px;
-        font-size: 0.64rem;
+        padding-top: 4px;
+        margin-bottom: 16px;
+        gap: 5px;
       }
       .archive-title {
-        font-size: clamp(1.38rem, 5.2vw, 1.65rem);
-        margin-bottom: 2px;
-        line-height: 1.15;
+        font-size: clamp(1.48rem, 5.5vw, 1.72rem);
+        line-height: 1.2;
       }
       .archive-desc {
-        font-size: 0.76rem;
-        line-height: 1.25;
+        font-size: 0.79rem;
+        line-height: 1.38;
       }
       .search-wrap {
         margin-bottom: 14px;
@@ -1579,9 +1636,9 @@
         height: 42px;
       }
       .dispenser-lever-widget {
-        padding: 14px 12px;
+        padding: 14px 12px 8px;
         margin-bottom: 20px;
-        gap: 10px;
+        gap: 9px;
       }
       .lever-title {
         font-size: 0.92rem;
@@ -1700,12 +1757,13 @@
       border: 1.5px solid var(--line);
       border-radius: 5px;
       transform: translateY(-1px);
+      backface-visibility: hidden;
       box-shadow:
         0 2.5px 0px var(--line),
         0 3px 6px rgba(30, 25, 21, 0.12),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
       transition:
-        transform 0.14s cubic-bezier(0.22, 1.2, 0.36, 1),
+        transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.14s ease,
         background 0.14s ease,
         color 0.14s ease;
@@ -1762,12 +1820,13 @@
       border: 1.5px solid var(--line);
       border-radius: 6px;
       transform: translateY(-1px);
+      backface-visibility: hidden;
       box-shadow:
         0 2.5px 0px var(--line),
         0 3px 6px rgba(30, 25, 21, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
       transition:
-        transform 0.14s cubic-bezier(0.22, 1.2, 0.36, 1),
+        transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.14s ease,
         background 0.14s ease;
     }
@@ -1795,12 +1854,13 @@
       border: 1.5px solid var(--line);
       border-radius: 4px;
       transform: translateY(-0.8px);
+      backface-visibility: hidden;
       box-shadow:
         0 2px 0px var(--line),
         0 2px 4px rgba(30, 25, 21, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
       transition:
-        transform 0.14s cubic-bezier(0.22, 1.2, 0.36, 1),
+        transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.14s ease,
         background 0.14s ease,
         color 0.14s ease;
@@ -1970,7 +2030,7 @@
 <canvas id="steamCanvas"></canvas>
 
 <!-- 📦 최초 접속 크래프트 박스 패키지 & 절취선 개봉(Unboxing) 오버레이 -->
-<div class="disclaimer-modal-overlay" id="disclaimerOverlay">
+<div class="disclaimer-modal-overlay open" id="disclaimerOverlay">
   <div class="kraft-panel kraft-top-panel">
     <div class="kraft-copy-block">
       <div class="kraft-copy-title">추출 방식에 따른 맛 변화 안내</div>
@@ -1978,7 +2038,7 @@
         본 아카이브의 테이스팅 노트는 표준 SCA 추출기준(92~94℃, 1:15~18)을 바탕으로 작성되었습니다. 드리퍼와 추출 변수에 따라 향미가 다를 수 있습니다.
       </div>
       <div class="kraft-copy-en">
-        Dispenser v1 — Specialty Coffee Archive<br>
+        Coffee Taste Archive · Dispenser v2<br>
         Standard SCA cupping &amp; brewing protocol notice.
       </div>
     </div>
@@ -2001,6 +2061,20 @@
     </div>
   </div>
 </div>
+<script>
+  (function() {
+    try {
+      var overlay = document.getElementById("disclaimerOverlay");
+      var hideUntil = localStorage.getItem("dispenser_hide_disclaimer");
+      var now = Date.now();
+      if (hideUntil && now <= parseInt(hideUntil, 10)) {
+        if (overlay) overlay.classList.remove("open");
+      } else {
+        document.body.style.overflow = "hidden";
+      }
+    } catch (e) {}
+  })();
+</script>
 
 <!-- 📌 상단 네비게이션 바 (좌측 상단 수평 정렬: 소리 ON/OFF · 원산지 도감) -->
 <div class="top-nav-bar">
@@ -2068,7 +2142,6 @@
 <div class="app-container" id="appContainer">
 
   <header class="archive-header" id="logoBtn" title="처음으로">
-    <div class="archive-issue" id="archiveIssueBadge">DISPENSER V1 • SCA 120 MASTER DATABASE</div>
     <h1 class="archive-title">커피 맛 아카이브</h1>
     <p class="archive-desc">원하는 맛과 입안의 무게감으로 나의 커피를 찾아보세요</p>
   </header>
@@ -2079,7 +2152,6 @@
       <input type="text" id="searchInput" class="search-input" placeholder="원두 이름, 맛(초콜릿, 복숭아), 1~5단계..." autocomplete="off">
       <button type="button" id="searchJumpBadge" class="search-jump-badge" style="display:none;">🔍 0건 보기 ↓</button>
       <button type="button" class="btn-icon clear-btn" id="clearSearchBtn" title="지우기" style="display: none;">✕</button>
-      <button type="button" class="btn-icon mic-btn" id="micBtn" title="음성 검색">🎤</button>
     </div>
 
     <!-- 📌 검색창 클릭 시 오버레이 팝오버로 등장하는 메인 테이스트 카테고리 -->
@@ -2108,16 +2180,11 @@
     </div>
   </div>
 
-  <div class="voice-status" id="voiceStatus">
-    🎙️ <strong>듣고 있어요!</strong> 원하시는 맛이나 느낌을 편하게 말씀해주세요...
-  </div>
-
   <!-- 📌 레트로 원두 디스펜서 (조작 휠 + 레버) 위젯 -->
   <div class="dispenser-lever-widget" id="leverWidget">
     <div id="beanDropZone"></div>
     <div class="dispenser-top-bar">
       <div class="lever-info">
-        <span class="lever-badge">CUSTOM TASTE DISPENSER</span>
         <div class="lever-title">🎰 오늘의 스페셜티 뽑기</div>
         <div class="lever-desc">조작 휠로 산미·고소함·바디감·원산지를 조합한 뒤 우측 레버를 당겨보세요</div>
       </div>
@@ -2247,6 +2314,10 @@
         </div>
       </div>
     </div>
+    <div class="dispenser-powered-by">
+      <span>powered by DispenserV2 ™</span>
+      <button type="button" class="dispenser-version-trigger" id="dispenserVersionBtn" data-term="version_log" title="버전 변경 기록 보기">CTA v2.1.8 (α1)</button>
+    </div>
   </div>
 
   <div class="results-container visible" id="resultsContainer">
@@ -2354,7 +2425,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <!-- 2. 커피 데이터를 담은 외부 파일 연결 (반드시 위에 선언) -->
-<script src="data.js?v=2.3"></script>
+<script src="version.js?v=2.1.8"></script>
+<script src="data.js?v=2.1.8"></script>
 
 <!-- 3. 메인 동작 로직 -->
 <script>
@@ -3043,11 +3115,21 @@
     if (!AudioFX.isMuted) AudioFX.drip();
   };
 
-  // 헬퍼: 모달/서랍 UI 토글
+  // 헬퍼: 모달/서랍 UI 토글 (실제 열림/닫힘 상태 변화가 있을 때만 body overflow 변경)
   function toggleUI(targetEl, overlayEl, isOpen) {
-    if (targetEl) targetEl.classList.toggle("open", isOpen);
-    if (overlayEl) overlayEl.classList.toggle("open", isOpen);
-    document.body.style.overflow = isOpen ? "hidden" : "";
+    let changed = false;
+    if (targetEl && targetEl.classList.contains("open") !== Boolean(isOpen)) {
+      targetEl.classList.toggle("open", isOpen);
+      changed = true;
+    }
+    if (overlayEl && overlayEl.classList.contains("open") !== Boolean(isOpen)) {
+      overlayEl.classList.toggle("open", isOpen);
+      changed = true;
+    }
+    if (changed) {
+      const anyModalOpen = document.querySelector(".detail-modal-overlay.open, .origin-drawer.open, .printer-modal-overlay.open, .disclaimer-modal-overlay.open");
+      document.body.style.overflow = anyModalOpen ? "hidden" : "";
+    }
   }
 
   // 📦 최초 접속 크래프트 박스 패키지 & 절취선 개봉(Unboxing) 제어
@@ -3436,6 +3518,35 @@
           <li><strong>🏷️ 카페 메뉴판 읽는 공식:</strong> <code>[나라] + [지역] + [품종] + [가공방식]</code> 순서만 알면 처음 보는 긴 이름도 맛을 바로 예측할 수 있습니다.</li>
         </ul>
       `
+    },
+    version_log: {
+      kicker: "RELEASE NOTES & CHANGELOG",
+      title: "Coffee Taste Archive 버전 기록",
+      getContext: () => {
+        const label = (typeof APP_VERSION_INFO !== "undefined" && APP_VERSION_INFO.displayLabel) ? APP_VERSION_INFO.displayLabel : "CTA v2.1.7 (α1)";
+        const eng = (typeof APP_VERSION_INFO !== "undefined") ? APP_VERSION_INFO.engineName : "DispenserV2 ™";
+        const dt = (typeof APP_VERSION_INFO !== "undefined") ? APP_VERSION_INFO.updatedAt : "2026-11-18";
+        return `현재 빌드: <strong>${label}</strong> (${dt})<br>검색 엔진: <strong>${eng}</strong> · 수록 원두: <strong>SCA ${coffeeData.length}종 스페셜</strong>`;
+      },
+      body: () => {
+        if (typeof APP_VERSION_INFO === "undefined" || !Array.isArray(APP_VERSION_INFO.history)) {
+          return "<p>버전 기록을 불러올 수 없습니다.</p>";
+        }
+        return `<ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">` +
+          APP_VERSION_INFO.history.map((h, i) => {
+            const stg = h.stage ? ` (${h.stage})` : "";
+            return `
+              <li style="padding-bottom:9px; border-bottom:1px dashed rgba(92,80,70,0.18);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
+                  <strong style="color:${i === 0 ? 'var(--accent)' : 'var(--ink)'}; font-size:0.82rem;">CTA v${h.version}${stg} ${i === 0 ? '· LATEST' : ''}</strong>
+                  <span style="font-size:0.7rem; color:var(--ink-sub); font-family:monospace;">${h.date}</span>
+                </div>
+                <div style="font-size:0.79rem; color:var(--ink); line-height:1.48;">${h.summary}</div>
+              </li>
+            `;
+          }).join("") +
+          `</ul>`;
+      }
     }
   };
 
@@ -3462,7 +3573,9 @@
         termGuideContextBox.classList.remove("visible");
       }
     }
-    if (termGuideBody) termGuideBody.innerHTML = def.body;
+    if (termGuideBody) {
+      termGuideBody.innerHTML = typeof def.body === "function" ? def.body(item) : def.body;
+    }
     termGuideBackdrop.classList.add("open");
   }
 
@@ -3642,9 +3755,9 @@
     { key: "BLD", code: "BLD", label: "☕ BLD", kor: "블렌드", categoryType: "HOUSE_BLEND", matchTokens: ["HOUSE BLEND", "BLEND"] }
   ];
 
-  const archiveIssueBadge = document.getElementById("archiveIssueBadge");
-  if (archiveIssueBadge) {
-    archiveIssueBadge.textContent = `DISPENSER V1 • SCA ${coffeeData.length} MASTER DATABASE`;
+  const dispenserVersionBtn = document.getElementById("dispenserVersionBtn");
+  if (dispenserVersionBtn && typeof APP_VERSION_INFO !== "undefined") {
+    dispenserVersionBtn.textContent = APP_VERSION_INFO.displayLabel || `CTA v${APP_VERSION_INFO.version}`;
   }
   if (resetAllBtn) {
     resetAllBtn.textContent = `🔄 전체 ${coffeeData.length}종`;
@@ -3906,30 +4019,60 @@
         }
       });
 
-      // Task 3-2: 드래그/스와이프 및 상·하단 탭(Tap/Click) 시 단계 1씩 즉시 증감 보장
+      // Task 3-2: 드래그/스와이프 및 상·하단 탭(Tap/Click) 시 단계 1씩 즉시 증감 보장 (모바일 터치 스크롤 간섭 방어 포함)
       let isDragging = false;
+      let startX = 0;
       let startY = 0;
       let startVal = wheelState[type];
       let moved = false;
       let soundPlayedDuringDrag = false;
       let downNumEl = null;
+      let pointerCaptured = false;
 
       slot.addEventListener("pointerdown", (e) => {
         isDragging = true;
         moved = false;
         soundPlayedDuringDrag = false;
+        pointerCaptured = false;
+        startX = e.clientX;
         startY = e.clientY;
         startVal = wheelState[type];
         downNumEl = e.target.closest(".wheel-num");
-        if (drum) drum.classList.add("dragging");
-        if (slot.setPointerCapture) {
-          try { slot.setPointerCapture(e.pointerId); } catch (err) {}
+        if (e.pointerType !== "touch") {
+          if (drum) drum.classList.add("dragging");
+          if (slot.setPointerCapture) {
+            try {
+              slot.setPointerCapture(e.pointerId);
+              pointerCaptured = true;
+            } catch (err) {}
+          }
         }
       });
 
       slot.addEventListener("pointermove", (e) => {
         if (!isDragging) return;
+        if (e.pointerType === "touch" && (performance.now() - lastWindowScrollMs) < 180) {
+          isDragging = false;
+          if (drum) drum.classList.remove("dragging");
+          return;
+        }
+        const dx = Math.abs(e.clientX - startX);
         const dy = e.clientY - startY;
+        if (e.pointerType === "touch" && !pointerCaptured) {
+          if (dx > Math.abs(dy) && dx > 8) {
+            isDragging = false;
+            return;
+          }
+          if (Math.abs(dy) >= 10) {
+            if (drum) drum.classList.add("dragging");
+            if (slot.setPointerCapture) {
+              try {
+                slot.setPointerCapture(e.pointerId);
+                pointerCaptured = true;
+              } catch (err) {}
+            }
+          }
+        }
         if (Math.abs(dy) >= 12) moved = true;
         const stepDelta = Math.round(-dy / 18);
         const maxVal = type === "origin" ? ORIGIN_WHEEL_OPTIONS.length - 1 : 5;
@@ -3944,6 +4087,9 @@
         if (!isDragging) return;
         isDragging = false;
         if (drum) drum.classList.remove("dragging");
+        if (e.pointerType === "touch" && (isTouchMoved || (performance.now() - lastWindowScrollMs) < 180 || (performance.now() - touchStartTime) >= 220) && !soundPlayedDuringDrag) {
+          return;
+        }
 
         if (!moved) {
           // 상단(이전 숫자) 또는 하단(다음 숫자) 탭/클릭 판별
@@ -3972,6 +4118,7 @@
       slot.addEventListener("pointerup", endDrag);
       slot.addEventListener("pointercancel", () => {
         isDragging = false;
+        pointerCaptured = false;
         if (drum) drum.classList.remove("dragging");
       });
     });
@@ -5014,22 +5161,23 @@
 
     wrappers.forEach((w, idx) => {
       const rect = rects[idx];
+      if (rect.bottom < -150 || rect.top > vh + 150) return;
       const cardEl = w.querySelector(".compact-coffee-card");
       const cardCenterY = rect.top + rect.height * 0.5;
       const dist = Math.abs(cardCenterY - focusCenterY);
       if (dist <= deadzone) {
         w.style.opacity = "1";
-        w.style.transform = "scale(1.022)";
+        w.style.transform = "scale(1.008)";
         w.style.zIndex = "2";
-        if (cardEl) cardEl.style.boxShadow = "4.5px 4.5px 0px var(--line)";
+        if (cardEl) cardEl.style.boxShadow = "3.5px 3.5px 0px var(--line)";
       } else {
         const overflowDist = dist - deadzone;
         const t = Math.min(1, overflowDist / maxFadeDist);
         const eased = t * t * (3 - 2 * t);
-        const scaleVal = (1.022 - eased * 0.074).toFixed(4);
-        const opacityVal = (1 - eased * 0.24).toFixed(3);
-        const shadowPx = (4.5 - eased * 3.5).toFixed(2);
-        const shadowAlpha = (0.92 - eased * 0.57).toFixed(2);
+        const scaleVal = (1.008 - eased * 0.032).toFixed(4);
+        const opacityVal = (1 - eased * 0.16).toFixed(3);
+        const shadowPx = (3.5 - eased * 2.0).toFixed(2);
+        const shadowAlpha = (0.92 - eased * 0.42).toFixed(2);
         w.style.opacity = opacityVal;
         w.style.transform = `scale(${scaleVal})`;
         w.style.zIndex = eased < 0.25 ? "1" : "0";
@@ -5357,11 +5505,52 @@
 
   // 📌 버튼 포인터다운/업 및 카드 클릭 시 기계식 타건 사운드 (모바일 터치 스크롤 오작동 방지 + 단일 재생 보장)
   const SOUND_BTN_SELECTOR =
-    ".core-category-btn, .nav-fixed-btn, .action-btn, .ticket-export-btn, .modal-tab-btn, .modal-close-btn, .drawer-close-btn, .clear-btn, .mic-btn, .wheel-random-btn, .reset-all-btn:not(:disabled), .tasted-filter-btn, .home-reset-btn, .search-jump-badge, .term-help-btn, .term-label-link, .term-guide-close, #logoBtn";
+    ".core-category-btn, .nav-fixed-btn, .action-btn, .ticket-export-btn, .modal-tab-btn, .modal-close-btn, .drawer-close-btn, .clear-btn, .wheel-random-btn, .reset-all-btn:not(:disabled), .tasted-filter-btn, .home-reset-btn, .search-jump-badge, .term-help-btn, .term-label-link, .dispenser-version-trigger, .term-guide-close";
   const CARD_SOUND_SELECTOR = ".compact-coffee-card, .origin-info-card";
   const BRIGHT_BTN_SELECTOR = ".modal-tab-btn, .action-btn, .ticket-export-btn, .compact-coffee-card, .origin-info-card";
   let activeSoundBtnPressed = null;
   let lastPointerType = "mouse";
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartTime = 0;
+  let isTouchMoved = false;
+  let lastWindowScrollMs = 0;
+
+  window.addEventListener("scroll", () => {
+    lastWindowScrollMs = performance.now();
+    isTouchMoved = true;
+    activeSoundBtnPressed = null;
+  }, { passive: true });
+
+  window.addEventListener("touchstart", (e) => {
+    lastPointerType = "touch";
+    if (e.touches && e.touches.length === 1) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchStartTime = performance.now();
+      isTouchMoved = false;
+    } else {
+      isTouchMoved = true;
+    }
+  }, { passive: true });
+
+  window.addEventListener("touchmove", (e) => {
+    if (!e.touches || e.touches.length === 0) return;
+    const dx = Math.abs(e.touches[0].clientX - touchStartX);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY);
+    if (dx > 6 || dy > 6) {
+      isTouchMoved = true;
+      activeSoundBtnPressed = null;
+    }
+  }, { passive: true });
+
+  function isValidMobileTap() {
+    if (lastPointerType !== "touch") return true;
+    const now = performance.now();
+    const holdDuration = now - touchStartTime;
+    const recentlyScrolled = (now - lastWindowScrollMs) < 180;
+    return !isTouchMoved && !recentlyScrolled && holdDuration > 0 && holdDuration < 220;
+  }
 
   function isExcludedSoundBtn(el) {
     return !el || el.id === "soundToggleBtn" || el.id === "toggleTastedBtn" || el.id === "saveTicketImgBtn" || el.id === "ticketDirectSaveBtn" || el.id === "ticketShareBtn";
@@ -5373,7 +5562,10 @@
     if (!helpBtn) return;
     e.preventDefault();
     e.stopPropagation();
-    if (lastPointerType === "touch" || e.detail === 0) {
+    if (lastPointerType === "touch") {
+      if (!isValidMobileTap()) return;
+      AudioFX.drip();
+    } else if (e.detail === 0) {
       AudioFX.drip();
     }
     openTermGuide(helpBtn.dataset.term, helpBtn.dataset.coffeeId || null, helpBtn);
@@ -5440,8 +5632,10 @@
     const tapBtnTarget = (e.detail === 0 || lastPointerType === "touch") ? e.target.closest(SOUND_BTN_SELECTOR) : null;
     const soundTarget = cardTarget || tapBtnTarget;
     if (soundTarget && !isExcludedSoundBtn(soundTarget)) {
-      const variant = soundTarget.matches(BRIGHT_BTN_SELECTOR) ? "bright" : "default";
-      AudioFX.drip(variant);
+      if (lastPointerType !== "touch" || isValidMobileTap()) {
+        const variant = soundTarget.matches(BRIGHT_BTN_SELECTOR) ? "bright" : "default";
+        AudioFX.drip(variant);
+      }
     }
     const btn = e.target.closest(".core-category-btn, .nav-fixed-btn, .action-btn");
     if (btn && btn.id !== "soundToggleBtn") {
@@ -5474,34 +5668,6 @@
       filterCoffeesBySearch(q);
     };
   });
-
-  // 음성 인식 (STT)
-  const micBtn = document.getElementById("micBtn");
-  const voiceStatus = document.getElementById("voiceStatus");
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (SpeechRecognition) {
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'ko-KR';
-
-    micBtn.onclick = () => {
-      try {
-        stopAudio();
-        recognition.start();
-        micBtn.classList.add("listening");
-        voiceStatus.classList.add("active");
-      } catch(e) { recognition.stop(); }
-    };
-    recognition.onresult = (e) => {
-      const text = e.results[0][0].transcript;
-      searchInput.value = text;
-      filterCoffeesBySearch(text);
-    };
-    recognition.onend = () => {
-      micBtn.classList.remove("listening");
-      voiceStatus.classList.remove("active");
-    };
-  }
 
   searchInput.oninput = (e) => {
     const val = e.target.value;
