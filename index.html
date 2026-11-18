@@ -141,18 +141,22 @@
       background: linear-gradient(180deg, #FFFDF9 0%, #F4ECE1 100%);
       border: 1.5px solid var(--line);
       border-radius: 4px;
-      padding: 3px 8px;
+      height: 25px;
+      width: 78px;
+      padding: 0 6px;
       margin: 0;
+      box-sizing: border-box;
       font-family: 'Pretendard', sans-serif;
       font-size: 0.74rem;
       font-weight: 800;
-      letter-spacing: 0;
+      line-height: 1;
+      letter-spacing: -0.2px;
       color: var(--ink);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 3px;
       transform: translateY(-0.8px);
       backface-visibility: hidden;
       box-shadow:
@@ -182,9 +186,8 @@
     }
     .nav-fixed-btn.slide-left { transform: translateY(-16px) !important; opacity: 0; pointer-events: none; }
 
-    /* 소리 ON/OFF 버튼 ('마셔본 원두' 동일 택타일 스타일 + 음소거 시 안착) */
+    /* 소리 ON/OFF 버튼 ('원산지 도감'과 동일한 폭·높이 + 음소거 시 안착) */
     #soundToggleBtn {
-      min-width: 82px;
       text-align: center;
     }
     #soundToggleBtn.muted {
@@ -1634,11 +1637,10 @@
         gap: 6px;
       }
       .nav-fixed-btn {
+        height: 24px;
+        width: 74px;
         font-size: 0.72rem;
-        padding: 3px 7px;
-      }
-      #soundToggleBtn {
-        min-width: 76px;
+        padding: 0 5px;
       }
       .top-clock-widget {
         top: max(6px, env(safe-area-inset-top));
