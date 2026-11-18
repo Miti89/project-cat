@@ -2,7 +2,7 @@
 <!-- SCHEMA / SYSTEM NAME: Coffee Taste Archive (Dispenser v2 Engine)           -->
 <!-- DESCRIPTION: Specialty Coffee Archive with SEO Schema, Disclaimer Modal,    -->
 <!--              Sound Toggle, Receipt Printer, 3D Tilt, Canvas & 120 Coffee DB  -->
-<!-- REVISION: v2.1.8 (α1) (Data Separated into data.js)                        -->
+<!-- REVISION: v2.1.9 (α1) (Data Separated into data.js)                        -->
 <!-- ========================================================================== -->
 
 <!DOCTYPE html>
@@ -128,54 +128,78 @@
       pointer-events: none; z-index: 1; opacity: 0.75;
     }
 
-    /* 📌 상단 네비게이션 영역 (좌측 상단 수평 정렬: 아웃라인 알약 토글 + 언더라인 드로어 탭) */
+    /* 📌 상단 네비게이션 영역 (좌측 상단 수평 정렬: '마셔본 원두'와 동일한 로우프로파일 택타일 버튼) */
     .top-nav-bar {
       position: fixed; top: max(12px, env(safe-area-inset-top)); left: 18px;
-      display: flex; flex-direction: row; align-items: center; gap: 14px;
+      display: flex; flex-direction: row; align-items: center; gap: 6px;
       pointer-events: none; z-index: 90;
       transition: transform 0.3s ease, opacity 0.25s ease;
     }
 
     .nav-fixed-btn {
-      pointer-events: auto; background: transparent; border: none; box-shadow: none;
-      padding: 4px 0; margin: 0;
-      font-family: 'Noto Serif KR', 'Playfair Display', 'Nanum Myeongjo', serif;
-      font-size: clamp(0.72rem, 2.3vw, 0.8rem);
-      font-weight: 800; letter-spacing: 0.5px;
-      color: var(--accent); cursor: pointer;
-      display: inline-flex; align-items: center; gap: 4px;
-      transition: transform 0.25s ease, opacity 0.2s ease, background-color 0.2s ease;
-      white-space: nowrap; position: relative;
-    }
-    .nav-fixed-btn:hover { opacity: 0.82; }
-    .nav-fixed-btn:active { transform: translateY(1px); opacity: 0.65; }
-    .nav-fixed-btn.slide-left { transform: translateY(-16px); opacity: 0; pointer-events: none; }
-
-    /* Task 1-1: 소리 ON/OFF 아웃라인 알약 버튼 */
-    #soundToggleBtn {
-      border: 1.5px solid #1E1915;
-      border-radius: 999px;
-      padding: 3px 10px;
-      background: rgba(251, 248, 243, 0.88);
-      color: #1E1915;
+      pointer-events: auto;
+      background: linear-gradient(180deg, #FFFDF9 0%, #F4ECE1 100%);
+      border: 1.5px solid var(--line);
+      border-radius: 4px;
+      padding: 3px 8px;
+      margin: 0;
       font-family: 'Pretendard', sans-serif;
-      font-size: clamp(0.7rem, 2.2vw, 0.76rem);
+      font-size: 0.74rem;
       font-weight: 800;
-      letter-spacing: 0.2px;
-      min-width: 88px;
+      letter-spacing: 0;
+      color: var(--ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
+      gap: 4px;
+      transform: translateY(-0.8px);
+      backface-visibility: hidden;
+      box-shadow:
+        0 2px 0px var(--line),
+        0 2px 4px rgba(30, 25, 21, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      transition:
+        transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.14s ease,
+        background 0.14s ease,
+        color 0.14s ease,
+        opacity 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+    }
+    .nav-fixed-btn:hover {
+      transform: translateY(-0.3px);
+      box-shadow:
+        0 1.5px 0px var(--line),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+    .nav-fixed-btn:active {
+      transform: translateY(1.2px) !important;
+      box-shadow:
+        0 0px 0px var(--line),
+        inset 0 1.5px 3px rgba(30, 25, 21, 0.2) !important;
+    }
+    .nav-fixed-btn.slide-left { transform: translateY(-16px) !important; opacity: 0; pointer-events: none; }
+
+    /* 소리 ON/OFF 버튼 ('마셔본 원두' 동일 택타일 스타일 + 음소거 시 안착) */
+    #soundToggleBtn {
+      min-width: 82px;
       text-align: center;
     }
     #soundToggleBtn.muted {
+      background: linear-gradient(180deg, #E2D9CE 0%, #ECE4DA 100%);
       color: var(--ink-sub);
-      background: rgba(235, 228, 220, 0.75);
+      border-color: var(--line);
+      transform: translateY(1.2px);
+      box-shadow:
+        0 0px 0px var(--line),
+        inset 0 1.5px 3px rgba(30, 25, 21, 0.18);
     }
 
-    /* Task 1-1: 원산지 도감 하단 언더라인 탭 스타일 */
+    /* 원산지 도감 버튼 ('마셔본 원두' 동일 택타일 스타일) */
     #openDrawerBtn {
-      border-bottom: 1.5px solid #B84A27;
-      padding-bottom: 2px;
-      border-radius: 0;
+      text-align: center;
     }
 
     /* 📌 우측 상단 초시계(Sub-dial) + 디지털 시.분.초 위젯 (파텍필립 미닛 리피터 버튼) */
@@ -905,29 +929,37 @@
 
     .btn-icon { width: 34px; height: 34px; border: 1px solid transparent; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.08rem; color: var(--ink-sub); border-radius: 4px; flex-shrink: 0; }
 
-    /* 메인 3대 카테고리 (플로팅 팝오버로 전환해 하단 요소 레이아웃 밀림 방지) */
+    /* 메인 3대 카테고리 (검색창과 디스펜서 사이에서 겹침 없이 부드럽게 펼쳐지는 인플로우 아코디언) */
     .core-categories-section {
-      position: absolute;
-      top: calc(100% + 8px);
-      left: 0;
-      right: 0;
-      z-index: 60;
-      background: var(--card-bg);
-      border: 2px solid var(--line);
-      border-radius: 8px;
-      padding: 12px 12px 10px;
-      box-shadow: 4px 4px 0px var(--line), 0 10px 24px rgba(30, 25, 21, 0.16);
+      display: grid;
+      grid-template-rows: 0fr;
+      margin-top: 0;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateY(-6px);
-      transition: opacity 0.16s ease, transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.16s ease;
+      transition:
+        grid-template-rows 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+        margin-top 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.16s ease,
+        visibility 0.16s ease;
     }
     .core-categories-section.open {
+      grid-template-rows: 1fr;
+      margin-top: 10px;
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-      transform: translateY(0);
+    }
+    .core-categories-inner {
+      min-height: 0;
+      overflow: hidden;
+    }
+    .core-categories-card {
+      background: var(--card-bg);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      padding: 11px 11px 9px;
+      box-shadow: 3px 3px 0px var(--line);
     }
     .section-label { font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; color: var(--ink-sub); text-align: center; text-transform: uppercase; margin-bottom: 6px; }
     .core-categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding-bottom: 4px; }
@@ -970,9 +1002,9 @@
     .results-container { width: 100%; display: none; flex-direction: column; gap: 14px; }
     .results-container.visible { display: flex; }
     .results-header-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 2px 10px; margin-bottom: 4px; border-bottom: 1.5px solid var(--line); gap: 8px; flex-wrap: wrap; scroll-margin-top: 56px; }
-    .result-count { font-size: 0.86rem; font-weight: 700; color: var(--ink-sub); margin: 0; }
+    .result-count { font-size: 0.84rem; font-weight: 700; color: var(--ink-sub); margin: 0; white-space: nowrap; }
     .result-count strong { color: var(--accent); }
-    .results-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .results-actions { display: flex; align-items: center; justify-content: flex-end; gap: 6px; flex-shrink: 0; margin-left: auto; }
     .reset-all-btn, .home-reset-btn, .tasted-filter-btn {
       background: var(--card-bg); border: 1.5px solid var(--line); color: var(--ink);
       font-size: 0.74rem; font-weight: 800; padding: 3px 8px; border-radius: 3px;
@@ -988,14 +1020,15 @@
     .reset-all-btn:active:not(:disabled), .home-reset-btn:active, .tasted-filter-btn:active {
       transform: translate(1px, 1px); box-shadow: 0.5px 0.5px 0px var(--line);
     }
-    .reset-all-btn:disabled {
-      opacity: 0.42;
-      cursor: default;
-      transform: translateY(-0.8px);
-      box-shadow: 0 2px 0px #A89C90;
-      background: #EAE2D8;
-      color: #877A70;
-      border-color: #A89C90;
+    .reset-all-btn.is-all-active {
+      opacity: 0.62;
+      background: linear-gradient(180deg, #EAE2D8 0%, #F1EAE1 100%);
+      color: var(--ink-sub);
+      border-color: #9A8D80;
+      transform: translateY(0.8px);
+      box-shadow:
+        0 0.5px 0px #9A8D80,
+        inset 0 1px 2px rgba(30, 25, 21, 0.12);
     }
 
     /* 📌 요약 카드 + 시선 중심 돌출(Pop-out) / 상·하단 후퇴(Recessed) 모션 */
@@ -1598,11 +1631,14 @@
       .top-nav-bar {
         top: max(8px, env(safe-area-inset-top));
         left: 10px;
-        gap: 7px;
+        gap: 6px;
+      }
+      .nav-fixed-btn {
+        font-size: 0.72rem;
+        padding: 3px 7px;
       }
       #soundToggleBtn {
-        min-width: 78px;
-        padding: 3px 7px;
+        min-width: 76px;
       }
       .top-clock-widget {
         top: max(6px, env(safe-area-inset-top));
@@ -1848,7 +1884,7 @@
     /* [그룹 D] 영수증 티켓 보조 툴바 (.ticket-export-btn) & 결과 헤더 컨트롤 버튼 - 2px 슬림 단면 */
     .ticket-export-btn,
     .tasted-filter-btn,
-    .reset-all-btn:not(:disabled),
+    .reset-all-btn,
     .home-reset-btn {
       background: linear-gradient(180deg, #FFFDF9 0%, #F4ECE1 100%);
       border: 1.5px solid var(--line);
@@ -1863,11 +1899,12 @@
         transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.14s ease,
         background 0.14s ease,
-        color 0.14s ease;
+        color 0.14s ease,
+        opacity 0.14s ease;
     }
     .ticket-export-btn:hover,
     .tasted-filter-btn:hover,
-    .reset-all-btn:not(:disabled):hover,
+    .reset-all-btn:hover,
     .home-reset-btn:hover {
       transform: translateY(-0.3px);
       box-shadow:
@@ -1877,12 +1914,22 @@
     .ticket-export-btn:active,
     .tasted-filter-btn:active,
     .tasted-filter-btn.active,
-    .reset-all-btn:not(:disabled):active,
+    .reset-all-btn:active,
     .home-reset-btn:active {
       transform: translateY(1.2px) !important;
       box-shadow:
         0 0px 0px var(--line),
         inset 0 1.5px 3px rgba(30, 25, 21, 0.2) !important;
+    }
+    .reset-all-btn.is-all-active {
+      opacity: 0.65;
+      background: linear-gradient(180deg, #EAE2D8 0%, #F1EAE1 100%);
+      color: var(--ink-sub);
+      border-color: #9A8D80;
+      transform: translateY(0.8px);
+      box-shadow:
+        0 0.5px 0px #9A8D80,
+        inset 0 1px 2px rgba(30, 25, 21, 0.12);
     }
     /* '☕ 마셔본 원두' 토글 활성 시 눌려 들어간 테라코타 스위치 상태 유지 */
     .tasted-filter-btn.active {
@@ -1892,6 +1939,95 @@
       box-shadow:
         0 0px 0px var(--line),
         inset 0 2px 4px rgba(20, 12, 8, 0.32) !important;
+    }
+
+    /* 카카오톡·인앱 브라우저 전용 이미지 꾹 눌러 저장 모달 */
+    .ticket-preview-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 25, 21, 0.78);
+      z-index: 270;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    .ticket-preview-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .ticket-preview-card {
+      width: 100%;
+      max-width: 390px;
+      max-height: 88vh;
+      background: var(--card-bg);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 4px 4px 0px var(--line);
+      padding: 16px 15px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      position: relative;
+    }
+    .ticket-preview-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid var(--line-light);
+      padding-bottom: 8px;
+    }
+    .ticket-preview-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .ticket-preview-guide {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: #F8EFE7;
+      border: 1px dashed var(--accent);
+      border-radius: 5px;
+      padding: 8px 10px;
+      text-align: center;
+      line-height: 1.45;
+    }
+    .ticket-preview-img-wrap {
+      background: #ECE3D8;
+      border: 1.5px solid var(--line-light);
+      border-radius: 6px;
+      padding: 8px;
+      display: flex;
+      justify-content: center;
+    }
+    .ticket-preview-img {
+      width: 100%;
+      max-width: 330px;
+      height: auto;
+      display: block;
+      border-radius: 3px;
+      -webkit-touch-callout: default !important;
+      user-select: auto !important;
+    }
+    .ticket-preview-actions {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+    .ticket-preview-actions .action-btn {
+      flex: 1;
+      min-width: 110px;
+      padding: 8px 6px;
+      font-size: 0.76rem;
     }
 
     /* [그룹 E] 모달 · 서랍 · 용어가이드 닫기(✕) 버튼 - 2px 마이크로 키캡 */
@@ -1944,6 +2080,7 @@
       .drawer-overlay,
       .disclaimer-modal-overlay,
       .term-guide-backdrop,
+      .ticket-preview-overlay,
       .term-help-btn,
       .detail-modal-overlay:not(.open),
       .printer-modal-overlay:not(.open),
@@ -2154,29 +2291,33 @@
       <button type="button" class="btn-icon clear-btn" id="clearSearchBtn" title="지우기" style="display: none;">✕</button>
     </div>
 
-    <!-- 📌 검색창 클릭 시 오버레이 팝오버로 등장하는 메인 테이스트 카테고리 -->
+    <!-- 📌 검색창 클릭 시 겹침 없이 펼쳐지는 메인 테이스트 카테고리 -->
     <div class="core-categories-section" id="coreCategoriesSection">
-      <div class="section-label">MAIN TASTE CATEGORY</div>
-      <div class="core-categories-grid">
-        <button type="button" class="core-category-btn" data-type="no-sour">
-          <span class="cat-icon">🥜</span>
-          <span class="cat-title">산미 없는 커피</span>
-          <span class="cat-sub">쓴맛·구수함 중심</span>
-        </button>
-        <button type="button" class="core-category-btn" data-type="mild-sour">
-          <span class="cat-icon">🍋</span>
-          <span class="cat-title">약한 산미 커피</span>
-          <span class="cat-sub">은은한 과일 단맛</span>
-        </button>
-        <button type="button" class="core-category-btn" data-type="nutty">
-          <span class="cat-icon">🌰</span>
-          <span class="cat-title">고소한 원두 커피</span>
-          <span class="cat-sub">견과류·초콜릿</span>
-        </button>
+      <div class="core-categories-inner">
+        <div class="core-categories-card">
+          <div class="section-label">MAIN TASTE CATEGORY</div>
+          <div class="core-categories-grid">
+            <button type="button" class="core-category-btn" data-type="no-sour">
+              <span class="cat-icon">🥜</span>
+              <span class="cat-title">산미 없는 커피</span>
+              <span class="cat-sub">쓴맛·구수함 중심</span>
+            </button>
+            <button type="button" class="core-category-btn" data-type="mild-sour">
+              <span class="cat-icon">🍋</span>
+              <span class="cat-title">약한 산미 커피</span>
+              <span class="cat-sub">은은한 과일 단맛</span>
+            </button>
+            <button type="button" class="core-category-btn" data-type="nutty">
+              <span class="cat-icon">🌰</span>
+              <span class="cat-title">고소한 원두 커피</span>
+              <span class="cat-sub">견과류·초콜릿</span>
+            </button>
+          </div>
+          <button type="button" class="beginner-primer-pill term-label-link" data-term="beginner_basics">
+            💡 처음이신가요? <strong>핸드드립 · 싱글오리진 · 스페셜티</strong> 10초 요약 보기 ➔
+          </button>
+        </div>
       </div>
-      <button type="button" class="beginner-primer-pill term-label-link" data-term="beginner_basics">
-        💡 처음이신가요? <strong>핸드드립 · 싱글오리진 · 스페셜티</strong> 10초 요약 보기 ➔
-      </button>
     </div>
   </div>
 
@@ -2316,7 +2457,7 @@
     </div>
     <div class="dispenser-powered-by">
       <span>powered by DispenserV2 ™</span>
-      <button type="button" class="dispenser-version-trigger" id="dispenserVersionBtn" data-term="version_log" title="버전 변경 기록 보기">CTA v2.1.8 (α1)</button>
+      <button type="button" class="dispenser-version-trigger" id="dispenserVersionBtn" data-term="version_log" title="버전 변경 기록 보기">CTA v2.1.9 (α1)</button>
     </div>
   </div>
 
@@ -2325,7 +2466,7 @@
       <h2 class="result-count" id="resultCount">전체 스페셜티 아카이브 <strong>120</strong>종</h2>
       <div class="results-actions">
         <button type="button" class="tasted-filter-btn" id="filterTastedBtn">☕ 마셔본 원두 (0)</button>
-        <button type="button" class="reset-all-btn" id="resetAllBtn" disabled>🔄 전체 120종</button>
+        <button type="button" class="reset-all-btn is-all-active" id="resetAllBtn">전체 120종</button>
         <button type="button" class="home-reset-btn" id="homeResetBtn">↑ 위로</button>
       </div>
     </div>
@@ -2389,6 +2530,28 @@
 
 </div>
 
+<!-- 📱 카카오톡·인앱 브라우저 전용 티켓 이미지 저장 미리보기 모달 -->
+<div class="ticket-preview-overlay" id="ticketImagePreviewOverlay" role="dialog" aria-modal="true" aria-label="티켓 이미지 저장">
+  <div class="ticket-preview-card">
+    <div class="ticket-preview-head">
+      <div class="ticket-preview-title">📸 티켓 이미지 저장</div>
+      <button type="button" class="term-guide-close" id="closeTicketPreviewBtn" aria-label="닫기">✕</button>
+    </div>
+    <div class="ticket-preview-guide" id="ticketPreviewGuide">
+      아래 이미지를 <strong>길게 눌러 [이미지 저장]</strong>을 선택해 주세요.<br>
+      <span style="font-size:0.71rem; color:var(--ink-sub); font-weight:600;">(카카오톡·인앱 브라우저에서도 깨짐 없이 원본 PNG로 저장됩니다)</span>
+    </div>
+    <div class="ticket-preview-img-wrap">
+      <img id="ticketPreviewImg" class="ticket-preview-img" src="" alt="커피 테이스팅 티켓">
+    </div>
+    <div class="ticket-preview-actions">
+      <button type="button" class="action-btn primary-save" id="ticketPreviewShareBtn" style="display:none;">📤 공유 / 사진앱 저장</button>
+      <button type="button" class="action-btn" id="ticketPreviewExtBtn" style="display:none;">🌐 외부 브라우저 열기</button>
+      <button type="button" class="action-btn" id="ticketPreviewCloseBtn2">닫기</button>
+    </div>
+  </div>
+</div>
+
 <!-- 💡 컨텍스트형 '?' 마이크로 용어 가이드 팝오버 -->
 <div class="term-guide-backdrop" id="termGuideBackdrop" role="dialog" aria-modal="true" aria-labelledby="termGuideTitle">
   <div class="term-guide-popover" id="termGuidePopover">
@@ -2425,8 +2588,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <!-- 2. 커피 데이터를 담은 외부 파일 연결 (반드시 위에 선언) -->
-<script src="version.js?v=2.1.8"></script>
-<script src="data.js?v=2.1.8"></script>
+<script src="version.js?v=2.1.9"></script>
+<script src="data.js?v=2.1.9"></script>
 
 <!-- 3. 메인 동작 로직 -->
 <script>
@@ -3127,7 +3290,7 @@
       changed = true;
     }
     if (changed) {
-      const anyModalOpen = document.querySelector(".detail-modal-overlay.open, .origin-drawer.open, .printer-modal-overlay.open, .disclaimer-modal-overlay.open");
+      const anyModalOpen = document.querySelector(".detail-modal-overlay.open, .origin-drawer.open, .printer-modal-overlay.open, .disclaimer-modal-overlay.open, .ticket-preview-overlay.open");
       document.body.style.overflow = anyModalOpen ? "hidden" : "";
     }
   }
@@ -3523,7 +3686,7 @@
       kicker: "RELEASE NOTES & CHANGELOG",
       title: "Coffee Taste Archive 버전 기록",
       getContext: () => {
-        const label = (typeof APP_VERSION_INFO !== "undefined" && APP_VERSION_INFO.displayLabel) ? APP_VERSION_INFO.displayLabel : "CTA v2.1.8 (α1)";
+        const label = (typeof APP_VERSION_INFO !== "undefined" && APP_VERSION_INFO.displayLabel) ? APP_VERSION_INFO.displayLabel : "CTA v2.1.9 (α1)";
         const eng = (typeof APP_VERSION_INFO !== "undefined") ? APP_VERSION_INFO.engineName : "DispenserV2 ™";
         const dt = (typeof APP_VERSION_INFO !== "undefined") ? APP_VERSION_INFO.updatedAt : "2026-11-18";
         return `현재 빌드: <strong>${label}</strong> (${dt})<br>검색 엔진: <strong>${eng}</strong> · 수록 원두: <strong>SCA ${coffeeData.length}종 스페셜</strong>`;
@@ -3760,7 +3923,7 @@
     dispenserVersionBtn.textContent = APP_VERSION_INFO.displayLabel || `CTA v${APP_VERSION_INFO.version}`;
   }
   if (resetAllBtn) {
-    resetAllBtn.textContent = `🔄 전체 ${coffeeData.length}종`;
+    resetAllBtn.textContent = `전체 ${coffeeData.length}종`;
   }
 
   function matchesOriginWheelOption(c, originOpt) {
@@ -4422,7 +4585,68 @@
     shareRcpBtn.onclick = () => captureAndSaveTicket(document.getElementById("receiptPaper"), shareRcpBtn, "#FFFDF9", "share");
   }
 
-  // 공통 티켓 이미지 캡처/저장/공유 함수 (html2canvas -> 불투명 24bit RGB PNG 변환으로 '지원하지 않는 형식' 원천 방지)
+  // 카카오톡·네이버·인스타 등 인앱 브라우저 감지 및 티켓 이미지 저장 미리보기 모달 제어
+  const ticketImagePreviewOverlay = document.getElementById("ticketImagePreviewOverlay");
+  const ticketPreviewImg = document.getElementById("ticketPreviewImg");
+  const ticketPreviewShareBtn = document.getElementById("ticketPreviewShareBtn");
+  const ticketPreviewExtBtn = document.getElementById("ticketPreviewExtBtn");
+  const closeTicketPreviewBtn = document.getElementById("closeTicketPreviewBtn");
+  const ticketPreviewCloseBtn2 = document.getElementById("ticketPreviewCloseBtn2");
+  let latestTicketBlob = null;
+
+  function isInAppBrowserEnv() {
+    const ua = navigator.userAgent || "";
+    return /KAKAOTALK|NAVER|Instagram|FBAN|FBAV|Line|DaumApps|Twitter|Snapchat|wv\)/i.test(ua);
+  }
+  function isKakaoTalkBrowser() {
+    return /KAKAOTALK/i.test(navigator.userAgent || "");
+  }
+  function closeTicketImagePreview() {
+    toggleUI(ticketImagePreviewOverlay, null, false);
+  }
+  function openTicketImagePreview(dataUrl, blob) {
+    latestTicketBlob = blob || null;
+    if (ticketPreviewImg) ticketPreviewImg.src = dataUrl;
+    if (ticketPreviewShareBtn) {
+      let canShareImg = false;
+      if (blob && typeof File !== "undefined" && navigator.canShare) {
+        try {
+          const testFile = new File([blob], "coffee_taste_ticket.png", { type: "image/png" });
+          canShareImg = navigator.canShare({ files: [testFile] });
+        } catch (e) { canShareImg = false; }
+      }
+      ticketPreviewShareBtn.style.display = canShareImg ? "inline-flex" : "none";
+    }
+    if (ticketPreviewExtBtn) {
+      ticketPreviewExtBtn.style.display = isKakaoTalkBrowser() ? "inline-flex" : "none";
+    }
+    toggleUI(ticketImagePreviewOverlay, null, true);
+  }
+
+  if (closeTicketPreviewBtn) closeTicketPreviewBtn.onclick = closeTicketImagePreview;
+  if (ticketPreviewCloseBtn2) ticketPreviewCloseBtn2.onclick = closeTicketImagePreview;
+  if (ticketImagePreviewOverlay) {
+    ticketImagePreviewOverlay.onclick = (e) => {
+      if (e.target === ticketImagePreviewOverlay) closeTicketImagePreview();
+    };
+  }
+  if (ticketPreviewShareBtn) {
+    ticketPreviewShareBtn.onclick = () => {
+      if (!latestTicketBlob || !navigator.share) return;
+      try {
+        const file = new File([latestTicketBlob], "coffee_taste_ticket.png", { type: "image/png" });
+        navigator.share({ files: [file] }).catch(() => {});
+      } catch (e) {}
+    };
+  }
+  if (ticketPreviewExtBtn) {
+    ticketPreviewExtBtn.onclick = () => {
+      const targetUrl = encodeURIComponent(window.location.href);
+      window.location.href = `kakaotalk://web/openExternal?url=${targetUrl}`;
+    };
+  }
+
+  // 공통 티켓 이미지 캡처/저장/공유 함수 (카카오톡 인앱 브라우저 '지원하지 않는 형식' 원천 방지)
   function captureAndSaveTicket(targetEl, btnEl, bgColor = "#ECE3D8", mode = "download") {
     if (!targetEl || !btnEl) return;
     const originalBtnText = btnEl.innerHTML;
@@ -4432,7 +4656,12 @@
     targetEl.style.animation = "none";
 
     const triggerDirectDownload = (rgbCanvas, blob) => {
-      const fileName = "dispenser_ticket.png";
+      const dataUrl = rgbCanvas.toDataURL("image/png");
+      if (isInAppBrowserEnv()) {
+        openTicketImagePreview(dataUrl, blob);
+        return;
+      }
+      const fileName = "coffee_taste_ticket.png";
       const link = document.createElement("a");
       link.download = fileName;
       link.style.display = "none";
@@ -4446,7 +4675,7 @@
           URL.revokeObjectURL(blobUrl);
         }, 15000);
       } else {
-        link.href = rgbCanvas.toDataURL("image/png");
+        link.href = dataUrl;
         document.body.appendChild(link);
         link.click();
         setTimeout(() => link.remove(), 2000);
@@ -4472,23 +4701,37 @@
       rgbCtx.fillStyle = bgColor || "#ECE3D8";
       rgbCtx.fillRect(0, 0, rgbCanvas.width, rgbCanvas.height);
       rgbCtx.drawImage(rawCanvas, 0, 0);
+      const dataUrl = rgbCanvas.toDataURL("image/png");
 
       rgbCanvas.toBlob(blob => {
         if (!blob) {
-          triggerDirectDownload(rgbCanvas, null);
+          if (isInAppBrowserEnv()) {
+            openTicketImagePreview(dataUrl, null);
+          } else {
+            triggerDirectDownload(rgbCanvas, null);
+          }
           return;
         }
         if (mode === "share") {
-          const file = new File([blob], "dispenser_ticket.png", { type: "image/png" });
-          // 모바일/OS 공유 시 title 텍스트와 files 이미지를 동시에 넘기면 일부 앱에서 복합 MIME을 '지원하지 않는 형식'으로 거부하므로 files만 단독 전달
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            navigator.share({ files: [file] }).catch(err => {
-              if (err && err.name !== "AbortError") {
-                triggerDirectDownload(rgbCanvas, blob);
-              }
-            });
+          try {
+            const file = new File([blob], "coffee_taste_ticket.png", { type: "image/png" });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              navigator.share({ files: [file] }).catch(err => {
+                if (err && err.name !== "AbortError") {
+                  openTicketImagePreview(dataUrl, blob);
+                }
+              });
+              return;
+            }
+          } catch (e) {}
+          if (isInAppBrowserEnv()) {
+            openTicketImagePreview(dataUrl, blob);
             return;
           }
+        }
+        if (isInAppBrowserEnv()) {
+          openTicketImagePreview(dataUrl, blob);
+          return;
         }
         triggerDirectDownload(rgbCanvas, blob);
       }, "image/png", 1.0);
@@ -5048,8 +5291,9 @@
     resultsContainer.classList.add("visible");
 
     if (resetAllBtn) {
-      resetAllBtn.textContent = `🔄 전체 ${coffeeData.length}종`;
-      resetAllBtn.disabled = (filterState.mode === "ALL");
+      resetAllBtn.textContent = `전체 ${coffeeData.length}종`;
+      resetAllBtn.disabled = false;
+      resetAllBtn.classList.toggle("is-all-active", filterState.mode === "ALL");
     }
     updateTastedFilterBtn();
 
@@ -5505,7 +5749,7 @@
 
   // 📌 버튼 포인터다운/업 및 카드 클릭 시 기계식 타건 사운드 (모바일 터치 스크롤 오작동 방지 + 단일 재생 보장)
   const SOUND_BTN_SELECTOR =
-    ".core-category-btn, .nav-fixed-btn, .action-btn, .ticket-export-btn, .modal-tab-btn, .modal-close-btn, .drawer-close-btn, .clear-btn, .wheel-random-btn, .reset-all-btn:not(:disabled), .tasted-filter-btn, .home-reset-btn, .search-jump-badge, .term-help-btn, .term-label-link, .dispenser-version-trigger, .term-guide-close";
+    ".core-category-btn, .nav-fixed-btn, .action-btn, .ticket-export-btn, .modal-tab-btn, .modal-close-btn, .drawer-close-btn, .clear-btn, .wheel-random-btn, .reset-all-btn, .tasted-filter-btn, .home-reset-btn, .search-jump-badge, .term-help-btn, .term-label-link, .dispenser-version-trigger, .term-guide-close";
   const CARD_SOUND_SELECTOR = ".compact-coffee-card, .origin-info-card";
   const BRIGHT_BTN_SELECTOR = ".modal-tab-btn, .action-btn, .ticket-export-btn, .compact-coffee-card, .origin-info-card";
   let activeSoundBtnPressed = null;

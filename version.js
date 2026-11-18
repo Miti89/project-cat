@@ -3,7 +3,7 @@ const APP_VERSION_INFO = {
   projectShortCode: "CTA",
   projectTitleKor: "커피 맛 아카이브",
   engineName: "DispenserV2 ™",
-  version: "2.1.8",
+  version: "2.1.9",
   stage: "α1",
   get displayLabel() {
     return `${this.projectShortCode} v${this.version}${this.stage ? ` (${this.stage})` : ""}`;
@@ -11,6 +11,12 @@ const APP_VERSION_INFO = {
   updatedAt: "2026-11-18",
   dbCount: 120,
   history: [
+    {
+      version: "2.1.9",
+      stage: "α1",
+      date: "2026-11-18",
+      summary: "카카오톡 인앱 브라우저 티켓 이미지 저장 미리보기 모달 지원, 검색창 카테고리 겹침 해소, 전체 120종 버튼 이모티콘 삭제·효과음 수정 및 상단 소리/원산지 버튼 택타일 디자인 통일"
+    },
     {
       version: "2.1.8",
       stage: "α1",
