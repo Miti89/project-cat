@@ -1,0 +1,7 @@
+name = "cta-kma-weather-proxy"
+main = "kma-weather-proxy.js"
+compatibility_date = "2026-11-01"
+
+# [보안] 기상청 공공데이터포털 일반 인증키(Decoding)는 절대 이 파일에 기입하지 마세요.
+# 배포 전 아래 명령으로 Cloudflare Secret에 안전하게 등록합니다:
+#   wrangler secret put KMA_API_KEY

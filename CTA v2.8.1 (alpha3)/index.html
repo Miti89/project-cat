@@ -1,0 +1,523 @@
+<!-- ========================================================================== -->
+<!-- SCHEMA / SYSTEM NAME: Coffee Taste Archive (Casper™ V1 Engine)           -->
+<!-- DESCRIPTION: Specialty Coffee Archive with SEO Schema, Disclaimer Modal,    -->
+<!--              Sound Toggle, Receipt Printer, 3D Tilt, Canvas & 120 Coffee DB  -->
+<!-- REVISION: v2.8.1 (α3) (Data Separated into data.js · Schema v3.3)          -->
+<!-- ========================================================================== -->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Coffee Taste Archive - SCA 120종 스페셜</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+
+  <!-- SEO & OpenGraph Meta Tags -->
+  <meta name="description" content="산미, 고소함, 입안의 바디감(1~5단계)으로 찾아보는 SCA 스페셜티 커피 원두 추천 및 테이스팅 노트를 확인해보세요.">
+  <meta name="keywords" content="스페셜티커피, 커피원두추천, 산미없는원두, 고소한원두, 에티오피아게이샤, 디스펜서, 바디감, SCA커피">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Coffee Taste Archive - 내 취향 스페셜티 커피 찾기">
+  <meta property="og:description" content="오늘 마실 원두를 입안의 무게감과 향미로 뽑아보세요.">
+
+  <!-- Schema.org JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Coffee Taste Archive (Casper™ V1)",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "All",
+      "inLanguage": "ko-KR",
+      "description": "SCA 기준 120종 스페셜티 커피 맛 탐색 및 아카이브 서비스",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "스페셜티 커피가 뭐예요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SCA 평가 80점 이상 특상 등급 원두로, 족보와 성적표가 확실한 일등품 커피입니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "바디감은 무슨 뜻인가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "입안에서 느껴지는 국물의 두께감과 무게입니다. 1단계(생수)부터 5단계(생크림)까지 구분됩니다."
+          }
+        }
+      ]
+    }
+  ]
+  </script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css?v=2.8.1">
+</head>
+<body>
+
+<!-- 📌 상단 증기 파티클 Canvas -->
+<canvas id="steamCanvas"></canvas>
+
+<!-- 📦 최초 접속 크래프트 박스 패키지 & 절취선 개봉(Unboxing) 오버레이 -->
+<div class="disclaimer-modal-overlay open" id="disclaimerOverlay">
+  <div class="kraft-panel kraft-top-panel">
+    <div class="kraft-copy-block">
+      <div class="kraft-copy-title">추출 방식에 따른 맛 변화 안내</div>
+      <div class="kraft-copy-body">
+        본 아카이브의 테이스팅 노트는 표준 SCA 추출기준(92~94℃, 1:15~18)을 바탕으로 작성되었습니다. 드리퍼와 추출 변수에 따라 향미가 다를 수 있습니다.
+      </div>
+      <div class="kraft-copy-en">
+        Coffee Taste Archive · Casper™ V1<br>
+        Standard SCA cupping &amp; brewing protocol notice.
+      </div>
+    </div>
+  </div>
+
+  <div class="kraft-tear-zone">
+    <button type="button" class="kraft-confirm-trigger" id="disclaimerConfirmText" data-action="close-disclaimer">네, 확인했습니다 →</button>
+    <button type="button" class="kraft-tear-strip" id="closeDisclaimerBtn" data-action="close-disclaimer" aria-label="절취선 개봉하기">
+      <span class="kraft-pull-tab" aria-hidden="true"></span>
+    </button>
+    <div class="kraft-sub-motto">JUST THE WAY YOU BREW</div>
+  </div>
+
+  <div class="kraft-panel kraft-bottom-panel">
+    <div class="kraft-noshow-wrap">
+      <label class="no-show-label">
+        <input type="checkbox" id="noShowToday">
+        <span>오늘 하루 보지 않기</span>
+      </label>
+    </div>
+  </div>
+</div>
+<!-- 0-Frame Kraft Unboxing FOUC Prevention Script -->
+<script src="boot.js?v=2.8.1"></script>
+
+<!-- 📌 상단 네비게이션 바 (좌측 상단 수평 정렬: 소리 ON/OFF · 원산지 도감 · 언어 전환) -->
+<div class="top-nav-bar">
+  <button type="button" class="nav-fixed-btn" id="soundToggleBtn" data-action="toggle-sound">🔊 소리 ON</button>
+  <button type="button" class="nav-fixed-btn" id="openDrawerBtn" data-action="open-drawer">원산지 도감</button>
+  <button type="button" class="nav-fixed-btn" id="langToggleBtn" data-action="toggle-lang" title="언어 변경 (KR / EN / JP)">🌐 KR</button>
+  <button type="button" class="nav-fixed-btn nav-help-btn" id="tutorialReplayBtn" data-action="start-tutorial" title="사용 가이드 다시 보기" aria-label="사용 가이드 다시 보기">?</button>
+</div>
+
+<!-- 📌 우측 상단 실시간 시간(시.분.초) 및 초시계(Sub-dial) - 클릭 시 파텍필립 미닛 리피터 타종 -->
+<div class="top-clock-widget" id="topClockWidget" data-action="trigger-repeater" role="button" tabindex="0" title="클릭하여 미닛 리피터 타종 듣기" aria-label="현재 시간 미닛 리피터 타종">
+  <span class="top-clock-text" id="topClockText">
+    <span class="clock-d">0</span><span class="clock-d">0</span><span class="clock-sep">.</span><span class="clock-d">0</span><span class="clock-d">0</span><span class="clock-sep">.</span><span class="clock-d">0</span><span class="clock-d">0</span>
+  </span>
+  <div class="subdial-wrap" id="subdialWrap">
+    <svg class="subdial-svg" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="blueSteelHand" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#054A91" />
+          <stop offset="48%" stop-color="#2998FF" />
+          <stop offset="55%" stop-color="#002F63" />
+          <stop offset="100%" stop-color="#001D3D" />
+        </linearGradient>
+        <radialGradient id="blueSteelHub" cx="38%" cy="35%" r="65%">
+          <stop offset="0%" stop-color="#38A1FF" />
+          <stop offset="45%" stop-color="#0353A4" />
+          <stop offset="100%" stop-color="#001D3D" />
+        </radialGradient>
+        <filter id="handShadow" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0.8" dy="1.2" stdDeviation="1" flood-color="#1A1412" flood-opacity="0.32" />
+        </filter>
+      </defs>
+      <!-- 미세 동심원 기요셰(Guilloché) 텍스처 링 -->
+      <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(44,34,30,0.04)" stroke-width="0.7" />
+      <circle cx="50" cy="50" r="31" fill="none" stroke="rgba(44,34,30,0.04)" stroke-width="0.7" />
+      <circle cx="50" cy="50" r="24" fill="none" stroke="rgba(44,34,30,0.04)" stroke-width="0.7" />
+      <!-- 12개 인덱스 눈금 (12/3/6/9시는 굵은 바, 나머지는 세밀한 바) -->
+      <g stroke="#1E1916" stroke-linecap="round">
+        <line x1="50" y1="9" x2="50" y2="19" stroke-width="3.6" />
+        <line x1="50" y1="9" x2="50" y2="17.5" stroke-width="2.2" transform="rotate(30 50 50)" />
+        <line x1="50" y1="9" x2="50" y2="17.5" stroke-width="2.2" transform="rotate(60 50 50)" />
+        <line x1="50" y1="9" x2="50" y2="19" stroke-width="3.6" transform="rotate(90 50 50)" />
+        <line x1="50" y1="9" x2="50" y2="17.5" stroke-width="2.2" transform="rotate(120 50 50)" />
+        <line x1="50" y1="9" x2="50" y2="17.5" stroke-width="2.2" transform="rotate(150 50 50)" />
+        <line x1="50" y1="9" x2="50" y2="19" stroke-width="3.6" transform="rotate(180 50 50)" />
+        <line x1="50" y1="9" x2="50" y2="17.5" stroke-width="2.2" transform="rotate(210 50 50)" />
+        <line x1="50" y1="9" x2="50" y2="17.5" stroke-width="2.2" transform="rotate(240 50 50)" />
+        <line x1="50" y1="9" x2="50" y2="19" stroke-width="3.6" transform="rotate(270 50 50)" />
+        <line x1="50" y1="9" x2="50" y2="17.5" stroke-width="2.2" transform="rotate(300 50 50)" />
+        <line x1="50" y1="9" x2="50" y2="17.5" stroke-width="2.2" transform="rotate(330 50 50)" />
+      </g>
+      <!-- 사진 속 블루 스틸 초침 (Blued-steel second hand) -->
+      <g id="secSubdialHand" filter="url(#handShadow)" transform="rotate(0 50 50)">
+        <!-- 초침 바늘 및 하단 균형추(Counterweight) -->
+        <polygon points="48.9,61 48.0,50 49.2,11 50.8,11 52.0,50 51.1,61" fill="url(#blueSteelHand)" />
+        <!-- 중앙 블루 스틸 원형 허브 캡 (기존 10.2에서 0.7배 수준인 7.1로 축소) -->
+        <circle cx="50" cy="50" r="7.1" fill="url(#blueSteelHub)" stroke="#002347" stroke-width="0.7" />
+        <!-- 중앙 실버 피벗 핀 -->
+        <circle cx="50" cy="50" r="2.4" fill="#F4F1EA" stroke="#1E1916" stroke-width="0.6" />
+        <circle cx="50" cy="50" r="0.8" fill="#1E1916" />
+      </g>
+    </svg>
+  </div>
+</div>
+<div class="repeater-toast" id="repeaterToast"></div>
+
+<div class="app-container" id="appContainer">
+
+  <header class="archive-header" id="logoBtn" data-action="reset-home" title="처음으로">
+    <h1 class="archive-title">커피 맛 아카이브</h1>
+    <p class="archive-desc">원하는 맛과 입안의 무게감으로 나의 커피를 찾아보세요</p>
+  </header>
+
+  <div class="search-wrap" id="searchWrap">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" class="search-input" placeholder="원두 이름, 맛(초콜릿, 복숭아), 1~5단계..." autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="searchDropdownPanel">
+      <button type="button" id="searchJumpBadge" class="search-jump-badge" data-action="jump-to-results" style="display:none;">🔍 0건 보기 ↓</button>
+      <button type="button" class="btn-icon clear-btn" id="clearSearchBtn" data-action="clear-search" title="지우기" style="display: none;">✕</button>
+    </div>
+
+    <!-- 📌 실시간 자동완성 & 최근 검색 기록 드롭다운 -->
+    <div class="search-dropdown-panel" id="searchDropdownPanel" role="listbox" aria-label="검색 추천 및 최근 검색어"></div>
+
+    <!-- 📌 검색창 클릭 시 겹침 없이 펼쳐지는 메인 테이스트 카테고리 -->
+    <div class="core-categories-section" id="coreCategoriesSection">
+      <div class="core-categories-inner">
+        <div class="core-categories-card">
+          <div class="section-label">MAIN TASTE CATEGORY</div>
+          <div class="core-categories-grid">
+            <button type="button" class="core-category-btn" data-action="select-core-category" data-type="no-sour">
+              <span class="cat-icon">🥜</span>
+              <span class="cat-title">산미 없는 고소함</span>
+              <span class="cat-sub">견과·초콜릿 중심</span>
+            </button>
+            <button type="button" class="core-category-btn" data-action="select-core-category" data-type="bright-sour">
+              <span class="cat-icon">🍋</span>
+              <span class="cat-title">화사한 산미</span>
+              <span class="cat-sub">과즙·꽃향 중심</span>
+            </button>
+            <button type="button" class="core-category-btn" data-action="select-core-category" data-type="fermented-flv">
+              <span class="cat-icon">🧪</span>
+              <span class="cat-title">특수발효·가향</span>
+              <span class="cat-sub">무산소·인퓨즈드</span>
+            </button>
+            <button type="button" class="core-category-btn" data-action="select-core-category" data-type="balanced">
+              <span class="cat-icon">⚖️</span>
+              <span class="cat-title">균형 밸런스</span>
+              <span class="cat-sub">부드러운 데일리</span>
+            </button>
+          </div>
+          <button type="button" class="beginner-primer-pill term-label-link" data-term="beginner_basics">
+            💡 처음이신가요? <strong>핸드드립 · 싱글오리진 · 스페셜티</strong> 10초 요약 보기 ➔
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📌 Phase 2-2B: Today's Pick 바리스타 추천 배너 (1단계 시간대·계절 무API / 2단계 날씨 프록시 자동 폴백) -->
+  <section class="todays-pick-banner" id="todaysPickSection" aria-label="Today's Pick"></section>
+
+  <!-- 📌 레트로 원두 디스펜서 (조작 휠 + 레버) 위젯 -->
+  <div class="dispenser-lever-widget" id="leverWidget">
+    <div id="beanDropZone"></div>
+    <div class="dispenser-top-bar">
+      <div class="lever-info">
+        <div class="lever-title">🎰 오늘의 스페셜티 뽑기</div>
+        <div class="lever-desc">조작 휠로 산미·고소함·바디감·원산지를 조합한 뒤 우측 레버를 당겨보세요</div>
+      </div>
+      <button type="button" class="wheel-random-btn" id="wheelRandomBtn" data-action="random-wheel" title="다이얼 랜덤 조합">
+        <span class="wheel-random-dot"></span>랜덤 조합
+      </button>
+    </div>
+
+    <div class="dispenser-deck">
+      <div class="thumbwheel-group">
+        <!-- 1. 산미 휠 -->
+        <div class="thumbwheel-unit" data-unit="sour">
+          <div class="wheel-label">
+            <span class="wheel-label-kor">산미</span>
+            <span class="wheel-label-eng">ACIDITY</span>
+          </div>
+          <div class="wheel-housing">
+            <div class="wheel-live-callout" id="calloutSour" aria-hidden="true">2단계</div>
+            <div class="wheel-slot" data-wheel="sour" tabindex="0" role="slider" aria-label="산미 단계 조절" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2">
+              <div class="wheel-drum" id="drumSour">
+                <div class="wheel-num is-any" data-val="0">-</div>
+                <div class="wheel-num" data-val="1">1</div>
+                <div class="wheel-num" data-val="2">2</div>
+                <div class="wheel-num" data-val="3">3</div>
+                <div class="wheel-num" data-val="4">4</div>
+                <div class="wheel-num" data-val="5">5</div>
+              </div>
+              <div class="wheel-center-line"></div>
+              <div class="wheel-glass-shade"></div>
+            </div>
+          </div>
+          <div class="wheel-color-bar" id="barSour"></div>
+          <div class="wheel-val-badge val-badge level-badge" id="valSour">• 2단계</div>
+        </div>
+
+        <!-- 2. 고소함 휠 -->
+        <div class="thumbwheel-unit" data-unit="nutty">
+          <div class="wheel-label">
+            <span class="wheel-label-kor">고소함</span>
+            <span class="wheel-label-eng">NUTTY</span>
+          </div>
+          <div class="wheel-housing">
+            <div class="wheel-live-callout" id="calloutNutty" aria-hidden="true">4단계</div>
+            <div class="wheel-slot" data-wheel="nutty" tabindex="0" role="slider" aria-label="고소함 단계 조절" aria-valuemin="0" aria-valuemax="5" aria-valuenow="4">
+              <div class="wheel-drum" id="drumNutty">
+                <div class="wheel-num is-any" data-val="0">-</div>
+                <div class="wheel-num" data-val="1">1</div>
+                <div class="wheel-num" data-val="2">2</div>
+                <div class="wheel-num" data-val="3">3</div>
+                <div class="wheel-num" data-val="4">4</div>
+                <div class="wheel-num" data-val="5">5</div>
+              </div>
+              <div class="wheel-center-line"></div>
+              <div class="wheel-glass-shade"></div>
+            </div>
+          </div>
+          <div class="wheel-color-bar" id="barNutty"></div>
+          <div class="wheel-val-badge val-badge level-badge" id="valNutty">• 4단계</div>
+        </div>
+
+        <!-- 3. 바디감 휠 -->
+        <div class="thumbwheel-unit" data-unit="body">
+          <div class="wheel-label">
+            <span class="wheel-label-kor">바디감</span>
+            <span class="wheel-label-eng">BODY</span>
+          </div>
+          <div class="wheel-housing">
+            <div class="wheel-live-callout" id="calloutBody" aria-hidden="true">3단계</div>
+            <div class="wheel-slot" data-wheel="body" tabindex="0" role="slider" aria-label="바디감 단계 조절" aria-valuemin="0" aria-valuemax="5" aria-valuenow="3">
+              <div class="wheel-drum" id="drumBody">
+                <div class="wheel-num is-any" data-val="0">-</div>
+                <div class="wheel-num" data-val="1">1</div>
+                <div class="wheel-num" data-val="2">2</div>
+                <div class="wheel-num" data-val="3">3</div>
+                <div class="wheel-num" data-val="4">4</div>
+                <div class="wheel-num" data-val="5">5</div>
+              </div>
+              <div class="wheel-center-line"></div>
+              <div class="wheel-glass-shade"></div>
+            </div>
+          </div>
+          <div class="wheel-color-bar" id="barBody"></div>
+          <div class="wheel-val-badge val-badge level-badge" id="valBody">• 3단계</div>
+        </div>
+
+        <!-- 4. 원산지 휠 -->
+        <div class="thumbwheel-unit" data-unit="origin">
+          <div class="wheel-label">
+            <span class="wheel-label-kor">원산지</span>
+            <span class="wheel-label-eng">ORIGIN</span>
+          </div>
+          <div class="wheel-housing">
+            <div class="wheel-live-callout" id="calloutOrigin" aria-hidden="true">전체</div>
+            <div class="wheel-slot origin-slot" data-wheel="origin" tabindex="0" role="slider" aria-label="원산지 조절" aria-valuemin="0" aria-valuemax="11" aria-valuenow="0">
+              <div class="wheel-drum" id="drumOrigin">
+                <div class="wheel-num is-origin is-any" data-val="0">ALL</div>
+                <div class="wheel-num is-origin" data-val="1">🇨🇴 COL</div>
+                <div class="wheel-num is-origin" data-val="2">🇪🇹 ETH</div>
+                <div class="wheel-num is-origin" data-val="3">🇧🇷 BRA</div>
+                <div class="wheel-num is-origin" data-val="4">🇰🇪 KEN</div>
+                <div class="wheel-num is-origin" data-val="5">🇬🇹 GTM</div>
+                <div class="wheel-num is-origin" data-val="6">🇵🇦 PAN</div>
+                <div class="wheel-num is-origin" data-val="7">🇨🇷 CRI</div>
+                <div class="wheel-num is-origin" data-val="8">🇮🇩 IDN</div>
+                <div class="wheel-num is-origin" data-val="9">🇷🇼 RWA</div>
+                <div class="wheel-num is-origin" data-val="10">✨ FLV</div>
+                <div class="wheel-num is-origin" data-val="11">☕ BLD</div>
+              </div>
+              <div class="wheel-center-line"></div>
+              <div class="wheel-glass-shade"></div>
+            </div>
+          </div>
+          <div class="wheel-color-bar origin-bar" id="barOrigin"></div>
+          <div class="wheel-val-badge val-badge level-badge" id="valOrigin">• 전체</div>
+        </div>
+      </div>
+
+      <!-- 우측 추출 레버 -->
+      <div class="lever-station">
+        <div class="lever-station-label">PULL LEVER</div>
+        <div class="lever-mechanism dispenser-lever" id="leverTrigger" data-action="pull-lever" title="당겨서 맞춤 원두 뽑기!">
+          <div class="lever-base-slot"></div>
+          <div class="lever-arm">
+            <div class="lever-knob"></div>
+          </div>
+        </div>
+        <div class="lever-match-badges" id="dispenserMatchInfo">
+          <span class="match-badge exact" id="exactBadge">🎯 일치 9종</span>
+          <span class="match-badge close" id="closeBadge" style="display:none;">✨ 근접 0종</span>
+          <span class="match-badge search-override" id="searchOverrideBadge" style="display:none;">🔍 검색 필터 중</span>
+        </div>
+      </div>
+    </div>
+    <div class="dispenser-powered-by">
+      <span>powered by Casper™ V1</span>
+      <button type="button" class="dispenser-version-trigger" id="dispenserVersionBtn" data-term="version_log" title="버전 변경 기록 보기">CTA v2.8.1 (α3)</button>
+    </div>
+  </div>
+
+  <div class="results-container visible" id="resultsContainer">
+    <div class="results-header-bar" id="resultsHeader">
+      <h2 class="result-count" id="resultCount">전체 스페셜티 아카이브 <strong>120</strong>종</h2>
+      <div class="results-actions">
+        <button type="button" class="tasted-filter-btn" id="filterTastedBtn" data-action="toggle-tasted-filter">☕ 마셔본 원두 (0)</button>
+        <button type="button" class="reset-all-btn is-all-active" id="resetAllBtn" data-action="reset-all">전체 120종</button>
+        <button type="button" class="home-reset-btn" id="homeResetBtn" data-action="scroll-top">↑ 위로</button>
+      </div>
+    </div>
+    <div id="coffeeList" style="display: flex; flex-direction: column; gap: 20px;"></div>
+  </div>
+
+</div>
+
+<!-- 상세 카드 모달 -->
+<div class="detail-modal-overlay" id="detailModalOverlay">
+  <div class="detail-modal-card" id="detailModalContent"></div>
+</div>
+
+<!-- Ui7: 첫 방문 간단/자세히 모드 선택 온보딩 모달 -->
+<div class="onboarding-modal-overlay" id="onboardingModeOverlay" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
+  <div class="onboarding-modal-card" id="onboardingModeCard"></div>
+</div>
+
+<!-- Ui6: 3단계 인터랙티브 튜토리얼 코치마크 -->
+<div class="tutorial-overlay" id="tutorialOverlay" role="dialog" aria-modal="true" aria-labelledby="tutorialStepTitle">
+  <div class="tutorial-backdrop"></div>
+  <div class="tutorial-highlight-ring" id="tutorialHighlightRing"></div>
+  <div class="tutorial-tooltip" id="tutorialTooltip"></div>
+</div>
+
+<!-- 커피 2종 비교 플로팅 트레이 & 토스트 -->
+<div class="compare-toast" id="compareToast" role="status" aria-live="polite"></div>
+<div class="compare-floating-tray" id="compareFloatingTray" aria-live="polite"></div>
+
+<!-- 커피 2종 비교 모달 -->
+<div class="compare-modal-overlay" id="compareModalOverlay" role="dialog" aria-modal="true" aria-labelledby="compareModalTitle">
+  <div class="compare-modal-card" id="compareModalContent"></div>
+</div>
+
+<!-- 📌 빈티지 영수증 프린터 출력 모달 -->
+<div class="printer-modal-overlay" id="printerModalOverlay">
+  <div class="printer-slot-header">
+    <div class="printer-slot-line"></div>
+  </div>
+  <div class="receipt-paper" id="receiptPaper">
+    <div class="receipt-title">DISPENSER TASTING TICKET</div>
+    <div class="receipt-row">
+      <span id="rcpNo">NO. --</span>
+      <span id="rcpDate">2026.09.03</span>
+    </div>
+    <div class="receipt-divider"></div>
+    <div style="font-size:1.05rem; font-weight:900; text-align:center;" id="rcpName">원두 이름</div>
+    <div style="font-size:0.75rem; font-style:italic; text-align:center; color:#555;" id="rcpEng">English Name</div>
+    <div class="receipt-headline" id="rcpHeadline">"테이스팅 노트 헤드라인"</div>
+    <div class="receipt-divider"></div>
+    <div class="receipt-row">
+      <span>ORIGIN</span>
+      <span id="rcpOrigin">COUNTRY</span>
+    </div>
+    <div class="receipt-row">
+      <span>PROCESS</span>
+      <span id="rcpProcess">Washed</span>
+    </div>
+    <div class="receipt-row">
+      <span>TASTE DIAL</span>
+      <span id="rcpTasteCombo">산미2 · 고소4 · 바디3</span>
+    </div>
+    <div class="receipt-row">
+      <span>BODY STAGE</span>
+      <span id="rcpBody">3단계</span>
+    </div>
+    <div class="receipt-divider"></div>
+    <div class="receipt-barcode">
+      <canvas id="barcodeSvg" width="220" height="32"></canvas>
+    </div>
+    <div style="font-size:0.65rem; text-align:center; color:#777; margin-top:2px;">
+      SCA CERTIFIED SPECIALTY ARCHIVE
+    </div>
+  </div>
+  <div class="receipt-btn-group">
+    <button type="button" class="action-btn" id="printBtn" data-action="print-receipt" style="flex:1; padding:8px 4px;">🖨️ 인쇄</button>
+    <button type="button" class="action-btn" id="saveShareBtn" data-action="save-receipt-img" style="flex:1; padding:8px 4px;">📸 사진 저장</button>
+    <button type="button" class="action-btn" id="shareRcpBtn" data-action="share-receipt-img" style="flex:1; padding:8px 4px;">📤 공유</button>
+    <button type="button" class="action-btn" id="openModalFromRcpBtn" data-action="open-modal-from-receipt" style="flex:1; padding:8px 4px;">🔍 상세</button>
+    <button type="button" class="action-btn" id="closePrinterBtn" data-action="close-printer" style="width:44px; padding:8px 4px;">✕</button>
+  </div>
+
+</div>
+
+<!-- 📱 카카오톡·인앱 브라우저 전용 티켓 이미지 저장 미리보기 모달 -->
+<div class="ticket-preview-overlay" id="ticketImagePreviewOverlay" role="dialog" aria-modal="true" aria-label="티켓 이미지 저장">
+  <div class="ticket-preview-card">
+    <div class="ticket-preview-head">
+      <div class="ticket-preview-title">📸 티켓 이미지 저장</div>
+      <button type="button" class="term-guide-close" id="closeTicketPreviewBtn" data-action="close-ticket-preview" aria-label="닫기">✕</button>
+    </div>
+    <div class="ticket-preview-guide" id="ticketPreviewGuide">
+      아래 이미지를 <strong>길게 눌러 [이미지 저장]</strong>을 선택해 주세요.<br>
+      <span style="font-size:0.71rem; color:var(--ink-sub); font-weight:600;">(카카오톡·인앱 브라우저에서도 깨짐 없이 원본 PNG로 저장됩니다)</span>
+    </div>
+    <div class="ticket-preview-img-wrap">
+      <img id="ticketPreviewImg" class="ticket-preview-img" src="" alt="커피 테이스팅 티켓">
+    </div>
+    <div class="ticket-preview-actions">
+      <button type="button" class="action-btn primary-save" id="ticketPreviewShareBtn" data-action="share-ticket-preview" style="display:none;">📤 공유 / 사진앱 저장</button>
+      <button type="button" class="action-btn" id="ticketPreviewExtBtn" data-action="open-external-browser" style="display:none;">🌐 외부 브라우저 열기</button>
+      <button type="button" class="action-btn" id="ticketPreviewCloseBtn2" data-action="close-ticket-preview">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 💡 컨텍스트형 '?' 마이크로 용어 가이드 팝오버 -->
+<div class="term-guide-backdrop" id="termGuideBackdrop" role="dialog" aria-modal="true" aria-labelledby="termGuideTitle">
+  <div class="term-guide-popover" id="termGuidePopover">
+    <div class="term-guide-header">
+      <div>
+        <div class="term-guide-kicker" id="termGuideKicker">COFFEE GUIDE</div>
+        <h3 class="term-guide-title" id="termGuideTitle">용어 안내</h3>
+      </div>
+      <button type="button" class="term-guide-close" id="closeTermGuideBtn" data-action="close-term-guide" aria-label="닫기">✕</button>
+    </div>
+    <div class="term-guide-scroll">
+      <div class="term-guide-context-box" id="termGuideContextBox"></div>
+      <div class="term-guide-body" id="termGuideBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 🌍 좌측 서랍: 원산지 도감 -->
+<div class="drawer-overlay" id="originOverlay" data-action="close-drawer"></div>
+<div class="origin-drawer" id="originDrawer">
+  <div class="drawer-header">
+    <h2>🌍 커피 원산지 도감</h2>
+    <button type="button" class="drawer-close-btn" id="closeDrawerBtn" data-action="close-drawer">✕</button>
+  </div>
+  <div class="drawer-content">
+    <div class="drawer-notice" style="font-size:0.78rem; color:var(--ink-sub);">
+      💡 나라 이름을 누르면 해당 국가 원두의 테이스팅 카드를 모아드립니다.
+    </div>
+    <div id="originCardsContainer" style="display: flex; flex-direction: column; gap: 8px;"></div>
+  </div>
+</div>
+
+<!-- 1. 영수증 이미지 캡처용 라이브러리 (SRI 무결성 해시 적용) -->
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="version.js?v=2.8.1"></script>
+  <script src="data.js?v=2.8.1"></script>
+  <script src="casper.js?v=2.8.1"></script>
+  <script src="weather-service.js?v=2.8.1"></script>
+  <script src="app.js?v=2.8.1"></script>
+</body>
+</html>
